@@ -1,0 +1,57 @@
+# EvoViM · Card Matching
+# Qwen3.8-27B · Held-out seed 47 · Main paper, Figure 1
+# Selected program file: agents/board_tracker.py
+# Compare the aligned card pixels and look up the other position carrying the same pattern.
+# Function excerpts; helper definitions and imports are in the original module.
+
+def aligned_mad(a, b, max_shift=MAX_SHIFT):
+    """Minimum mean absolute difference between two same-size RGB crops over
+    integer shifts of b within +/-max_shift pixels (two-stage: coarse search
+    at half resolution, then refinement at full resolution)."""
+    if a.shape != b.shape:
+        h = min(a.shape[0], b.shape[0])
+        w = min(a.shape[1], b.shape[1])
+        a = a[:h, :w]
+        b = b[:h, :w]
+    if a.size == 0:
+        return 1e9
+    # coarse at half resolution
+    ac = a[::2, ::2].astype(np.int32)
+    bc = b[::2, ::2].astype(np.int32)
+    h, w, _ = ac.shape
+    ph = max_shift // 2
+    pcb = _pad(bc, ph).astype(np.int32)
+    best_d, best_dr, best_dc = 1e9, 0, 0
+    for dr in range(-ph, ph + 1):
+        base = pcb[ph + dr:ph + dr + h, :, :]
+        if base.shape[0] != h:
+            continue
+        for dc in range(2 * ph + 1):
+            d = float(np.abs(base[:, dc:dc + w, :] - ac).mean())
+            if d < best_d:
+                best_d, best_dr, best_dc = d, dr, dc - ph
+    # fine at full resolution around the coarse best
+    pbf = _pad(b.astype(np.int32), max_shift)
+    lo_r = max(-max_shift, 2 * best_dr - 2)
+    hi_r = min(max_shift, 2 * best_dr + 2)
+    lo_c = max(-max_shift, 2 * best_dc - 2)
+    hi_c = min(max_shift, 2 * best_dc + 2)
+    for dr in range(lo_r, hi_r + 1):
+        base = pbf[max_shift + dr:max_shift + dr + a.shape[0], :, :]
+        if base.shape[0] != a.shape[0]:
+            continue
+        for dc in range(lo_c, hi_c + 1):
+            d = float(np.abs(base[:, max_shift + dc:max_shift + dc + a.shape[1], :] - a.astype(np.int32)).mean())
+            if d < best_d:
+                best_d = d
+    return best_d
+
+
+def partner_of(self, coord):
+    cell = self.cells.get(coord)
+    if not cell or not cell.get("token"):
+        return None
+    for other in self.tokens.get(cell["token"], {}).get("cells", []):
+        if other != coord and self._state_of(other) == "known":
+            return other
+    return None

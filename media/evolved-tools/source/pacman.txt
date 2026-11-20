@@ -1,0 +1,45 @@
+# EvoViM · Pac-Man
+# Qwen3.8-27B · Held-out seed 43 · Main paper, Figure 1
+# Selected program file: agents/maze_panel.py
+# Search the maze and recover the first direction on the route to a target.
+# Function excerpts; helper definitions and imports are in the original module.
+
+def _bfs(oh, ov, start):
+    nc = len(oh[0])
+    nr = len(ov)
+    dist = {start: 0}
+    parent = {}
+    q = deque([start])
+    while q:
+        i, j = q.popleft()
+        d = dist[(i, j)] + 1
+        if i < nc and oh[j][i] and (i + 1, j) not in dist:
+            dist[(i + 1, j)] = d
+            parent[(i + 1, j)] = (i, j)
+            q.append((i + 1, j))
+        if i > 0 and oh[j][i - 1] and (i - 1, j) not in dist:
+            dist[(i - 1, j)] = d
+            parent[(i - 1, j)] = (i, j)
+            q.append((i - 1, j))
+        if j < nr and ov[j][i] and (i, j + 1) not in dist:
+            dist[(i, j + 1)] = d
+            parent[(i, j + 1)] = (i, j)
+            q.append((i, j + 1))
+        if j > 0 and ov[j - 1][i] and (i, j - 1) not in dist:
+            dist[(i, j - 1)] = d
+            parent[(i, j - 1)] = (i, j)
+            q.append((i, j - 1))
+    return dist, parent
+
+
+def _first_step(parent, target, start):
+    if target == start or target not in parent:
+        return None
+    cur = target
+    for _ in range(len(parent) + 2):
+        if parent.get(cur) == start:
+            return _DIRNAME.get((cur[0] - start[0], cur[1] - start[1]))
+        cur = parent.get(cur)
+        if cur is None:
+            return None
+    return None

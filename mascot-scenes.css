@@ -1,0 +1,107 @@
+/* The character occupies space in each scene, so its dialogue never covers the evidence. */
+.mascot-scene {
+  --mascot-size: clamp(94px, 7.4vw, 108px);
+  --bubble-edge: #a9b7c0;
+  --bubble-paper: #fffefa;
+  display: flex;
+  align-items: center;
+  gap: clamp(9px, 1.2vw, 18px);
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
+  margin: 14px 0 0;
+  color: var(--ink);
+  text-align: start;
+}
+.mascot-illustration {
+  display: block;
+  position: relative;
+  flex: 0 0 var(--mascot-size);
+  width: var(--mascot-size);
+  height: var(--mascot-size);
+  isolation: isolate;
+}
+.mascot-illustration img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+.mascot-performing .mascot-still { visibility: hidden; }
+.mascot-scene .mascot-bubble,
+#matched-case .mascot-scene .mascot-bubble {
+  position: relative;
+  width: fit-content;
+  max-width: 32ch;
+  min-width: 0;
+  margin: 0;
+  padding: .62em .88em .69em;
+  border: 1px solid var(--bubble-edge);
+  border-radius: 18px 20px 19px 10px;
+  background: var(--bubble-paper);
+  box-shadow: 1px 2px 0 #28374910;
+  color: #2b3540;
+  font: 520 clamp(14px,1.1vw,16px)/1.42 var(--sans, sans-serif);
+  letter-spacing: -.008em;
+  text-wrap: pretty;
+  transform-origin: 0% 60%;
+}
+.mascot-bubble[hidden] { display: none; }
+.mascot-bubble::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 56%;
+  width: 9px;
+  height: 9px;
+  border: solid var(--bubble-edge);
+  border-width: 0 0 1px 1px;
+  background: var(--bubble-paper);
+  transform: translateY(-50%) skew(-12deg) rotate(41deg);
+}
+.mascot-challenge { margin: 9px 0 0 auto; }
+.mascot-method { --bubble-paper: #fbfffc; }
+.mascot-cases { margin-block-start: 12px; }
+.mascot-matched-case { --bubble-paper: #fffdfa; }
+.mascot-applications { grid-column: 1 / -1; --mascot-size: clamp(88px, 7vw, 103px); }
+.mascot-install { --mascot-size: 96px; }
+.mascot-install .mascot-bubble { max-width: 29ch; }
+@media (prefers-reduced-motion: no-preference) {
+  .mascot-illustration::before, .mascot-illustration::after {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    left: 78%;
+    top: 12%;
+    width: 9px;
+    height: 12px;
+    background: #edac45;
+    opacity: 0;
+    clip-path: polygon(50% 0, 62% 37%, 100% 50%, 60% 61%, 50% 100%, 40% 62%, 0 50%, 39% 39%);
+    pointer-events: none;
+  }
+  .mascot-illustration::after { left: 91%; top: 26%; width: 6px; height: 7px; background: #55a9a0; }
+  .mascot-performing .mascot-illustration::before { animation: guide-glint .55s .58s both; }
+  .mascot-performing .mascot-illustration::after { animation: guide-glint .44s .69s both; }
+  @keyframes guide-glint {
+    0% { opacity: 0; transform: translate(-4px,4px) scale(.2) rotate(-15deg); }
+    45% { opacity: .9; }
+    70% { transform: translate(1px,-2px) scale(1); }
+    100% { opacity: 0; transform: translate(2px,-5px) scale(.45) rotate(15deg); }
+  }
+}
+@media (max-width: 720px) {
+  .mascot-scene { --mascot-size: 76px; gap: 10px; margin-top: 12px; }
+  .mascot-scene .mascot-bubble { max-width: min(34ch, 100%); font-size: 14px; }
+  .mascot-challenge { margin-inline-start: 0; }
+}
+@media (max-width: 375px) {
+  .mascot-scene { --mascot-size: 68px; }
+}
+@media (prefers-reduced-motion: reduce), print {
+  .mascot-scene .mascot-motion { display: none; }
+  .mascot-performing .mascot-still { visibility: visible; }
+}
+@media print { .mascot-scene { break-inside: avoid; } }

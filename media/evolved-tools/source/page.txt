@@ -1,0 +1,28 @@
+# EvoViM · DMV-Hard
+# Claude Haiku 5.5 · Held-out seed 52 · Main paper, Figure 1
+# Selected program file: agents/page_catalog.py
+# Locate the highest-scoring placement of a query patch in a saved page thumbnail.
+# Function excerpts; helper definitions and imports are in the original module.
+
+def best_window(prepared, content, scales=SCALES):
+    """Where the best-scoring placement sits on the page: (score, y, x, th, tw) or None.
+
+    The score equals _best_scales(prepared, content); (y, x) is the top-left corner
+    and (th, tw) the size of that placement, in thumbnail pixels.
+    """
+    best = None
+    ch, cw = content.shape
+    for scale in scales:
+        th, tw = int(round(ch * scale)), int(round(cw * scale))
+        if th < 5 or tw < 5 or th > prepared.shape[0] or tw > prepared.shape[1]:
+            continue
+        if (tw, th) == (cw, ch):
+            template = content
+        else:
+            template = _resize(content, tw, th)
+            if template is None:
+                continue
+        found = prepared.locate(template)
+        if found is not None and (best is None or found[0] > best[0]):
+            best = (found[0], found[1], found[2], th, tw)
+    return best

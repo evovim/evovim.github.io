@@ -1,0 +1,134 @@
+#score-explorer {
+  --fd-green: #11766c;
+  --fd-rule: #c2cece;
+  --fd-soft: #526269;
+  --fd-axis: 32px;
+  --fd-chart-height: clamp(184px, 18vw, 250px);
+  container-type: inline-size;
+  min-width: 0;
+  margin-top: clamp(24px, 3vw, 44px);
+  scroll-margin-top: calc(var(--nav-height,60px) + 16px);
+  color: var(--ink, #243238);
+  font-family: var(--sans, system-ui);
+}
+.fd-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+  padding-block: 16px 6px;
+  border-top: 1px solid var(--fd-rule);
+}
+.fd-controls label { display: flex; align-items: center; gap: 8px; color: var(--fd-soft); font-size: 14px; }
+.fd-controls select {
+  max-width: 100%;
+  min-height: 38px;
+  padding: 4px 18px 4px 3px;
+  border: 0;
+  border-bottom: 1px solid #8b9b9a;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 600 14px var(--sans,system-ui);
+  cursor: pointer;
+}
+.fd-main-chart { margin: clamp(16px, 2vw, 28px) 0 0; }
+.fd-main-chart figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  color: var(--fd-soft);
+  font-size: 14px;
+  line-height: 1.4;
+}
+.fd-legend { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 16px; color: var(--ink); }
+.fd-legend > span { display: inline-flex; align-items: center; gap: 6px; }
+.fd-legend i { width: 11px; height: 11px; border-radius: 2px; background: var(--series); }
+.fd-legend .fd-muted { color: var(--fd-soft); }
+.fd-legend .fd-muted i { background: transparent; box-shadow: inset 0 0 0 1px var(--series); transform: scale(.68); }
+.fd-series-0 { --series: var(--fd-green); }
+.fd-series-1 { --series: #b56855; }
+.fd-series-2 { --series: #6386a7; }
+.fd-series-3 { --series: #9482ab; }
+.fd-series-4 { --series: #baa16a; }
+.fd-series-5 { --series: #a2abae; }
+.fd-main-chart [hidden] { display: none; }
+.fd-groups {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  margin-top: 28px;
+  padding-inline-start: var(--fd-axis);
+}
+.fd-model { min-width: 0; }
+.fd-plot { position: relative; height: var(--fd-chart-height); }
+.fd-grid { position: absolute; inset: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; }
+.fd-grid div { position: relative; border-top: 1px dashed #c2ceceaa; }
+.fd-grid div:last-child { border-top: 1px solid #849995; }
+.fd-grid span { display: none; position: absolute; right: calc(100% + 6px); transform: translateY(-50%); color: var(--fd-soft); font: 12px/1 var(--mono,monospace); }
+.fd-model:first-child .fd-grid span { display: block; }
+.fd-bars { --fd-gutter: clamp(1.5px,.25vw,4px); display: flex; padding-inline: clamp(7px,1.2vw,18px); justify-content: center; height: 100%; }
+.fd-track { position: relative; z-index: 1; min-width: 0; flex: 1 1 0; max-width: 54px; margin-inline: var(--fd-gutter); }
+.fd-paired .fd-track { max-width: 76px; margin-inline: calc(1.8 * var(--fd-gutter)); }
+.fd-bars .fd-track.fd-excluded { flex-grow: 0; max-width: 0; margin-inline: 0; opacity: 0; pointer-events: none; z-index: 0; }
+.fd-bar { position: absolute; inset-inline: 0; bottom: 0; height: var(--score); background: var(--series); border-radius: 2px 2px 0 0; }
+.fd-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(180deg, #fff8, transparent 75%);
+  opacity: var(--fd-light, 0);
+}
+.fd-bar strong {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font: 540 clamp(12px, 1vw, 15px)/1 var(--sans,system-ui);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.fd-series-0 .fd-bar strong { color: var(--fd-green); font-weight: 700; }
+.fd-model-label { padding: 10px 2px 3px; text-align: center; font: 600 clamp(14px,1.35vw,19px)/1.25 var(--sans,system-ui); }
+.fd-score-data { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 0 16px; border-block: 1px solid var(--fd-rule); margin-top: 20px; }
+.fd-score-data a { color: var(--fd-green); font: 600 14px/1.5 var(--sans,system-ui); padding-block: 10px; text-underline-offset: 3px; }
+.fd-table { min-width: 0; }
+.fd-table[open] { width: 100%; }
+.fd-table summary { width: fit-content; cursor: pointer; padding: 11px 0; color: var(--ink); font-size: 14px; font-weight: 600; }
+.fd-table-scroll { overflow-x: auto; margin: 0 0 20px; }
+.fd-table table { width: 100%; min-width: 740px; border-collapse: collapse; text-align: right; font: 500 13px/1.4 var(--sans,system-ui); font-variant-numeric: tabular-nums; }
+.fd-table caption { text-align: left; padding: 8px 0; font-size: 16px; font-weight: 650; }
+.fd-table :is(th,td) { padding: 6px 8px; border-bottom: 1px solid #dbe0df; }
+.fd-table th:first-child { text-align: left; }
+.fd-table tbody tr:first-child td { color: var(--fd-green); font-weight: 650; }
+.fd-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .fd-awaiting .fd-bars { visibility: hidden; }
+  .fd-track {
+    --fd-slide: 650ms cubic-bezier(.25,.74,.2,1);
+    transition: flex-grow var(--fd-slide), max-width var(--fd-slide), margin var(--fd-slide), opacity 350ms ease-out;
+  }
+  .fd-legend i { transition: transform 400ms ease, background-color 300ms, box-shadow 300ms; }
+  .fd-controls select { transition: border-color 150ms, background-color 150ms; }
+  .fd-controls select:focus { border-color: var(--fd-green); background-color: #17766c0c; }
+}
+@container (max-width: 760px) {
+  .fd-groups { grid-template-columns: 1fr; gap: 28px; }
+  .fd-model { --fd-chart-height: clamp(108px, 25cqi, 155px); }
+  .fd-model .fd-grid span { display: block; }
+  .fd-bars { --fd-gutter: clamp(2.5px,1cqi,8px); }
+  .fd-main-chart figcaption { flex-direction: column; align-items: flex-start; }
+  .fd-model-label { font-size: 14px; }
+  .fd-bar strong { font-size: 13px; }
+}
+@container (max-width: 480px) {
+  .fd-controls { align-items: flex-end; gap: 8px 16px; }
+  .fd-controls label { display: grid; gap: 3px; }
+  .fd-controls select { min-height: 36px; padding-inline: 0 4px; }
+  .fd-legend { gap: 5px 12px; }
+}

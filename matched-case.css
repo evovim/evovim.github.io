@@ -1,0 +1,29 @@
+#matched-case { margin: 32px 0; padding-block: clamp(18px, 2.5vw, 36px); color: var(--ink); border-top: 1px solid var(--line); --paired-accent: #24685d; }
+#matched-case:empty { display: none; }
+#matched-case .paired-head { display: flex; align-items: start; justify-content: space-between; flex-wrap: wrap; gap: 14px 24px; }
+#matched-case h3 { margin: 0 0 7px; font: 500 clamp(24px, 2.6vw, 39px)/1.07 var(--serif); letter-spacing: -.04em; }
+#matched-case .paired-head p, #matched-case .paired-note { font-size: 15px; line-height: 1.55; color: var(--body); }
+#matched-case .paired-head p { max-width: 65ch; }
+#matched-case .paired-tabs { display: inline-flex; align-items: stretch; gap: 24px; border-bottom: 1px solid var(--line); }
+#matched-case .paired-tabs button { min-height: 44px; padding: 9px 0; margin-bottom: -1px; border-bottom: 2px solid transparent; font: 600 14px/1.4 var(--sans); color: var(--body); }
+#matched-case .paired-tabs button[aria-pressed=true] { color: var(--paired-accent); border-bottom-color: currentColor; }
+#matched-case .paired-body { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; gap: clamp(16px, 3vw, 42px); margin-top: 18px; }
+#matched-case .paired-pictures { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; align-items: start; }
+#matched-case figure { margin: 0; min-width: 0; }
+#matched-case figure img { width: 100%; height: auto; display: block; }
+#matched-case figcaption { margin-top: 6px; font: 500 14px/1.45 var(--sans); color: var(--soft); }
+#matched-case .paired-methods { margin-top: 13px; }
+#matched-case .paired-methods button, #matched-case .paired-columns { display: flex; justify-content: space-between; gap: 12px; align-items: center; width: 100%; }
+#matched-case .paired-columns { color: var(--soft); font: 500 14px var(--sans); padding: 0 0 7px; border-bottom: 1px solid var(--line); }
+#matched-case .paired-methods button { text-align: left; min-height: 44px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+#matched-case .paired-methods button[aria-pressed=true] b { text-decoration: underline; text-underline-offset: 4px; color: var(--paired-accent); }
+#matched-case :is(button, summary, a):focus-visible { outline: 2px solid var(--paired-accent); outline-offset: 3px; }
+@media (hover: hover) {
+  #matched-case .paired-methods button:hover b, #matched-case .paired-tabs button:hover { color: var(--paired-accent); text-decoration: underline; text-underline-offset: 4px; }
+}
+#matched-case .paired-methods b { font: 650 15px var(--sans); }
+#matched-case .paired-methods strong { white-space: nowrap; font: 600 14px var(--mono); color: var(--deep); }
+@media (max-width: 720px) {
+  #matched-case .paired-body { grid-template-columns: 1fr; }
+  #matched-case .paired-pictures { max-width: 430px; width: 100%; }
+}

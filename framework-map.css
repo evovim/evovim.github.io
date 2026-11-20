@@ -1,0 +1,58 @@
+.fm {
+  position:relative;
+  mix-blend-mode:multiply;
+  color:var(--fw-ink);
+}
+.fm-window {
+  position:relative;
+  overflow:clip;
+  aspect-ratio:1200/610;
+  background:var(--paper);
+}
+.fm-canvas {
+  position:absolute;
+  top:0; left:0; width:100%;
+  aspect-ratio:1200/610;
+  transform-origin:0 0;
+}
+.fm-overview { display:block; width:100%; height:auto; }
+.fm-mask,.fm-hotspots { position:absolute; inset:0; width:100%; height:100%; }
+.fm-mask { opacity:0; pointer-events:none; }
+.fm[data-focused=true] .fm-mask { opacity:1; }
+.fm-hotspots { pointer-events:none; }
+.fm-spot {
+  position:absolute; margin:0; padding:0;
+  background:transparent; border:0; border-radius:0;
+  pointer-events:auto; cursor:pointer; appearance:none;
+}
+.fm-spot:hover { background:color-mix(in srgb,var(--fm-ink) 8%,transparent); }
+.fm-spot:focus-visible,.fm-actions button:focus-visible { outline:2px solid var(--deep); outline-offset:2px; }
+.fm-actions { display:flex; align-items:center; justify-content:flex-end; }
+.fm-actions button {
+  display:inline-flex; align-items:center; gap:6px;
+  min-height:32px; padding:2px 0 2px 8px; color:var(--fw-muted);
+  font:540 14px/1.2 var(--sans); text-decoration:underline; text-underline-offset:3px;
+}
+.fm-actions button::before { content:''; display:inline-block; width:9px; height:9px; border:1px solid; }
+.fm-actions button:hover { color:var(--deep); }
+.fm-actions [hidden] { display:none; }
+.method-fallback { margin:0; }
+.method-fallback img { width:100%; height:auto; display:block; }
+.method-fallback figcaption { margin:12px 0; color:var(--body); font:450 15px/1.5 var(--sans); }
+@media (min-width:1001px) {
+  .fw-spread.fw-expanded { grid-template-columns:1fr; gap:12px; }
+  .fw-expanded .fw-inspect { border-top:1px solid var(--fw-rule); padding:12px 0 0; max-width:72ch; }
+}
+@media (max-width:1000px) {
+  .fm-actions .fm-wide { display:none; }
+}
+@media (max-width:650px) {
+  .fm-actions .fm-view { min-height:38px; }
+  .fm[data-zoomed=true] .fm-window { aspect-ratio:1.6; }
+}
+@media (prefers-reduced-motion:no-preference) {
+  .fm-trace { animation:fm-follow .7s ease-out both; }
+  .fm-mask { transition:opacity .25s; }
+  .fm-canvas { transition:transform .54s cubic-bezier(.22,.7,.2,1); }
+}
+@keyframes fm-follow { from { stroke-dasharray:1; stroke-dashoffset:1; } to { stroke-dasharray:1; stroke-dashoffset:0; } }

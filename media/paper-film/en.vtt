@@ -1,0 +1,263 @@
+WEBVTT
+
+00:00:00.600 --> 00:00:03.096
+EvoViM starts with a question about memory.
+
+00:00:03.296 --> 00:00:06.845
+Imagine your only job is to
+reach the end of this gallery.
+
+00:00:07.045 --> 00:00:09.994
+At the exit, someone shows you a painting.
+
+00:00:10.194 --> 00:00:12.121
+Which door did it hang beside?
+
+00:00:12.321 --> 00:00:15.850
+Would you have saved the painting,
+the door number, or both?
+
+00:00:16.640 --> 00:00:22.538
+In DMV-Hard, a tiny patch has to lead
+back to one of a hundred product pages.
+
+00:00:22.738 --> 00:00:25.849
+The gallery asks for a door and a side.
+
+00:00:26.049 --> 00:00:29.811
+Poster Maze asks which wall
+in which cell held a poster.
+
+00:00:30.011 --> 00:00:33.052
+All three reveal their
+questions after exploration.
+
+00:00:33.840 --> 00:00:36.216
+Other tasks tell you the goal immediately.
+
+00:00:36.416 --> 00:00:39.992
+In Tetris, find a landing
+for the falling piece.
+
+00:00:40.192 --> 00:00:43.965
+In Pac-Man, reach the pellets
+while avoiding ghosts.
+
+00:00:44.165 --> 00:00:48.658
+In Card Matching, remember where a face
+appeared so you can flip its partner.
+
+00:00:49.440 --> 00:00:54.223
+First, AutoMem lets the model
+evolve its own text memory program.
+
+00:00:54.423 --> 00:00:57.558
+Its words for blue spots fit both patterns.
+
+00:00:57.758 --> 00:01:02.135
+Haiku identified just one of a
+hundred and six generated patterns.
+
+00:01:02.940 --> 00:01:06.527
+Second, a hand-built
+memory saves every frame.
+
+00:01:06.727 --> 00:01:11.430
+Adding a pixel matcher found the right
+painting in fifty-six of sixty cases.
+
+00:01:11.630 --> 00:01:14.253
+How many locations did Haiku get right?
+
+00:01:14.453 --> 00:01:15.045
+Zero.
+
+00:01:15.840 --> 00:01:19.288
+Third, write the program
+before entering the gallery.
+
+00:01:19.488 --> 00:01:22.437
+It dutifully logged the order of the doors.
+
+00:01:22.637 --> 00:01:26.584
+When the question arrived,
+the paintings were missing from its records.
+
+00:01:27.373 --> 00:01:29.521
+The pilots showed what gets lost.
+
+00:01:29.721 --> 00:01:32.873
+In EvoViM, one frozen model revises how its
+
+00:01:32.873 --> 00:01:35.805
+memory program stores and uses evidence.
+
+00:01:36.005 --> 00:01:37.687
+Follow task execution.
+
+00:01:37.887 --> 00:01:41.114
+At Record, the model saves
+a view of door seven.
+
+00:01:41.314 --> 00:01:45.215
+Pixel computation compares the
+query painting with frame memory.
+
+00:01:45.415 --> 00:01:48.480
+Visual recall brings matches
+into the next prompt.
+
+00:01:48.680 --> 00:01:52.523
+At Act, the model answers: door seven, left.
+
+00:01:53.307 --> 00:01:56.592
+Memory evolution starts
+from development episodes.
+
+00:01:56.792 --> 00:02:00.275
+Enhanced feedback helps trace
+missing evidence to a tool call.
+
+00:02:00.475 --> 00:02:04.411
+The same model revises prompts,
+memory operations, or tools.
+
+00:02:04.611 --> 00:02:07.130
+It also rewrites its revision experience.
+
+00:02:07.330 --> 00:02:12.717
+Notes preserve findings, the playbook
+guides diagnosis, and scripts rerun checks.
+
+00:02:12.917 --> 00:02:16.876
+After code checks, the candidate
+runs on the same seeds.
+
+00:02:17.076 --> 00:02:18.911
+The gate selects the next parent.
+
+00:02:19.111 --> 00:02:23.174
+Revision experience survives rejection
+and guides the next revision.
+
+00:02:23.374 --> 00:02:25.220
+This makes evolution recursive.
+
+00:02:26.007 --> 00:02:30.744
+In DMV-Hard, offline matcher edits
+failed to improve recognition.
+
+00:02:30.944 --> 00:02:33.022
+The model logged that in its playbook.
+
+00:02:33.222 --> 00:02:34.650
+A later revision read it.
+
+00:02:34.850 --> 00:02:37.172
+Retrieval usually found the right page.
+
+00:02:37.372 --> 00:02:40.715
+It added a tool to compare image
+regions at the same scale.
+
+00:02:40.915 --> 00:02:42.936
+Here it is on an unseen episode.
+
+00:02:43.740 --> 00:02:46.434
+The same starting tools can evolve a skill.
+
+00:02:46.634 --> 00:02:51.382
+In Tetris, the program reads the
+board and projects a landing.
+
+00:02:51.582 --> 00:02:54.682
+The model moves left twice and drops.
+
+00:02:54.882 --> 00:02:57.297
+That move earns twenty-two points.
+
+00:02:58.107 --> 00:03:03.703
+On new episodes, EvoViM leads the
+six-task average with all three models.
+
+00:03:03.903 --> 00:03:07.010
+Its lead over AutoMem ranges from thirty-one
+
+00:03:07.010 --> 00:03:09.835
+to nearly forty-eight percentage points.
+
+00:03:10.035 --> 00:03:11.823
+Individual tasks differ.
+
+00:03:12.023 --> 00:03:16.284
+With GPT in Poster Maze,
+AutoMem still leads.
+
+00:03:17.073 --> 00:03:20.463
+Three independent gallery
+runs tell a different story.
+
+00:03:20.663 --> 00:03:24.042
+Two programs answered
+seventy-nine out of eighty.
+
+00:03:24.242 --> 00:03:27.339
+The third assigned a
+location to every unfamiliar
+
+00:03:27.339 --> 00:03:30.500
+painting. It finished at
+fifty-four out of eighty.
+
+00:03:31.307 --> 00:03:35.010
+Where did points go?
+AutoMem lost twenty-five points
+
+00:03:35.010 --> 00:03:38.424
+at retrieval. EvoViM lost
+fewer than five there.
+
+00:03:38.624 --> 00:03:41.599
+Its largest remaining loss
+came when choosing an
+
+00:03:41.599 --> 00:03:44.638
+answer or action, even
+with the evidence in hand.
+
+00:03:45.440 --> 00:03:49.283
+Removing visual tools and
+recorded frames hurts both tasks.
+
+00:03:49.483 --> 00:03:51.329
+What does enhanced feedback add?
+
+00:03:51.529 --> 00:03:53.746
+Both versions see raw traces.
+
+00:03:53.946 --> 00:03:58.765
+Enhanced feedback summarizes tool use
+and checks predictions against results.
+
+00:03:58.965 --> 00:04:04.561
+By round two, all three full gallery runs
+reached seventy-five percent in practice.
+
+00:04:04.761 --> 00:04:06.247
+Without it, none did.
+
+00:04:06.447 --> 00:04:10.803
+The programs improved sooner.
+On held-out tests, it helped the gallery
+
+00:04:10.803 --> 00:04:14.655
+on average, while simpler feedback
+won the single catalog run.
+
+00:04:15.440 --> 00:04:19.747
+The questions an agent misses today
+can teach it what to keep tomorrow.
+
+00:04:19.947 --> 00:04:24.533
+Explore the tools and try
+EvoViM on the project page.

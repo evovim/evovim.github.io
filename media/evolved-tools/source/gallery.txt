@@ -1,0 +1,35 @@
+# EvoViM · Minecraft Gallery
+# Claude Haiku 5.5 · Held-out seed 43 · Main paper, Figure 1
+# Selected program file: view_match.py
+# Search one stored doorway view and recover the side of the best match.
+# Function excerpts; helper definitions and imports are in the original module.
+
+def best_in_view(view, patch, factor):
+    """Best NCC for one stored view (float RGB array at view resolution).
+
+    Coarse search over VIEW_SCALES; then, for a view at or above REFINE_FLOOR, two refinement
+    passes around the best scale (step ratio COARSE_RATIO**0.5, then **0.25). Never lowers a score.
+    """
+    base = scaled_patch(patch, factor)
+    best = None
+    for scale in VIEW_SCALES:
+        hit = _scale_hit(view, base, scale)
+        if hit is not None and (best is None or hit["score"] > best["score"]):
+            best = hit
+    if best is None:
+        return {"score": -1.0, "scale": None, "x": None, "y": None, "w": None, "h": None, "centre": None}
+    if best["score"] >= REFINE_FLOOR:
+        ratio = COARSE_RATIO ** 0.5
+        for _pass in range(2):
+            centre_scale = best["scale"]
+            for scale in (centre_scale / ratio, centre_scale * ratio):
+                hit = _scale_hit(view, base, scale)
+                if hit is not None and hit["score"] > best["score"]:
+                    best = hit
+            ratio = ratio ** 0.5
+    return best
+
+
+def side_of(centre, door_x):
+    """L when the matched panel centre lies left of the doorway column, R otherwise."""
+    return "L" if centre < door_x else "R"

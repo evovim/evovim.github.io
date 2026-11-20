@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fcfcfd">
+<title>EvoViM: Recursively Self-Evolving Visual Agents for Exploration with Deferred Queries</title>
+<meta name="description" content="How can a visual agent explore before it knows the question? EvoViM lets a frozen multimodal model evolve a visual program for memory and skills from its own experience.">
+<link rel="icon" href="media/mascot.png" type="image/png">
+<link rel="stylesheet" href="site.css?v=7471b2d7"><link rel="stylesheet" href="cases.css?v=526d6124"><link rel="stylesheet" href="applications.css?v=590e17ec">
+<link rel="stylesheet" href="gallery-memory.css?v=eb6d76cd"><link rel="stylesheet" href="ambient.css?v=eb76d2be">
+<link rel="stylesheet" href="embodied-case.css?v=58a72ff9"><link rel="stylesheet" href="editorial.css?v=a5388ed5"><link rel="stylesheet" href="overview-film.css?v=b8430140">
+<link rel="stylesheet" href="mascot-scenes.css"><link rel="stylesheet" href="scroll-story.css?v=0b9ec52d"><link rel="stylesheet" href="environment-atlas.css?v=be6318d2">
+<link rel="stylesheet" href="challenge-pilot.css?v=0cea514e"><link rel="stylesheet" href="evolution-story.css?v=96342654"><link rel="stylesheet" href="findings.css?v=8a33351e">
+<link rel="stylesheet" href="framework-loops.css?v=7745e5c3"><link rel="stylesheet" href="framework-map.css?v=6ea17b4a"><link rel="stylesheet" href="framework-evidence.css?v=73866688"><link rel="stylesheet" href="evolved-tools.css?v=ca642fd9">
+<link rel="stylesheet" href="reading-nav.css?v=c7ea47ce">
+<script defer src="results-data.js"></script><script defer src="site.js?v=13053fdc"></script><script defer src="cases.js?v=ea271bae"></script>
+<script defer src="gallery-memory.js?v=36816cbc"></script><script defer src="applications.js?v=6c12bbb0"></script>
+<script defer src="ambient.js?v=c14b31fe"></script><script defer src="overview-film.js"></script><script defer src="environment-atlas.js?v=3538c9f3"></script>
+<script defer src="embodied-case.js?v=3218387e"></script><script defer src="mascot-scenes.js?v=f07bb2d9"></script><script defer src="challenge-pilot.js?v=461d18e7"></script>
+<script defer src="framework-map.js?v=f614137e"></script><script defer src="framework-evidence.js?v=a8458531"></script><script defer src="framework-loops.js?v=3543f562"></script><script defer src="evolution-story.js?v=64f3fe7f"></script><script defer src="evolved-tools.js?v=002e30fa"></script>
+<script defer src="findings.js?v=d77ba3e4"></script><script defer src="scroll-story.js?v=b6c09ed0"></script>
+</head>
+<body>
+<div id="ambient-field" aria-hidden="true"><canvas></canvas></div>
+<a class="skip" href="#main">Skip to content</a>
+<div id="top"></div>
+<header class="top reading-header">
+  <div class="top-in">
+    <a href="#top" class="brand" aria-label="EvoViM home"><img class="brand-mascot" src="media/mascot.png" width="44" height="44" alt=""><span class="wordmark" aria-hidden="true"><i>E</i><i>v</i><i>o</i><i>V</i><i>i</i><i>M</i></span></a>
+    <nav class="masthead-links" aria-label="Main navigation">
+      <a href="#environments">Environments</a>
+      <a href="#pilots">Pilot studies</a>
+      <a href="#method">Method</a>
+      <a href="#tools">Tools</a>
+      <a href="#results">Main results</a>
+      <a href="#applications">Applications</a>
+      <a href="#install" class="nav-install">Install <span aria-hidden="true">↓</span></a>
+    </nav>
+    <nav class="reading-nav" aria-label="Table of contents">
+      <span class="reading-label">Contents</span>
+      <button class="reading-toggle" type="button" aria-expanded="false" aria-controls="reading-links" hidden>
+        <span>Contents</span><strong class="reading-current">Overview</strong><span class="reading-chevron" aria-hidden="true"></span>
+      </button>
+      <ol class="reading-links" id="reading-links">
+        <li><a href="#top" aria-current="location"><span class="reading-name">Overview</span></a></li>
+        <li><a href="#abstract"><span class="reading-name">Abstract</span></a></li>
+        <li><a href="#environments"><span class="reading-name">Environments</span></a></li>
+        <li><a href="#pilots"><span class="reading-name">Pilot studies</span></a></li>
+        <li><a href="#method"><span class="reading-name">Method</span></a></li>
+        <li><a href="#tools"><span class="reading-name">Evolved tools</span></a></li>
+        <li><a href="#results"><span class="reading-name">Main results</span></a></li>
+        <li><a href="#applications"><span class="reading-name">Applications</span></a></li>
+        <li><a href="#install"><span class="reading-name">Install</span></a></li>
+      </ol>
+    </nav>
+  </div>
+</header>
+<main id="main">
+<section id="overview" class="hero" aria-labelledby="title">
+  <div class="wrap hero-inner">
+    <div class="hero-copy paper-heading">
+      <h1 id="title" aria-label="EvoViM: Recursively Self-Evolving Visual Agents for Exploration with Deferred Queries"><span class="wordmark"><i>E</i><i>v</i><i>o</i><i>V</i><i>i</i><i>M</i></span>: Recursively Self-Evolving Visual Agents for Exploration with <em>Deferred Queries</em></h1>
+      <ul class="paper-authors" aria-label="Authors and affiliations">
+        <li><span class="paper-author">Xinyu Cao</span><a href="https://www-en.hnu.edu.cn/" title="Hunan University"><span class="author-logo hnu-logo"><img src="media/institutions/hnu-lockup.png" width="590" height="181" alt="Hunan University"></span><span class="school-short" aria-hidden="true">HNU</span></a></li>
+        <li><span class="paper-author">Tianjie Ju</span><a href="https://nus.edu.sg/" title="National University of Singapore"><span class="author-logo nus-logo"><img src="media/institutions/nus-lockup.svg" width="475" height="218" alt="National University of Singapore"></span><span class="school-short" aria-hidden="true">NUS</span></a></li>
+        <li><span class="paper-author">Zhuosheng Zhang<sup title="Corresponding author">†</sup><span class="visually-hidden"> (corresponding author)</span></span><a href="https://en.sjtu.edu.cn/" title="Shanghai Jiao Tong University"><span class="author-logo sjtu-logo"><img src="media/institutions/sjtu.png" width="4283" height="1408" alt="Shanghai Jiao Tong University"></span><span class="school-short" aria-hidden="true">SJTU</span></a></li>
+      </ul>
+      <div class="actions"><a class="btn primary" href="#environments">Explore the environments <span aria-hidden="true">↓</span></a></div>
+    </div>
+    <figure id="overview-film" class="overview-film" aria-label="The EvoViM paper film">
+      <div class="film-projection">
+        <video id="environment-film" width="1280" height="720" controls playsinline preload="metadata" src="media/paper-film/evovim.mp4?v=f6c607d6" poster="media/paper-film/poster.jpg" aria-label="EvoViM narrated paper film" aria-describedby="tour-description">
+          <track kind="subtitles" srclang="en" label="English" src="media/paper-film/en.vtt">
+          <track kind="subtitles" srclang="zh-Hans" label="简体中文" src="media/paper-film/zh.vtt">
+          <track id="film-chapter-track" kind="chapters" srclang="en" label="Chapters" src="media/paper-film/chapters.vtt">
+        </video>
+      </div>
+      <figcaption>
+        <div class="film-caption"><strong id="film-title">Paper walkthrough</strong><button id="film-start" type="button" aria-controls="environment-film" hidden><span aria-hidden="true">▶</span> Play paper walkthrough</button><span id="tour-description" class="visually-hidden">English narration with English and simplified Chinese subtitles.</span></div>
+        <div class="film-toolbar">
+          <label id="film-chapter-picker" hidden>Chapter <select id="film-chapters" aria-controls="environment-film"></select></label>
+          <a href="media/paper-film/evovim.mp4?v=f6c607d6" download="EvoViM-paper-film.mp4">Download film <span aria-hidden="true">↓</span></a>
+        </div>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+<section id="abstract" class="section wrap paper-abstract" aria-labelledby="abstract-title">
+  <h2 id="abstract-title">Abstract</h2>
+  <div class="abstract-copy">
+    <p><span class="abstract-text">Multimodal large language model (MLLM) agents have shown promising capabilities in task-oriented environments. However, they still struggle when <span class="abstract-mark">queries are deferred until after exploration</span>, requiring them to retain visual evidence before knowing which details will matter.</span></p>
+    <p><span class="abstract-text">We introduce EvoViM, a recursively self-evolving framework in which a frozen multimodal model turns its own interaction experience into <span class="abstract-mark">one visual program for memory and skills</span>. The program retains images and computes directly on pixels, and its operations decide how this evidence is used in each task. During memory evolution, the same model traces failures in its visual trajectories to the operations that lost or misused evidence and revises them. It also rewrites the notes and analysis tools that guide later revisions, which then build on earlier findings and skip changes that have already failed.</span></p>
+    <p><span class="abstract-text">We evaluate EvoViM with three multimodal models on six tasks covering visual matching, spatial recall, and sequential decision-making, including three tasks with deferred queries. Across the six tasks, EvoViM improves the average score over AutoMem, the strongest baseline in the main comparison, by <span class="abstract-mark">31.3–47.6 points</span> on held-out episodes. Programs written once from the initial environment instructions perform substantially worse, highlighting the value of interaction experience in shaping how visual evidence is retained and used.</span></p>
+  </div>
+</section>
+<section id="environments" class="section wrap story-chapter" aria-labelledby="environment-title">
+  <div class="chapter-intro"><h2 id="environment-title">What does the agent <em>know at the start?</em></h2><p>In MC Gallery, the agent walks past paintings on its way to the exit. Only then does it learn which painting to locate. In Tetris, it knows from the first move that it needs to reach 600 points.</p></div>
+  <div class="atlas-groups">
+    <div class="atlas-group deferred"><h3>Deferred queries</h3><div class="atlas-row">
+      <a class="atlas-item" data-env="dmv-hard" href="media/live/dmv-hard.mp4" aria-label="Watch DMV-Hard. Find the page behind a crop.">
+        <span class="atlas-image"><img src="media/observations/dmv-hard-a.webp" alt="" loading="lazy"><i class="atlas-play" aria-hidden="true">▶</i></span>
+        <strong>DMV-Hard</strong><span class="atlas-task">Find the page behind a crop.</span>
+      </a>
+      <a class="atlas-item" data-env="gallery" href="media/live/gallery.mp4" aria-label="Watch MC Gallery. Recall the door and side of a painting.">
+        <span class="atlas-image"><img src="media/episodes/gallery-door7.webp" alt="" loading="lazy"><i class="atlas-play" aria-hidden="true">▶</i></span>
+        <strong>MC Gallery</strong><span class="atlas-task">Recall the door and side of a painting.</span>
+      </a>
+      <a class="atlas-item" data-env="poster-maze" href="media/live/poster-maze.mp4" aria-label="Watch Poster Maze. Locate a poster on a maze wall.">
+        <span class="atlas-image"><img src="media/observations/poster-maze-a.webp" alt="" loading="lazy"><i class="atlas-play" aria-hidden="true">▶</i></span>
+        <strong>Poster Maze</strong><span class="atlas-task">Locate a poster on a maze wall.</span>
+      </a>
+    </div></div>
+    <div class="atlas-group known"><h3>Goal known from the start</h3><div class="atlas-row">
+      <a class="atlas-item" data-env="tetris" href="media/live/tetris.mp4" aria-label="Watch Tetris. Place the next falling piece.">
+        <span class="atlas-image"><img src="media/live/tetris.jpg" alt="" loading="lazy"><i class="atlas-play" aria-hidden="true">▶</i></span>
+        <strong>Tetris</strong><span class="atlas-task">Place the next falling piece.</span>
+      </a>
+      <a class="atlas-item" data-env="pacman" href="media/live/pacman.mp4" aria-label="Watch Pac-Man. Collect pellets and avoid ghosts.">
+        <span class="atlas-image"><img src="media/live/pacman.jpg" alt="" loading="lazy"><i class="atlas-play" aria-hidden="true">▶</i></span>
+        <strong>Pac-Man</strong><span class="atlas-task">Collect pellets and avoid ghosts.</span>
+      </a>
+      <a class="atlas-item" data-env="card-matching" href="media/live/card-matching.mp4" aria-label="Watch Card Matching. Remember faces and clear pairs.">
+        <span class="atlas-image"><img src="media/observations/card-matching-a.webp" alt="" loading="lazy"><i class="atlas-play" aria-hidden="true">▶</i></span>
+        <strong>Card Matching</strong><span class="atlas-task">Remember faces and clear pairs.</span>
+      </a>
+    </div></div>
+  </div>
+  <details id="case-exercises" class="secondary-evidence"><summary>Try a decision from a real episode</summary>
+    <div id="cases" aria-label="Four interactive benchmark episodes"></div>
+  </details>
+</section>
+<section id="pilots" class="section wrap story-chapter" aria-labelledby="pilots-title">
+  <div class="chapter-intro"><h2 id="pilots-title">Why do existing <em>memory designs fall short?</em></h2></div>
+  <div id="pilot-story"><p>A note can omit a pattern. An image can lose its location. A program written before exploration may record only the route.</p></div>
+</section>
+<section id="method" class="section wrap story-chapter" aria-labelledby="method-title">
+  <div class="chapter-intro"><h2 id="method-title">How does the <em>memory program evolve?</em></h2><p>EvoViM starts with basic image tools. The same frozen model uses the memory program during task execution and revises it from development episodes. It also updates the playbook, notes, and analysis scripts that guide its next revision.</p></div>
+  <div id="framework-loops">
+    <figure class="method-fallback"><img src="media/method/framework-editorial.svg?v=3fc6a064" width="1200" height="610" alt="EvoViM framework. Task execution, memory program and memory evolution. A frozen model rewrites both a candidate program and its revision experience.">
+      <figcaption>Task execution records outcomes and reads the memory program. Memory evolution uses development episodes, enhanced feedback and revision experience. The playbook, notes and scripts carry forward after every attempt. Code checks and a gate determine which candidate joins the program lineage.</figcaption>
+    </figure>
+    <a id="framework-open" class="text-link" href="media/method/framework.webp" aria-haspopup="dialog">View original framework diagram</a>
+  </div>
+  <section id="gallery-lineage" class="lineage-chapter" aria-labelledby="gallery-lineage-title">
+    <div class="lineage-intro"><h3 id="gallery-lineage-title">Memory evolution in <em>MC Gallery</em></h3><p>Follow one program from text notes to a tool that locates paintings in saved doorway views.</p></div>
+    <div id="evolution-story"><p>The starting program answered 4 of 16 development questions correctly. Saving painting crops and their locations brought the total to 13. Searching inside full doorway views brought it to 16.</p></div>
+  </section>
+</section>
+<section id="tools" class="section wrap story-chapter" aria-labelledby="tools-title">
+  <div class="chapter-intro"><h2 id="tools-title">Evolved <em>visual tools</em></h2><p>All six programs started with the same image tools.</p></div>
+  <div id="evolved-tools">
+    <dl class="tool-fallback">
+      <dt>Visual matching</dt><dd>Card Matching compares exposed card faces. DMV-Hard searches saved pages for the corner pattern in a product photo.</dd>
+      <dt>Spatial recall</dt><dd>MC Gallery locates a painting beside a numbered door. Poster Maze links a poster to a cell and wall.</dd>
+      <dt>Sequential decision-making</dt><dd>Tetris reads the board and plans a drop. Pac-Man updates its pellet map and finds the first move on a route.</dd>
+    </dl>
+  </div>
+</section>
+<section id="results" class="section wrap story-chapter" aria-labelledby="results-title">
+  <div class="chapter-intro"><h2 id="results-title">Main <em>results</em></h2><p>Across the three models, EvoViM scores 31.3–47.6 percentage points above AutoMem on the six-task held-out average.</p></div>
+  <div id="score-explorer"><a href="downloads/main_results.csv" download>Download scores</a></div>
+</section>
+<section id="applications" aria-labelledby="applications-title"></section>
+<section id="install" class="install"><div class="wrap install-inner"><div><h2>Try <em>EvoViM.</em></h2><p>Run the evolved Card Matching program offline with Python 3.10+ on macOS or Linux. The release includes 18 memory programs selected across six benchmarks.</p>
+<div class="install-links"><a class="btn light" id="download-wheel" href="downloads/evovim-0.3.0-py3-none-any.whl" download="evovim-0.3.0-py3-none-any.whl">Download wheel ↓</a><a href="downloads/evovim-0.3.0.tar.gz" download>Source package ↓</a></div></div>
+<div class="terminal"><div class="terminal-head"><span>Terminal</span><button id="copy-install" type="button">Copy commands</button></div><pre><code id="install-code">python -m pip install ./evovim-0.3.0-py3-none-any.whl
+evovim demo --cards</code></pre><p id="install-hint">Run these commands in the folder containing the downloaded wheel.</p></div></div></section>
+</main>
+<footer class="wrap footer"><a class="brand" href="#top" aria-label="EvoViM home"><span class="wordmark" aria-hidden="true"><i>E</i><i>v</i><i>o</i><i>V</i><i>i</i><i>M</i></span></a><div class="footer-links"><a href="#top">Back to top ↑</a></div></footer>
+<dialog id="environment-dialog" aria-labelledby="environment-name">
+  <div class="env-modal-head"><h2 id="environment-name"></h2><button class="env-close" aria-label="Close environment" type="button">Close <span aria-hidden="true">×</span></button></div>
+  <p id="environment-task"></p>
+  <div class="env-media"><video playsinline controls muted preload="none"></video><img class="env-observation" hidden alt=""></div>
+  <div class="env-views" role="group" aria-label="Film or original observations" hidden></div>
+  <p class="env-still-caption" hidden></p>
+  <div id="gallery-memory" hidden></div>
+  <button type="button" class="env-exercise" hidden>Try this decision <span aria-hidden="true">→</span></button>
+</dialog>
+<dialog id="framework-dialog" aria-labelledby="original-framework-heading"><div class="dialog-head"><b id="original-framework-heading">Original framework diagram</b><button type="button" id="framework-close" aria-label="Close method diagram">Close ×</button></div><div class="diagram-scroll"><img loading="lazy" src="media/method/framework.webp" alt="The memory program supports task execution. During memory evolution the same model revises both the program and its revision experience. Code checks and a gate select the next parent."></div></dialog>
+</body></html>

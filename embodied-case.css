@@ -1,0 +1,33 @@
+#embodied-case .kitchen-case {
+  padding-top: clamp(22px,2.4vw,36px);
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,.95fr);
+  column-gap: clamp(25px,6vw,88px);
+  row-gap: 20px;
+  align-items: start;
+}
+.kitchen-intro h3 { margin: 0 0 12px; font: 500 clamp(28px,2.65vw,44px)/1.08 var(--serif); letter-spacing: -.04em; }
+.kitchen-intro p,.kitchen-questions p { font: 400 15px/1.6 var(--sans); color: var(--body); }
+.kitchen-intro .kitchen-play { margin-top: 16px; display: inline-flex; align-items: center; gap: 9px; min-height: 42px; padding: 8px 17px; border: 1px solid #ab98bc; border-radius: 22px; color: #50366b; background: white; font: 650 13px var(--sans); }
+.kitchen-play span { font-size: 11px; }
+.kitchen-questions { align-self: center; border-top: 1px solid var(--line); }
+.kitchen-questions details { border-bottom: 1px solid var(--line); }
+.kitchen-questions summary { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 17px 2px; list-style: none; color: var(--ink); cursor: pointer; font: 650 16px/1.4 var(--sans); }
+.kitchen-questions summary::-webkit-details-marker { display: none; }
+.kitchen-questions summary::after { content: '+'; color: var(--plum); font-weight: 500; }
+.kitchen-questions details[open] summary::after { content: '−'; }
+.kitchen-questions details > div { padding: 0 2px 12px; }
+.kitchen-questions strong { color: var(--ink); }
+.kitchen-questions button,.kitchen-intro a,#kitchen-filmbox a { color: #624382; text-underline-offset: 3px; }
+.kitchen-questions button { padding: 8px 0; text-align: left; text-decoration: underline; font: 600 14px var(--sans); }
+.kitchen-back { grid-column: 1 / -1; justify-self: start; min-height: 42px; padding: 4px 0; color: var(--deep); font: 600 14px/1.4 var(--sans); text-decoration: underline; text-underline-offset: 4px; }
+.kitchen-back span { display: inline-block; margin-inline-end: 4px; }
+#kitchen-filmbox { grid-column: 1 / -1; }
+#kitchen-filmbox { width: min(880px,100%); }
+#kitchen-filmbox video { display: block; width: 100%; aspect-ratio: 16/9; background: #181720; border-radius: 7px; }
+#kitchen-filmbox figcaption,.kitchen-status { font: 500 14px/1.65 var(--sans); color: var(--soft); }
+#kitchen-filmbox figcaption { margin-top: 6px; }
+@media (max-width: 720px) {
+  #embodied-case .kitchen-case { grid-template-columns: 1fr; gap: 18px; }
+  .kitchen-questions summary { padding-block: 13px; }
+}

@@ -1,0 +1,126 @@
+@media screen {
+  .top::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 -1px;
+    height: 3px;
+    background: linear-gradient(90deg, #ef476f, #f28e2b 24%, #00a890 50%, #934bed 74%, #184878);
+    transform: scaleX(var(--reading-progress, 0));
+    transform-origin: left;
+    pointer-events: none;
+  }
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  [data-scroll-scene] {
+    --remaining: calc(1 - var(--arrival, 1));
+    --rise: 24px;
+  }
+
+  /* Ink follows each paragraph's own position, including when reading back up. */
+  [data-scroll-scene="abstract"] h2 {
+    position: relative;
+    justify-self: start;
+    width: fit-content;
+  }
+  [data-scroll-scene="abstract"] h2::after {
+    content: "";
+    position: absolute;
+    top: calc(100% + .12em);
+    left: 1%;
+    width: 98%;
+    height: .08em;
+    border-radius: 100%;
+    background: linear-gradient(90deg, #519891, #987fb3 57%, #d19a50);
+    transform: scaleX(var(--arrival));
+    transform-origin: left;
+  }
+  [data-scroll-scene="paragraph"] { --annotation: #bfe3dc; }
+  [data-scroll-scene="paragraph"]:nth-child(2) { --annotation: #e0d3ee; }
+  [data-scroll-scene="paragraph"]:nth-child(3) { --annotation: #f0d8b4; }
+  .abstract-text { display: block; }
+  [data-scroll-scene="paragraph"] .abstract-text {
+    transform: translateY(calc(var(--remaining) * var(--rise)));
+    opacity: calc(.84 + .16 * var(--arrival));
+  }
+  [data-scroll-scene="paragraph"] .abstract-mark {
+    background: linear-gradient(var(--annotation), var(--annotation)) left 94% / calc(var(--arrival) * 100%) .39em no-repeat;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  [data-scroll-scene="heading"] :is(h2, h3) {
+    transform: translateY(calc(var(--remaining) * var(--rise)));
+  }
+  [data-scroll-scene="heading"] p {
+    transform: translateY(calc(var(--remaining) * var(--rise) * 1.65));
+  }
+  [data-scroll-scene="heading"] :is(h2, h3) em {
+    background: linear-gradient(currentColor, currentColor) left bottom / calc(var(--arrival) * 100%) 2px no-repeat;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    text-decoration: none;
+  }
+  [data-scroll-scene="environments"] .atlas-item {
+    transform: translateY(calc(var(--remaining) * var(--distance, 16px)));
+  }
+  [data-scroll-scene="environments"] .atlas-item:nth-child(2) { --distance: 30px; }
+  [data-scroll-scene="environments"] .atlas-item:nth-child(3) { --distance: 44px; }
+  [data-scroll-scene="evidence"] :is(.ep-picture, .fw-map, .ev-figure) {
+    translate: 0 calc(var(--remaining) * var(--rise));
+    scale: calc(1 - var(--remaining) * .024);
+    transform-origin: center top;
+  }
+  [data-scroll-scene="evidence"] :is(.ep-narration, .fw-inspect, .ev-caption) {
+    translate: 0 calc(var(--remaining) * var(--rise) * 1.8);
+  }
+  [data-scroll-scene="install"] .terminal::after {
+    content: "";
+    display: block;
+    height: 2px;
+    background: #86dbc2;
+    transform: scaleX(var(--arrival));
+    transform-origin: left;
+  }
+  [data-scroll-scene]:focus-within { --remaining: 0; }
+}
+
+@media screen and (min-width: 800px) and (prefers-reduced-motion: no-preference) {
+  [data-scroll-scene] { --rise: 41px; }
+  [data-scroll-scene="abstract"] h2 {
+    position: sticky;
+    top: calc(var(--nav-height, 65px) + 2.2rem);
+  }
+  [data-scroll-scene="paragraph"] .abstract-text {
+    transform: translate(calc(var(--remaining) * -13px), calc(var(--remaining) * var(--rise)));
+  }
+  [data-scroll-scene="opening"] .paper-heading h1 {
+    transform: translateY(calc(var(--arrival) * -24px)) scale(calc(1 - var(--arrival) * .028));
+    transform-origin: left bottom;
+  }
+  [data-scroll-scene="heading"] :is(h2, h3) em {
+    background-image: linear-gradient(color-mix(in srgb, currentColor 38%, transparent), color-mix(in srgb, currentColor 38%, transparent));
+  }
+  [data-scroll-scene="environments"] .atlas-item { --distance: 36px; }
+  [data-scroll-scene="environments"] .atlas-item:nth-child(2) { --distance: 64px; }
+  [data-scroll-scene="environments"] .atlas-item:nth-child(3) { --distance: 92px; }
+  [data-scroll-scene="decision"] .cs-visual {
+    clip-path: inset(0 calc(var(--remaining) * 7%) calc(var(--remaining) * 6%) 0);
+    transform: translateY(calc(var(--remaining) * 26px)) scale(calc(1 - var(--remaining) * .04));
+    transform-origin: left top;
+  }
+  [data-scroll-scene="decision"] .cs-copy h3 {
+    transform: translateX(calc(var(--remaining) * 20px));
+  }
+
+  /* Three archive prints open from a fan into their original order. */
+  [data-scroll-scene="archive"] .archive-record {
+    transform-origin: 50% 90%;
+    transform: translate(calc(var(--remaining) * var(--spread)), calc(var(--remaining) * var(--lift)))
+      rotate(calc(var(--remaining) * var(--angle)));
+  }
+  [data-scroll-scene="archive"] .archive-record:nth-child(1) { --spread: 47%; --lift: 5%; --angle: -7deg; }
+  [data-scroll-scene="archive"] .archive-record:nth-child(2) { --spread: 0%; --lift: 15%; --angle: 1deg; }
+  [data-scroll-scene="archive"] .archive-record:nth-child(3) { --spread: -47%; --lift: 8%; --angle: 7deg; }
+  .archive-guide:not([data-stage="browse"]) + [data-scroll-scene="archive"] { --remaining: 0; }
+}

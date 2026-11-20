@@ -1,0 +1,108 @@
+{
+  "apollo": [
+    {
+      "id": "AS11-40-5874",
+      "title": "Flag on the surface",
+      "alt": "Aldrin stands to the right of the flag. The lunar module is at the left edge.",
+      "image": "apollo-flag.webp",
+      "query": "apollo-flag-crop.png",
+      "width": 600,
+      "height": 593,
+      "box": [
+        165,
+        150,
+        99
+      ],
+      "source": "https://images.nasa.gov/details/as11-40-5874",
+      "image_source": "https://images-assets.nasa.gov/image/as11-40-5874/as11-40-5874~medium.jpg",
+      "credit": "NASA / Johnson Space Center"
+    },
+    {
+      "id": "AS11-40-5878",
+      "title": "Bootprint in lunar soil",
+      "alt": "A bootprint cuts diagonally across the dusty surface.",
+      "image": "apollo-print.webp",
+      "query": "apollo-print-crop.png",
+      "width": 597,
+      "height": 600,
+      "box": [
+        304,
+        319,
+        90
+      ],
+      "source": "https://images.nasa.gov/details/as11-40-5878",
+      "image_source": "https://images-assets.nasa.gov/image/as11-40-5878/as11-40-5878~medium.jpg",
+      "credit": "NASA / Johnson Space Center"
+    },
+    {
+      "id": "AS11-40-5903",
+      "title": "Aldrin near Eagle",
+      "alt": "Aldrin faces the camera with a gold visor. His shadow crosses the foreground.",
+      "image": "apollo-visor.webp",
+      "query": "apollo-visor-crop.png",
+      "width": 600,
+      "height": 585,
+      "box": [
+        277,
+        8,
+        66
+      ],
+      "source": "https://images.nasa.gov/details/as11-40-5903",
+      "image_source": "https://images-assets.nasa.gov/image/as11-40-5903/as11-40-5903~medium.jpg",
+      "credit": "NASA / Johnson Space Center"
+    }
+  ],
+  "monet": [
+    {
+      "id": "1985.1103",
+      "title": "End of Summer",
+      "alt": "Two stacks sit in a sunlit field in front of scattered houses.",
+      "image": "monet-summer.webp",
+      "query": "monet-summer-crop.png",
+      "width": 600,
+      "height": 356,
+      "box": [
+        104,
+        156,
+        90
+      ],
+      "source": "https://publications.artic.edu/node/135599",
+      "image_source": "https://commons.wikimedia.org/wiki/File:Claude_Monet_-_Stacks_of_Wheat_%28End_of_Summer%29_-_1985.1103_-_Art_Institute_of_Chicago.jpg",
+      "credit": "Claude Monet / Art Institute of Chicago, open-access reproduction via Wikimedia Commons"
+    },
+    {
+      "id": "1933.444",
+      "title": "End of Day, Autumn",
+      "alt": "Two reddish stacks stand before a blue band of trees.",
+      "image": "monet-autumn.webp",
+      "query": "monet-autumn-crop.png",
+      "width": 600,
+      "height": 386,
+      "box": [
+        392,
+        104,
+        114
+      ],
+      "source": "https://publications.artic.edu/node/135601",
+      "image_source": "https://commons.wikimedia.org/wiki/File:Claude_Monet_-_Stacks_of_Wheat_%28End_of_Day%2C_Autumn%29_-_1933.444_-_Art_Institute_of_Chicago.jpg",
+      "credit": "Claude Monet / Art Institute of Chicago, open-access reproduction via Wikimedia Commons"
+    },
+    {
+      "id": "1922.431",
+      "title": "Sunset, Snow Effect",
+      "alt": "A large blue-violet stack and a smaller one stand below a peach sky.",
+      "image": "monet-snow.webp",
+      "query": "monet-snow-crop.png",
+      "width": 600,
+      "height": 386,
+      "box": [
+        204,
+        121,
+        102
+      ],
+      "source": "https://publications.artic.edu/node/135603",
+      "image_source": "https://commons.wikimedia.org/wiki/File:Claude_Monet_-_Stacks_of_Wheat_%28Sunset%2C_Snow_Effect%29_-_1922.431_-_Art_Institute_of_Chicago.jpg",
+      "credit": "Claude Monet / Art Institute of Chicago, open-access reproduction via Wikimedia Commons"
+    }
+  ]
+}

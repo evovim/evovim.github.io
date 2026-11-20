@@ -1,0 +1,79 @@
+#applications {
+  --archive-ink: var(--ink, #2b3540);
+  --archive-accent: #255e88;
+  --archive-rule: var(--line, #d7dce1);
+  color: var(--archive-ink);
+  border-top: 1px solid var(--archive-rule);
+  scroll-margin-top: calc(var(--nav-height, 68px) + 10px);
+}
+#applications .app-wrap { padding-block: clamp(46px, 5vw, 82px); }
+#applications-title { margin: 0 0 clamp(20px,2.8vw,38px); font: 500 clamp(39px,4.1vw,67px)/1.04 var(--serif); letter-spacing: -.05em; text-wrap: balance; }
+#applications-title em { color: var(--archive-accent); }
+#applications .app-switch { position: relative; display: flex; flex-wrap: wrap; gap: 0 clamp(16px,3vw,44px); border-bottom: 1px solid var(--archive-rule); }
+#applications .app-switch::after {
+  content: ''; pointer-events: none; position: absolute; left: 0; bottom: -1px;
+  height: 3px; width: var(--tab-width, 0px); border-radius: 2px;
+  background: var(--archive-accent); transform: translateX(var(--tab-left, 0px));
+}
+#applications .app-switch button { padding: 10px 0; min-height: 44px; margin-bottom: -1px; background: transparent; border-radius: 0; border-bottom: 2px solid transparent; color: var(--body); font: 600 14px var(--sans); }
+#applications .app-switch button[aria-pressed=true] { color: var(--archive-accent); }
+#applications .app-case-stage { overflow-anchor: none; }
+#applications .archive { padding-top: clamp(22px,2.4vw,36px); }
+#applications .archive-head { display: grid; grid-template-columns: 1fr .9fr; gap: 9px 42px; align-items: end; padding-bottom: clamp(20px,2.3vw,33px); }
+#applications .archive-title { font: 500 clamp(28px,2.65vw,44px)/1.08 var(--serif); letter-spacing: -.04em; }
+#applications .archive-context { color: var(--body); font: 400 15px/1.6 var(--sans); }
+#applications .archive-interaction { display: grid; align-items: start; grid-template-columns: minmax(175px,.72fr) minmax(0,2.6fr); gap: clamp(14px,2.2vw,34px); padding-block: clamp(18px,2vw,30px); border-block: 1px solid var(--archive-rule); }
+#applications .archive-guide { min-width: 0; }
+#applications .archive-instruction { margin: 0; font: 650 clamp(17px,1.6vw,24px)/1.22 var(--sans); letter-spacing: -.035em; }
+#applications .archive-instruction:focus { outline: 0; }
+#applications .archive-actions { display: flex; align-items: center; flex-wrap: wrap; column-gap: 16px; }
+#applications .archive-action { min-height: 44px; padding: 6px 0; background: transparent; color: var(--archive-accent); text-decoration: underline; text-underline-offset: 4px; font: 650 14px/1.4 var(--sans); }
+#applications .archive-back { color: var(--body); font-weight: 550; }
+#applications .archive-query { margin: 10px 0; }
+#applications .archive-query img { width: clamp(58px,6vw,90px); aspect-ratio: 1; object-fit: contain; }
+#applications .archive-status { margin-top: 8px; color: var(--ink); font: 600 14px/1.4 var(--sans); }
+#applications .archive-status:empty { display: none; }
+#applications .archive-records { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: clamp(7px,1.2vw,18px); }
+#applications .archive-record { min-width: 0; }
+#applications .archive-picture { position: relative; display: block; width: 100%; padding: 0; line-height: 0; background: transparent; }
+#applications .archive-picture img { display: block; width: 100%; height: auto; }
+#applications :is(button, summary, a):focus-visible { outline: 2px solid var(--archive-accent); outline-offset: 3px; }
+#applications .archive-record.missed .archive-record-label strong { color: #9b4139; text-decoration: line-through; }
+#applications .archive-record.correct-record .archive-record-label strong { color: #24685d; }
+#applications .archive-record.correct-record .archive-record-label strong::before { content: "✓ "; }
+#applications .archive-match { position: absolute; z-index: 1; outline: 2px solid #292430; border: 2px solid #ffed8d; }
+#applications .archive-record-label { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; padding: 9px 1px 2px; }
+#applications .archive-record-label strong { font: 600 clamp(14px,1vw,16px)/1.4 var(--sans); }
+#applications .archive-record-label a { color: var(--archive-accent); font: inherit; text-decoration: underline; text-underline-offset: 3px; }
+#applications .archive-foot { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 9px 25px; padding-top: 13px; color: var(--soft); font: 14px/1.5 var(--sans); }
+#applications .archive-foot details { max-width: 54ch; }
+#applications .archive-foot summary { cursor: pointer; color: var(--archive-accent); font-weight: 650; }
+#applications .archive-foot details p { margin: 8px 0; }
+#applications .archive-foot details a { color: var(--archive-accent); font-weight: 600; }
+#applications .archive-command { display: block; margin: 8px 0; font: 14px/1.5 var(--mono); overflow-wrap: anywhere; }
+@media (hover:hover) {
+  #applications button.archive-picture:hover + .archive-record-label strong { text-decoration: underline; text-underline-offset: 3px; }
+  #applications .app-switch button:hover, #applications .archive-action:hover { color: var(--archive-accent); text-decoration: underline; text-underline-offset: 4px; }
+}
+@media (prefers-reduced-motion:no-preference) {
+  #applications .app-switch::after { transition: transform 420ms cubic-bezier(.22,.8,.18,1), width 360ms cubic-bezier(.22,.8,.18,1); }
+  #applications .app-switch button { transition: color .18s, transform .16s ease-out; }
+  #applications .app-switch button:active { transform: translateY(2px) scale(.97); }
+  #applications .archive-guide[data-stage="choose"] .archive-query, #applications .archive-match { animation: archive-enter .3s ease-out both; }
+  @keyframes archive-enter { from {opacity: .3; transform: translateY(3px);} to {opacity: 1; transform: none;} }
+}
+@media (max-width: 760px) {
+  #applications .app-switch { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+  #applications .app-switch button { text-align: start; line-height: 1.35; text-wrap: balance; }
+  #applications .archive-head { grid-template-columns: 1fr; gap: 7px; }
+  #applications .archive-interaction { grid-template-columns: 1fr; }
+  #applications .archive-guide { display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 4px 15px; }
+  #applications .archive-instruction { grid-column: 1; }
+  #applications .archive-query { grid-column: 1; grid-row: 2; margin: 6px 0; }
+  #applications .archive-actions { align-self: center; grid-column: 2; grid-row: 1 / span 2; flex-direction: column; align-items: flex-start; }
+  #applications .archive-status { grid-column: 1 / -1; margin-top: 4px; }
+}
+@media (max-width: 400px) {
+  #applications .archive-guide { gap: 6px; }
+  #applications .archive-records { gap: 7px; }
+}

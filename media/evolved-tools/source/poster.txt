@@ -1,0 +1,46 @@
+# EvoViM · Poster Maze
+# GPT-6.1 Sol · Held-out seed 48 · Main paper, Figure 1
+# Selected program file: scene_memory.py
+# Resolve a central poster's wall from a stored wall claim or recorded openings along the sightline.
+# Function excerpts; helper definitions and imports are in the original module.
+
+def frontal_endpoint(record, cells, central):
+    """A conditional inference, never a silently persisted wall claim."""
+    if record.get('wall') is not None:
+        return {'wall': record['wall'], 'source': 'model claim',
+                'claim_step': record.get('wall_step', record['step'])}
+    pose = record['public'].get('pose')
+    if not pose or not central:
+        return {'wall': None, 'source': 'no model wall; crop is not central or pose is unknown'}
+    row, col, direction = pose['row'], pose['col'], pose['facing']
+    support = []
+    grid = record['public'].get('grid')
+    # Each iteration consumes a distinct saved/inferred cell; unknown stops it.
+    for _ in range(len(cells) + 1):
+        fact = cells.get((row, col), {}).get('edges', {}).get(direction)
+        if fact is None:
+            dr, dc = OFFSETS[direction]
+            # Public dimensions are retained only by the selected SAVE_FRAME.
+            # Do not guess through interior gaps or override an observed exit.
+            if (grid and grid.get('zero_based') and 0 <= row < grid['rows'] and 0 <= col < grid['cols']
+                    and not (0 <= row + dr < grid['rows'] and 0 <= col + dc < grid['cols'])):
+                support.append({'cell': [row, col], 'direction': direction, 'open': False,
+                                'step': record['step'], 'source': 'saved public zero-based grid dimensions',
+                                'grid': grid})
+                return {'wall': {'row': row, 'col': col, 'side': direction},
+                        'source': 'conditional frontal ray ending at declared grid boundary',
+                        'condition': 'Requires a frontal end-wall panel and a bounded grid without wrapping or portals; explicit observed exits override this inference.',
+                        'support': support}
+            return {'wall': None, 'source': 'unobserved gap along frontal ray', 'support': support}
+        if any(step > record['step'] for step in fact['changed_at']):
+            return {'wall': None, 'source': 'edge changed after image; old scene may be stale', 'support': support}
+        support.append({'cell': [row, col], 'direction': direction,
+                        'open': fact['open'], 'step': fact['step'], 'image_id': fact['source']})
+        if not fact['open']:
+            return {'wall': {'row': row, 'col': col, 'side': direction},
+                    'source': 'conditional frontal ray through saved public exits',
+                    'condition': 'Valid only if this crop depicts the frontal end wall, not a side panel.',
+                    'support': support}
+        dr, dc = OFFSETS[direction]
+        row, col = row + dr, col + dc
+    return {'wall': None, 'source': 'ray not resolved', 'support': support}
