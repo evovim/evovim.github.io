@@ -34,11 +34,6 @@ dialog.addEventListener("click", event => {
 });
 
 const installCode = document.getElementById("install-code");
-if (["http:", "https:"].includes(location.protocol)) {
-  const wheel = document.getElementById("download-wheel");
-  installCode.textContent = installCode.textContent.replace("./" + wheel.download, '"' + wheel.href + '"');
-  document.getElementById("install-hint").hidden = true;
-}
 const copyButton = document.getElementById("copy-install");
 let resetTimer;
 copyButton.addEventListener("click", async () => {
