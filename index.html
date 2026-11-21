@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="embodied-case.css?v=58a72ff9"><link rel="stylesheet" href="editorial.css?v=22a1cff7"><link rel="stylesheet" href="overview-film.css?v=b8430140">
 <link rel="stylesheet" href="mascot-scenes.css"><link rel="stylesheet" href="scroll-story.css?v=7724b019"><link rel="stylesheet" href="environment-atlas.css?v=99065ab9">
 <link rel="stylesheet" href="research-question.css?v=759bf0fe">
-<link rel="stylesheet" href="challenge-pilot.css?v=5074370b"><link rel="stylesheet" href="evolution-story.css?v=95a47ba6"><link rel="stylesheet" href="findings.css?v=d4657d84">
+<link rel="stylesheet" href="challenge-pilot.css?v=a707b893"><link rel="stylesheet" href="evolution-story.css?v=95a47ba6"><link rel="stylesheet" href="findings.css?v=d4657d84">
 <link rel="stylesheet" href="generation-results.css?v=7023b6cc">
 <link rel="stylesheet" href="framework-loops.css?v=56b905c0"><link rel="stylesheet" href="framework-evidence.css?v=2f018030"><link rel="stylesheet" href="paper-framework.css?v=ba544bc1"><link rel="stylesheet" href="evolved-tools.css?v=9f52084f">
 <link rel="stylesheet" href="reading-nav.css?v=120607f3">
@@ -21,7 +21,7 @@
 <script defer src="gallery-memory.js?v=36816cbc"></script><script defer src="applications.js?v=3a15ed09"></script>
 <script defer src="ambient.js?v=c14b31fe"></script><script defer src="overview-film.js"></script><script defer src="environment-atlas.js?v=8aa9d9f8"></script>
 <script defer src="research-question.js?v=7224c476"></script>
-<script defer src="embodied-case.js?v=56882243"></script><script defer src="mascot-scenes.js?v=f2807ce2"></script><script defer src="challenge-pilot.js?v=ce146fe4"></script>
+<script defer src="embodied-case.js?v=56882243"></script><script defer src="mascot-scenes.js?v=f2807ce2"></script><script defer src="challenge-pilot.js?v=a6718187"></script>
 <script defer src="framework-evidence.js?v=23b77210"></script><script defer src="paper-framework.js?v=253bc26f"></script><script defer src="framework-loops.js?v=9112e53c"></script><script defer src="evolution-story.js?v=dbd56b9e"></script><script defer src="evolved-tools.js?v=dfc9a753"></script>
 <script defer src="findings.js?v=872c04d3"></script><script defer src="scroll-story.js?v=5495f28e"></script>
 <script defer src="generation-results.js?v=ea8bbe95"></script>
@@ -171,7 +171,32 @@
         <tr data-pilot="one-shot" data-qwen="13.8 25.0 14.2"><th scope="row">One-shot program</th><td>13.8</td><td>20.0</td><td>28.8</td></tr>
       </tbody>
     </table>
-    <noscript><p>On DMV-Hard, evolved text memory answered only 1 of 106 pattern questions correctly. In MC Gallery, the hand-designed matcher ranked 56 of 60 seen paintings first, yet the agent located none. The one-shot program recorded the door order and also located none of the 60 paintings.</p></noscript>
+    <section class="ep-notes" aria-label="Excerpts from AutoMem’s notes in DMV-Hard">
+      <h3>AutoMem’s saved notes</h3>
+      <div class="ep-note-pages">
+        <figure>
+          <img src="media/comparison/correct-vase.webp" width="512" height="512" loading="lazy" alt="A wood-panelled vase with a rust, blue and cream swatch at the bottom left.">
+          <figcaption>
+            <h4>Vase <span>Correct page</span></h4>
+            <dl><dt>Pattern</dt><dd><q>teal to pale sea-green base mottled with rust-orange, cream and navy blurred blobs</q></dd>
+                <dt>Upper-right mark</dt><dd><q><strong>rust</strong> blob top-right edge</q></dd></dl>
+          </figcaption>
+        </figure>
+        <figure>
+          <img src="media/comparison/returned-table.webp" width="512" height="512" loading="lazy" alt="A wooden side table with a similarly colored swatch at the bottom left.">
+          <figcaption>
+            <h4>Side table <span>AutoMem’s choice</span></h4>
+            <dl><dt>Pattern</dt><dd><q>deep teal-blue and pale cream mottled base with rust-orange and dark navy blob accents</q></dd>
+                <dt>Upper-right mark</dt><dd><q><strong>dark navy</strong> blob upper-right</q></dd></dl>
+          </figcaption>
+        </figure>
+      </div>
+      <figure class="ep-note-search">
+        <img src="media/comparison/pattern-query.webp" width="256" height="256" loading="lazy" alt="The query shows only the spotted swatch from the vase page.">
+        <figcaption><strong>AutoMem’s search for this crop</strong><q>teal navy rust cream blob swatch</q></figcaption>
+      </figure>
+    </section>
+    <noscript><p>The search left out the spot positions and matched 40 pages. The side table ranked second. The correct vase was missing from the eight results shown. Across DMV-Hard, evolved text memory answered 1 of 106 pattern questions correctly. In MC Gallery, the hand-designed matcher ranked 56 of 60 seen paintings first, yet the agent located none. The one-shot program recorded the door order and also located none of the 60 paintings.</p></noscript>
   </div>
 </section>
 <section id="method" class="section wrap story-chapter" aria-labelledby="method-title">

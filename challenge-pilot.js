@@ -1,7 +1,6 @@
 (() => {
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const gallery = 'media/episodes/';
-  const products = 'media/comparison/';
   const art = 'media/mascot-scenes/';
 
   const image = (src, description = '') => `<img src="${src}" alt="${description}" decoding="async" draggable="false">`;
@@ -10,14 +9,10 @@
 
   const pilots = [
     {
-      title: 'Two different patterns fit the same description.',
+      title: 'Why did AutoMem choose the side table?',
+      duration: 18000, scoreContext: 'Claude Haiku 5.5 on DMV-Hard',
       numbers: [['100','134','photo-detail queries answered correctly'],['1','106','pattern queries answered correctly']],
-      pose: 'archivist', speech: 'In DMV-Hard, the crop came from the vase page. Claude Haiku 5.5 searched its AutoMem notes and returned the table.', next: 'See the visual matcher',
-      visual: () => `<div class="ep-notes">
-        <figure>${image(products + 'pattern-query.webp', 'A cropped pattern with blue and rust marks on teal.')}<figcaption>Query crop</figcaption></figure>
-        <figure>${image(products + 'correct-vase.webp', 'Vase above a teal, blue and rust swatch.')}<figcaption>Source page</figcaption></figure>
-        <figure>${image(products + 'returned-table.webp', 'Side table with a different swatch in similar colours.')}<figcaption>Text lookup</figcaption></figure>
-        </div>`
+      pose: 'archivist', speech: 'I left the spot positions out of my search. It matched 40 pages. I chose the side table, ranked second. The vase was missing from the eight results I saw.', next: 'See the visual matcher'
     },
     {
       title: 'The matcher found the painting. Which door was it at?',
@@ -39,6 +34,7 @@
     const root = document.getElementById(id);
     if (!root) return;
     const table = root.querySelector('.ep-comparison');
+    const notebook = root.querySelector('.ep-notes');
     const modelSelector = document.createElement('select');
     modelSelector.setAttribute('aria-label','Model for pilot accuracy');
     modelSelector.innerHTML = '<option value="claude">Claude Haiku 5.5</option><option value="qwen">Qwen3.8-27B</option>';
@@ -80,7 +76,7 @@
         <div class="ep-picture"></div>
         <div class="ep-narration">
           <h3></h3>
-          <div class="ep-counts"></div>
+          <div class="ep-metrics"><p class="ep-score-context" hidden></p><div class="ep-counts"></div></div>
           <div class="ep-guide"><img alt="" width="112" height="112"><p></p></div>
         </div>
       </div>
@@ -88,12 +84,14 @@
         <div class="ep-controls"><button class="ep-play" type="button"></button><button class="ep-next" type="button"></button></div>
       </div><p class="ep-sr" role="status"></p>`);
     const picture = root.querySelector('.ep-picture');
-    const title = root.querySelector('h3');
+    const title = root.querySelector('.ep-narration h3');
     const next = root.querySelector('.ep-next');
     const toggle = root.querySelector('.ep-play');
     const guide = root.querySelector('.ep-guide');
     const status = root.querySelector('[role=status]');
-    const counts = root.querySelector('.ep-counts');
+    const metrics = root.querySelector('.ep-metrics');
+    const scoreContext = metrics.querySelector('.ep-score-context');
+    const counts = metrics.querySelector('.ep-counts');
     let countsVisible = false;
     let countsPlayed = false;
     function animateCounts() {
@@ -128,7 +126,7 @@
         timer = setTimeout(() => {
           timer = undefined;
           select((index + 1) % steps.length);
-        }, Math.max(0,delay - elapsed));
+        }, Math.max(0, (steps[index].duration ?? delay) - elapsed));
       }
     }
 
@@ -145,7 +143,12 @@
         rows[i].classList.toggle('ep-selected',index === i);
       });
       root.dataset.beat = String(index + 1);
-      picture.innerHTML = step.visual();
+      if (step.visual) picture.innerHTML = step.visual();
+      else picture.replaceChildren(notebook);
+      if (index === 0) guide.after(metrics);
+      else guide.before(metrics);
+      scoreContext.textContent = step.scoreContext ?? '';
+      scoreContext.hidden = !step.scoreContext;
       title.textContent = step.title;
       countsPlayed = false;
       counts.hidden = !step.numbers;
