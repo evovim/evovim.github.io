@@ -47,6 +47,8 @@
     ad_personalization: 'denied'
   };
   const source = visitSource();
+  const isDebug = new URLSearchParams(location.search).get('analytics_debug') === '1';
+  const testParameters = isDebug ? {debug_mode: true, traffic_type: 'developer'} : {};
   let loaded = false, sentView = false, choice;
   try { choice = localStorage.getItem(key); } catch { /* Storage is optional. */ }
   settings.hidden = false;
@@ -65,6 +67,7 @@
       tag('consent', 'default', {...denied, analytics_storage: 'granted'});
       // All events share the canonical page. The referrer category is sent separately.
       tag('set', {
+        ...testParameters,
         page_location: 'https://evovim.github.io/', page_referrer: '',
         allow_ad_personalization_signals: false, allow_google_signals: false,
         send_page_view: false, cookie_expires: 86400, cookie_update: false,
@@ -74,11 +77,7 @@
       const config = {
         send_page_view: false, cookie_domain: 'evovim.github.io'
       };
-      if (new URLSearchParams(location.search).get('analytics_debug') === '1') {
-        config.debug_mode = true;
-        config.traffic_type = 'developer';
-      }
-      tag('config', id, config);
+      tag('config', id, {...config, ...testParameters});
       const script = document.createElement('script');
       script.async = true;
       script.referrerPolicy = 'no-referrer';
@@ -89,8 +88,8 @@
     }
     if (!sentView) {
       sentView = true;
-      tag('event', 'page_view');
-      tag('event', 'visit_' + source);
+      send('page_view');
+      send('visit_' + source);
     }
   }
 
@@ -129,7 +128,7 @@
   // An exercise or milestone counts at most once during this page visit.
   const recorded = new Set();
   function send(name) {
-    if (choice === 'allow' && loaded) tag('event', name);
+    if (choice === 'allow' && loaded) tag('event', name, {send_to: id, ...testParameters});
   }
   function record(name) {
     if (choice !== 'allow' || !loaded || recorded.has(name)) return;
