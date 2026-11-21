@@ -95,11 +95,6 @@
 .ev-verdict-line b { font: 650 clamp(15px,1.6vw,25px)/1.2 var(--sans); white-space: nowrap; }
 .ev-verdict-line.kept :is(b,small) { color: var(--ev-green); }
 .ev-verdict-line.kept small { font-weight: 700; }
-.ev-playbook { font: 450 14px/1.5 var(--sans); color: var(--body); }
-.ev-playbook summary { color: var(--ev-green); font-weight: 650; cursor: pointer; }
-.ev-playbook ol { padding-left: 1.4em; margin: 10px 0; }
-.ev-playbook li + li { margin-top: 6px; }
-.ev-playbook a { color: var(--ev-green); text-underline-offset: 3px; }
 .ev-outcome { display: flex; align-items: baseline; justify-content: flex-start; gap: 16px; }
 .ev-outcome > strong { color: var(--ev-green); font: 600 clamp(47px,6vw,87px)/1 var(--sans); letter-spacing: -.07em; }
 .ev-outcome strong span { font-size: .5em; color: var(--ev-muted); letter-spacing: -.04em; }

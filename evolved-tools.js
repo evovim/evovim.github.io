@@ -121,7 +121,7 @@
 
   mount.innerHTML = `<figure class="et-taxonomy" aria-labelledby="et-taxonomy-title">
     <figcaption><h3 id="et-taxonomy-title">Mechanisms added by evolution</h3>
-      <p>Each bar counts additions to the starting programs across six tasks and three models. Each method has 18 final programs, and one program can add several mechanisms in a group.</p>
+      <p>EvoViM most often added frame parsing and image memory. AutoMem most often added text notes. The bars count additions across 18 final programs per method. A program can add several mechanisms in one group.</p>
     </figcaption>
     <div class="et-mechanism-chart">
       <div class="et-chart-tools"><div class="et-legend" aria-hidden="true">
@@ -141,6 +141,19 @@
       ${functionTables}
     </table>
   </details>
+  <figure class="et-coverage" aria-labelledby="maze-coverage-heading">
+    <figcaption>
+      <h3 id="maze-coverage-heading">In Poster Maze, memory guided the next move</h3>
+      <p>Qwen3.8-27B’s evolved program tracked which walls it had explored and suggested moves toward unexplored areas. The agent followed those suggestions on most navigation steps.</p>
+    </figcaption>
+    <div class="et-coverage-chart">
+      <p>Posters seen clearly per episode <span>(10 held-out episodes)</span></p>
+      <dl>
+        <div><dt>Starting program</dt><dd style="--coverage:30%"><i aria-hidden="true"></i><strong>1.5</strong></dd></div>
+        <div><dt>Evolved program</dt><dd style="--coverage:86%"><i aria-hidden="true"></i><strong>4.3</strong></dd></div>
+      </dl>
+    </div>
+  </figure>
   <h3 class="et-examples-title">A tool from each task</h3><div class="et-menu">${familyNav}</div><div class="et-trace"></div>`;
 
   const chart = mount.querySelector('.et-mechanism-chart');
@@ -151,14 +164,22 @@
     chart.classList.add('et-drawing');
   }
   if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    chart.classList.add('et-await');
+    const coverage = mount.querySelector('.et-coverage-chart');
     const observer = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting)) {
-        drawBars();
-        observer.disconnect();
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        if (entry.target === chart) drawBars();
+        else {
+          coverage.classList.remove('et-await');
+          coverage.classList.add('et-drawing');
+        }
+        observer.unobserve(entry.target);
       }
     }, { threshold: 0.25 });
-    observer.observe(chart);
+    for (const figure of [chart, coverage]) {
+      figure.classList.add('et-await');
+      observer.observe(figure);
+    }
   }
   chart.querySelector('.et-replay').addEventListener('click', drawBars);
   const trace = mount.querySelector('.et-trace');

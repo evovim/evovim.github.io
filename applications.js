@@ -5,13 +5,13 @@
   const collections = {
     apollo: {
       title: 'Which lunar photograph contains this detail?',
-      context: 'In DMV-Hard a crop leads back to a product page. Here, finding the source photograph gives you its NASA archive ID.',
+      credit: 'Apollo 11 photographs courtesy of NASA / Johnson Space Center.',
       hints: ['The folds of a flag against black sky.', 'A row of parallel ridges in the dust.', 'A reflection in a gold visor.'],
       first: 1,
     },
     monet: {
       title: 'Which canvas contains these brushstrokes?',
-      context: 'Monet painted the same stacks in different light. All three canvases are at the Art Institute of Chicago. Images via Wikimedia Commons.',
+      credit: 'Claude Monet, Art Institute of Chicago. Open-access reproductions via Wikimedia Commons.',
       hints: ['The small stack where sunlight meets the field.', 'The outline of a reddish stack against the sky.', 'A ridge of blue-violet paint against a distant hillside.'],
       first: 0,
     },
@@ -39,7 +39,7 @@
       </div>
       <div class="app-case-stage">
       <article class="archive" id="archive-example" aria-labelledby="archive-title">
-        <header class="archive-head"><h3 class="archive-title" id="archive-title"></h3><p class="archive-context"></p></header>
+        <h3 class="archive-title" id="archive-title"></h3>
         <div class="archive-interaction">
           <div class="archive-guide">
             <h4 class="archive-instruction" tabindex="-1"></h4>
@@ -52,9 +52,10 @@
           </div>
           <div class="archive-records" role="group" aria-label="Three archive records"></div>
         </div>
-        <footer class="archive-foot"><details><summary>Run the lookup locally</summary>
-          <p>EvoViM stores the images. A scripted matcher finds the crop. <a href="#install">Install EvoViM</a>, unzip the example and run</p><code class="archive-command"></code>
-          <a href="downloads/archive_lookup.zip" download>Download images and Python example ↓</a></details></footer>
+        <footer class="archive-foot"><details><summary>Images and Python example</summary>
+          <p class="archive-credit"></p>
+          <a href="downloads/archive_lookup.zip" download>Download the images and lookup script ↓</a>
+          <p><a href="#install">Install EvoViM</a> and unzip the example. EvoViM stores the full images, then the script matches the crop.</p><code class="archive-command"></code></details></footer>
       </article>
       <article id="embodied-case" aria-labelledby="kitchen-title" hidden></article>
       </div>
@@ -138,7 +139,7 @@
   function browseCollection() {
     const item = collections[collection];
     get('.archive-title').textContent = item.title;
-    get('.archive-context').textContent = item.context;
+    get('.archive-credit').textContent = item.credit;
     back.lastElementChild.textContent = collection === 'apollo' ? 'Back to photos' : 'Back to paintings';
     status.textContent = '';
     missed = null;
@@ -182,7 +183,7 @@
     }
     // Sequence the actual items: archive prints or the questions in the walkthrough.
     const pieces = panel.querySelectorAll(
-      '.archive-head, .archive-guide, .archive-picture, .kitchen-intro, .kitchen-questions details, #kitchen-filmbox:not([hidden])'
+      '.archive-title, .archive-guide, .archive-picture, .kitchen-intro, .kitchen-questions details, #kitchen-filmbox:not([hidden])'
     );
     pieces.forEach((element, order) => {
       const print = element.matches('.archive-picture');

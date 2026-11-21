@@ -19,9 +19,7 @@
 #applications .app-switch button[aria-pressed=true] { color: var(--archive-accent); }
 #applications .app-case-stage { overflow-anchor: none; }
 #applications .archive { padding-top: clamp(22px,2.4vw,36px); }
-#applications .archive-head { display: grid; grid-template-columns: 1fr .9fr; gap: 9px 42px; align-items: end; padding-bottom: clamp(20px,2.3vw,33px); }
-#applications .archive-title { font: 500 clamp(28px,2.65vw,44px)/1.08 var(--serif); letter-spacing: -.04em; }
-#applications .archive-context { color: var(--body); font: 400 15px/1.6 var(--sans); }
+#applications .archive-title { margin: 0 0 clamp(16px,1.8vw,26px); font: 500 clamp(28px,2.65vw,44px)/1.08 var(--serif); letter-spacing: -.04em; text-wrap: balance; }
 #applications .archive-interaction { display: grid; align-items: start; grid-template-columns: minmax(175px,.72fr) minmax(0,2.6fr); gap: clamp(14px,2.2vw,34px); padding-block: clamp(18px,2vw,30px); border-block: 1px solid var(--archive-rule); }
 #applications .archive-guide { min-width: 0; }
 #applications .archive-instruction { margin: 0; font: 650 clamp(17px,1.6vw,24px)/1.22 var(--sans); letter-spacing: -.035em; }
@@ -65,7 +63,6 @@
 @media (max-width: 760px) {
   #applications .app-switch { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
   #applications .app-switch button { text-align: start; line-height: 1.35; text-wrap: balance; }
-  #applications .archive-head { grid-template-columns: 1fr; gap: 7px; }
   #applications .archive-interaction { grid-template-columns: 1fr; }
   #applications .archive-guide { display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 4px 15px; }
   #applications .archive-instruction { grid-column: 1; }

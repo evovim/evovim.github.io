@@ -5,13 +5,13 @@
   margin-top: clamp(44px, 5vw, 78px);
   color: var(--ink);
 }
-.gen-intro { display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 18px 6%; }
+.gen-intro { display: grid; gap: 12px; }
 .gen-intro h3 {
   font: 500 clamp(28px, 3.05vw, 48px)/1.08 var(--serif);
   letter-spacing: -.045em;
   text-wrap: balance;
 }
-.gen-intro p { max-width: 60ch; color: var(--body); font: 400 clamp(15px, 1.14vw, 17px)/1.55 var(--sans); }
+.gen-intro p { max-width: 72ch; color: var(--body); font: 400 clamp(16px, 1.24vw, 19px)/1.55 var(--sans); }
 .gen-controls {
   display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px 22px;
   margin-top: 23px; padding-block: 10px; border-block: 1px solid var(--line);

@@ -8,8 +8,8 @@
   const blue = '#184878', green = '#256d69', orange = '#a3473e', plum = '#76549d';
   const story = [
     {id:'intro', name:'Overview', color:blue,
-      title:'Where did the agent see this painting?', text:'MC Gallery asks for a door number and a side. Follow one answer through the program, then trace the edits that made it possible.',
-      next:'Follow task execution', caseStep:0},
+      title:'Where did the agent see this painting?', text:'The painting was on the left of door 7. Follow the evolved program as it retrieves that view, then see how development walks led to the tool.',
+      next:'Start the walkthrough', caseStep:0},
     {id:'execution', name:'Task execution', color:blue, parts:['execution','environment','record','act'], pose:'photographer',
       title:'Record the outcome, then choose an action.', text:'After each move, Record can store the new observation. Act consults the same episode memory before choosing the next move.',
       next:'Inspect frame memory', caseStep:0},
@@ -29,7 +29,7 @@
       title:'Did the edit work for the reason predicted?', text:'Before a replay the model predicts changes in score and tool use. The measured changes on two development episodes guide its next diagnosis.',
       next:'Inspect revision experience', caseStep:1},
     {id:'experience', name:'Revision experience', color:plum, parts:['revision','experience'],
-      title:'Keep a failed experiment in the playbook.', text:'The model rewrites its playbook, notes and analysis scripts for later revisions. In DMV-Hard, two failed matcher edits led it to inspect the shortlist and align patches for comparison.',
+      title:'A playbook entry changes the next edit.', text:'The model edits its playbook, notes and scripts. These survive even a rejected candidate. In generation 3 of DMV-Hard, Claude Haiku 5.5 used the playbook to skip two failed matcher changes and build a tool that shows the query and retrieved patches at the same scale.',
       next:'Follow the revision', caseStep:4},
     {id:'revision', name:'Revision', color:orange, parts:['evolution','revision','development','feedback','experience'], pose:'detective',
       title:'Find the missing link in the notes.', text:'In MC Gallery the model could see the painting in a recorded frame, but its notebook described only a green wall. It needed a lookup from painting to door and side.',
@@ -48,7 +48,13 @@
       next:'Evaluate on new episodes', caseStep:3},
     {id:'heldout', name:'Held-out evaluation', color:blue, pose:'presenter',
       title:'Run the selected program on new episodes.', text:'The program and model weights stay fixed. Each of the ten held-out walks starts with empty memory.',
-      next:'Back to the overview', caseStep:5}
+      next:'Restart walkthrough', caseStep:5}
+  ];
+  const chapters = [
+    {name:'Task execution', start:'execution', color:blue},
+    {name:'Revision', start:'development', color:plum},
+    {name:'Candidate selection', start:'checks', color:orange},
+    {name:'Held-out evaluation', start:'heldout', color:green}
   ];
   const indexOf = id => story.findIndex(step => step.id === id);
   const initial = () => ({index:0, retry:false, verdict:'accept'});
@@ -57,7 +63,7 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const originalFigure = document.getElementById('framework-open');
 
-  root.innerHTML = '<div class="fw-toolbar"><label class="fw-picker"><span>Step</span><select aria-label="Choose a framework component"></select></label>' +
+  root.innerHTML = '<nav class="fw-journey" aria-label="Walkthrough stages"></nav><div class="fw-toolbar"><label class="fw-picker"><span>Step</span><select aria-label="Choose a framework component"></select></label>' +
     '<div class="fw-nav"><button type="button" class="fw-back" aria-label="Previous step">Back</button><button type="button" class="fw-auto" aria-pressed="false"><span aria-hidden="true">▷</span><span class="fw-auto-label">Auto-play</span></button><button type="button" class="fw-next" aria-controls="fw-title"></button></div></div>' +
     '<div class="fw-spread"><div class="fw-map"></div><section class="fw-inspect" aria-labelledby="fw-title">' +
     '<div class="fw-heading"><h3 id="fw-title"></h3><picture class="fw-guide" hidden><source><img alt="" width="70" height="72"></picture></div><p class="fw-explain"></p>' +
@@ -67,8 +73,17 @@
 
   const find = s => root.querySelector(s);
   find('.fw-footer').prepend(originalFigure);
+  const journey = find('.fw-journey');
+  for (const chapter of chapters) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.textContent = chapter.name;
+    button.style.setProperty('--chapter-accent',chapter.color);
+    button.addEventListener('click',() => jump(chapter.start));
+    journey.append(button);
+  }
   const picker = find('.fw-picker select');
-  for (const [index, step] of story.entries()) picker.add(new Option((index + 1) + '. ' + step.name, step.id));
+  for (const [index, step] of story.entries()) picker.add(new Option((index + 1) + ' / ' + story.length + ' · ' + step.name, step.id));
   const next = find('.fw-next'), back = find('.fw-back'), auto = find('.fw-auto');
   const gate = find('.fw-verdicts'), guide = find('.fw-guide');
   const map = figure.mount(find('.fw-map'), id => jump(id));
@@ -76,6 +91,7 @@
   function jump(id) {
     const index = indexOf(id);
     if (index >= 0 && state.index !== index) navigate({...initial(), index});
+    else if (playing) { playing = false; transport(); }
   }
   function schedule() {
     clearTimeout(timer);
@@ -112,6 +128,15 @@
     const rejected = step.id === 'gate' && state.verdict === 'reject' && !state.retry;
     root.dataset.stage = step.id;
     root.style.setProperty('--fw-active',step.color);
+    const active = chapters.findLastIndex(chapter => state.index >= indexOf(chapter.start));
+    for (const [index,button] of [...journey.children].entries()) {
+      const start = indexOf(chapters[index].start);
+      const end = chapters[index+1] ? indexOf(chapters[index+1].start) : story.length;
+      const progress = Math.min(1,Math.max(0,(state.index-start+1)/(end-start)));
+      button.style.setProperty('--fw-progress',String(progress));
+      if (index === active) button.setAttribute('aria-current','step');
+      else button.removeAttribute('aria-current');
+    }
     picker.value = step.id;
     find('#fw-title').textContent = step.title;
     find('.fw-explain').textContent = rejected ? 'A later gallery edit ties the whole-view parent at 16 of 16, but takes more steps and tokens. The gate retains the parent. Follow the retry to see what the model changes next.' : state.retry && retryText[step.id] ? retryText[step.id] : step.text;
@@ -122,7 +147,7 @@
     map.update(step,state.verdict === 'reject');
     updateGuide();
     transport();
-    if (announce) find('.fw-sr').textContent = step.name+'. '+step.title;
+    if (announce) find('.fw-sr').textContent = 'Step '+(state.index+1)+' of '+story.length+'. '+step.name+'. '+step.title;
   }
   function navigate(newState, manual = true) {
     if (manual) playing = false;

@@ -6,21 +6,21 @@
 <title>EvoViM: Recursively Self-Evolving Visual Agents for Exploration with Deferred Queries</title>
 <meta name="description" content="EvoViM lets a visual agent learn from missed questions by revising its own image memory and tools. See how visual agents learn what to save before they know the question, and how the resulting tools perform across six tasks.">
 <link rel="icon" href="media/mascot.png" type="image/png">
-<link rel="stylesheet" href="site.css?v=7471b2d7"><link rel="stylesheet" href="cases.css?v=526d6124"><link rel="stylesheet" href="applications.css?v=590e17ec">
+<link rel="stylesheet" href="site.css?v=7471b2d7"><link rel="stylesheet" href="cases.css?v=526d6124"><link rel="stylesheet" href="applications.css?v=bd29af42">
 <link rel="stylesheet" href="gallery-memory.css?v=eb6d76cd"><link rel="stylesheet" href="ambient.css?v=eb76d2be">
 <link rel="stylesheet" href="embodied-case.css?v=58a72ff9"><link rel="stylesheet" href="editorial.css?v=22a1cff7"><link rel="stylesheet" href="overview-film.css?v=b8430140">
-<link rel="stylesheet" href="mascot-scenes.css"><link rel="stylesheet" href="scroll-story.css?v=0e1970ce"><link rel="stylesheet" href="environment-atlas.css?v=6218cf78">
-<link rel="stylesheet" href="challenge-pilot.css?v=8b79d38a"><link rel="stylesheet" href="evolution-story.css?v=017ccfa1"><link rel="stylesheet" href="findings.css?v=8a33351e">
-<link rel="stylesheet" href="generation-results.css?v=e98bb037">
-<link rel="stylesheet" href="framework-loops.css?v=7745e5c3"><link rel="stylesheet" href="framework-evidence.css?v=73866688"><link rel="stylesheet" href="paper-framework.css?v=114c3e9b"><link rel="stylesheet" href="evolved-tools.css?v=6eb4b8b4">
+<link rel="stylesheet" href="mascot-scenes.css"><link rel="stylesheet" href="scroll-story.css?v=7724b019"><link rel="stylesheet" href="environment-atlas.css?v=ed46bf9e">
+<link rel="stylesheet" href="challenge-pilot.css?v=b73f789a"><link rel="stylesheet" href="evolution-story.css?v=f65dda8c"><link rel="stylesheet" href="findings.css?v=ccb3708b">
+<link rel="stylesheet" href="generation-results.css?v=0c4d817e">
+<link rel="stylesheet" href="framework-loops.css?v=d186669f"><link rel="stylesheet" href="framework-evidence.css?v=2f018030"><link rel="stylesheet" href="paper-framework.css?v=6705a733"><link rel="stylesheet" href="evolved-tools.css?v=ed7bb6fa">
 <link rel="stylesheet" href="reading-nav.css?v=120607f3">
 <link rel="stylesheet" href="analytics.css?v=a40d35fb">
 <script defer src="analytics.js?v=7ab2aee4" data-measurement-id="G-NFL9PGZGV3"></script>
 <script defer src="results-data.js"></script><script defer src="site.js?v=629cdfdd"></script><script defer src="cases.js?v=905d7e86"></script>
-<script defer src="gallery-memory.js?v=36816cbc"></script><script defer src="applications.js?v=226c6c13"></script>
+<script defer src="gallery-memory.js?v=36816cbc"></script><script defer src="applications.js?v=d3332265"></script>
 <script defer src="ambient.js?v=c14b31fe"></script><script defer src="overview-film.js"></script><script defer src="environment-atlas.js?v=3aa6bcfb"></script>
-<script defer src="embodied-case.js?v=1f89f387"></script><script defer src="mascot-scenes.js?v=f2807ce2"></script><script defer src="challenge-pilot.js?v=5212016a"></script>
-<script defer src="framework-evidence.js?v=a8458531"></script><script defer src="paper-framework.js?v=a0963da9"></script><script defer src="framework-loops.js?v=876476b0"></script><script defer src="evolution-story.js?v=b69e113f"></script><script defer src="evolved-tools.js?v=6444ccee"></script>
+<script defer src="embodied-case.js?v=56882243"></script><script defer src="mascot-scenes.js?v=f2807ce2"></script><script defer src="challenge-pilot.js?v=f860dc68"></script>
+<script defer src="framework-evidence.js?v=c400884e"></script><script defer src="paper-framework.js?v=2d2304d4"></script><script defer src="framework-loops.js?v=bdc65f9b"></script><script defer src="evolution-story.js?v=3dbff47e"></script><script defer src="evolved-tools.js?v=c4837170"></script>
 <script defer src="findings.js?v=d77ba3e4"></script><script defer src="scroll-story.js?v=5495f28e"></script>
 <script defer src="generation-results.js?v=f883f057"></script>
 </head>
@@ -97,19 +97,17 @@
 <section id="research-question" class="section wrap story-chapter" aria-labelledby="question-title">
   <div class="question-copy">
     <h2 id="question-title">What should an agent remember <em>before it knows the question?</em></h2>
-    <p>In DMV-Hard, an agent browses a catalog. Only later does it see a detail from a product photo and have to identify the original page.</p>
-    <p>We call this <strong>exploration with deferred queries</strong>. Can an agent learn both which visual evidence to save and how to use it once the question arrives?</p>
+    <p>In <strong>exploration with deferred queries</strong>, the agent chooses what to save before it sees the question. Can it learn which details to keep and how to find them again?</p>
   </div>
   <div class="question-pair" role="group" aria-label="Two observations from the same DMV-Hard episode">
     <figure><img src="media/observations/dmv-hard-a.webp" width="512" height="512" loading="lazy" alt="Catalog photo of a gold vase with orange fan-shaped panels and a narrow neck.">
-      <figcaption><span>During exploration</span><strong>Catalog page 03401944</strong></figcaption></figure>
+      <figcaption><span>Exploring the DMV-Hard catalog</span><strong>Catalog page 03401944</strong></figcaption></figure>
     <figure><img src="media/observations/dmv-hard-b.webp" width="256" height="256" loading="lazy" alt="Later query showing only a close-up of the neck and upper panels of the same vase.">
       <figcaption><span>After exploration</span><strong>Which page showed this vase?</strong></figcaption></figure>
   </div>
 </section>
 <section id="environments" class="section wrap story-chapter" aria-labelledby="environment-title">
-  <div class="chapter-intro"><h2 id="environment-title">Six <em>environments</em></h2>
-    <p>We built three environments where the question comes after exploration. We also tested three games where the goal is known from the start and the agent can use visual tools to choose its next move.</p></div>
+  <div class="chapter-intro"><h2 id="environment-title">Six <em>environments</em></h2></div>
   <div class="atlas-groups">
     <div class="atlas-group deferred"><div class="atlas-group-heading"><h3>Deferred queries</h3><button type="button" class="atlas-preview-toggle" hidden>Pause previews</button></div><div class="atlas-row">
       <a class="atlas-item" data-env="dmv-hard" href="media/live/dmv-hard.mp4" aria-label="Watch DMV-Hard. Match a crop to a page.">
@@ -145,8 +143,19 @@
   </details>
 </section>
 <section id="pilots" class="section wrap story-chapter" aria-labelledby="pilots-title">
-  <div class="chapter-intro"><h2 id="pilots-title">Pilot <em>studies</em></h2><p>We tried three memory designs with Claude Haiku 5.5. Could text preserve enough detail? Would a visual match recover where an object appeared? Could the model write the right tools before seeing a failure?</p></div>
-  <div id="pilot-story"><p>Compare evolved text memory, hand-designed visual memory and a one-shot program.</p></div>
+  <div class="chapter-intro"><h2 id="pilots-title">Pilot <em>studies</em></h2></div>
+  <div id="pilot-story" class="ep-story">
+    <table class="ep-comparison">
+      <caption>Accuracy on deferred queries (%) with Claude Haiku 5.5</caption>
+      <thead><tr><th scope="col">Memory design</th><th scope="col">MC Gallery</th><th scope="col">Poster Maze</th><th scope="col">DMV-Hard</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Evolved text memory</th><td>23.8</td><td>16.3</td><td>42.1</td></tr>
+        <tr><th scope="row">Hand-designed visual memory</th><td>18.8</td><td>16.3</td><td>80.8</td></tr>
+        <tr><th scope="row">One-shot program</th><td>13.8</td><td>20.0</td><td>28.8</td></tr>
+      </tbody>
+    </table>
+    <noscript><p>On DMV-Hard, evolved text memory answered only 1 of 106 pattern questions correctly. In MC Gallery, the hand-designed matcher ranked 56 of 60 seen paintings first, yet the agent located none. The one-shot program recorded the door order and also located none of the 60 paintings.</p></noscript>
+  </div>
 </section>
 <section id="method" class="section wrap story-chapter" aria-labelledby="method-title">
   <div class="chapter-intro"><h2 id="method-title">The EvoViM <em>framework</em></h2>
@@ -163,8 +172,13 @@
   </section>
 </section>
 <section id="results" class="section wrap story-chapter" aria-labelledby="results-title">
-  <div class="chapter-intro"><h2 id="results-title">Main <em>results</em></h2><p>On held-out episodes, EvoViM’s six-task average exceeded AutoMem’s by 31.3 to 47.6 percentage points, depending on the model. Each task counts equally.</p></div>
+  <div class="chapter-intro"><h2 id="results-title">Main <em>results</em></h2></div>
+  <p class="fd-lead">Across the three models, EvoViM outscored AutoMem by <strong>31.3 to 47.6 percentage points</strong> on the six-task held-out average.</p>
   <div id="score-explorer"><a href="downloads/main_results.csv" download>Download scores</a></div>
+  <section class="fd-attribution" aria-labelledby="retrieval-heading">
+    <h3 id="retrieval-heading">Retrieval accounts for the largest gap</h3>
+    <p>Across six tasks and three models, retrieval errors cost AutoMem <strong>25.0 points</strong> and EvoViM <strong>4.7</strong>. EvoViM’s largest remaining loss came when deciding how to act (<strong>13.9 points</strong>). Each lost point counts toward the first stage that failed.</p>
+  </section>
   <section id="generation-results" aria-labelledby="generation-heading">
     <header class="gen-intro">
       <h3 id="generation-heading">Scores across generations</h3>
@@ -172,9 +186,21 @@
     </header>
     <div id="generation-chart"></div>
   </section>
+  <section class="fd-revision" aria-labelledby="revision-support-heading">
+    <h3 id="revision-support-heading">Revision support sped up learning on MC Gallery</h3>
+    <p>We removed enhanced feedback and inherited revision experience together for Claude Haiku 5.5. The full program scored higher on held-out MC Gallery walks. On DMV-Hard, the run without revision support finished ahead.</p>
+    <table>
+      <thead><tr><th scope="col">Measure</th><th scope="col">EvoViM</th><th scope="col">Without revision support</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">MC Gallery <span>Runs reaching ≥75% on development by generation 2</span></th><td>3 of 3</td><td>0 of 3</td></tr>
+        <tr><th scope="row">MC Gallery <span>Mean held-out score across three runs</span></th><td>88.3%</td><td>60.0%</td></tr>
+        <tr><th scope="row">DMV-Hard <span>Final held-out score, one run per setting</span></th><td>77.1%</td><td>82.9%</td></tr>
+      </tbody>
+    </table>
+  </section>
 </section>
 <section id="tools" class="section wrap story-chapter" aria-labelledby="tools-title">
-  <div class="chapter-intro"><h2 id="tools-title">Evolved <em>visual tools</em></h2><p>EvoViM most often added ways to parse a frame and remember images. AutoMem most often added text notes.</p></div>
+  <div class="chapter-intro"><h2 id="tools-title">Evolved <em>visual tools</em></h2></div>
   <div id="evolved-tools">
     <figure>
       <img src="media/evolved-tools/mechanisms.svg" width="780" height="353" loading="lazy" style="height:auto" alt="Mechanisms added by EvoViM and AutoMem respectively. Image memory 39 and 0, frame parsing 42 and 17, text notes 6 and 22, workflow 19 and 16.">
@@ -185,6 +211,7 @@
       <dt>Spatial recall</dt><dd>MC Gallery locates a painting beside a numbered door. Poster Maze links a poster to a cell and wall.</dd>
       <dt>Sequential decision-making</dt><dd>Tetris reads the board and plans a drop. Pac-Man updates its pellet map and finds the first move on a route.</dd>
     </dl>
+    <p>In Poster Maze, Qwen3.8-27B’s evolved program tracks visited walls and suggests moves toward unexplored areas. The agent saw 4.3 posters clearly per held-out episode, up from 1.5 with the starting program.</p>
   </div>
 </section>
 <section id="applications" aria-labelledby="applications-title"></section>

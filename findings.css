@@ -1,3 +1,36 @@
+.fd-lead {
+  max-width: 55ch;
+  color: var(--body);
+  font: 400 clamp(18px, 1.5vw, 23px)/1.5 var(--sans);
+}
+.fd-lead strong, .fd-attribution strong { color: var(--teal); font-weight: 650; }
+.fd-attribution, .fd-revision { margin-top: clamp(32px, 3.6vw, 58px); }
+.fd-attribution h3, .fd-revision h3 {
+  margin: 0 0 12px;
+  color: var(--ink);
+  font: 500 clamp(27px, 2.7vw, 40px)/1.12 var(--serif);
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+.fd-attribution p, .fd-revision p {
+  max-width: 78ch; margin: 0; color: var(--body);
+  font: 400 clamp(16px, 1.24vw, 19px)/1.55 var(--sans);
+}
+.fd-revision table {
+  margin: 18px 0 0; width: min(100%, 860px); border-collapse: collapse;
+  color: var(--ink); text-align: left; font: 500 clamp(15px, 1.18vw, 18px)/1.4 var(--sans);
+}
+.fd-revision tr { border-bottom: 1px solid var(--line); }
+.fd-revision thead { border-top: 1px solid var(--line); background-color: var(--paper); }
+.fd-revision th, .fd-revision td { padding: 10px clamp(6px, 1.1vw, 16px); vertical-align: middle; }
+.fd-revision th:first-child { padding-inline-start: 0; }
+.fd-revision th { font-weight: 600; }
+.fd-revision th span { display: block; color: var(--body); font-weight: 400; }
+.fd-revision td { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fd-revision td:nth-child(2) { color: var(--teal); }
+@media (min-width: 700px) {
+  .fd-revision :is(td, th):not(:first-child) { text-align: right; }
+}
 #score-explorer {
   --fd-green: #11766c;
   --fd-rule: #c2cece;

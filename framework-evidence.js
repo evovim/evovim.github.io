@@ -56,11 +56,11 @@
   }
 
   function experience() {
-    return '<blockquote class="fe-log"><code>rotation refinement</code><q>promotes false positives</q><code>denser/wider ladders</code><q>no rank change</q></blockquote>' +
-      '<div class="fe-samples">' + photo('media/evolved-tools/dmv-query.webp','Original DMV-Hard query patch','Query') +
+    return '<table class="fe-score-table"><caption>Earlier matcher edits</caption><tbody><tr><th scope="row">Refine rotations</th><td>More false positives</td></tr><tr><th scope="row">Search more scales</th><td>Same ranking</td></tr></tbody></table>' +
+      '<figure class="fe-aligned"><figcaption>Same-scale comparison on a held-out query</figcaption><div class="fe-samples">' + photo('media/evolved-tools/dmv-query.webp','Original DMV-Hard query patch','Query') +
       photo('media/evolved-tools/dmv-win1.webp','Aligned region on the correct page','Page 1') +
       photo('media/evolved-tools/dmv-win18.webp','Aligned region on another retrieved page','Page 18') +
-      '</div>';
+      '</div></figure>';
   }
 
   function revision(retry) {
@@ -91,12 +91,10 @@
     const rejected = retry || verdict === 'reject';
     const parent = rejected ? 'Whole-view search' : 'Starting program';
     const candidate = retry ? 'Shorter logging phase' : rejected ? 'Reworked query extraction' : 'Labeled crop memory';
-    const reason = retry ? 'The retry loses three answers. The whole-view parent stays.' : rejected
-      ? 'The scores tie, but the edit uses more steps and tokens. Retry once from the whole-view parent.'
-      : 'The crop program becomes the parent for the next round.';
+    const reason = retry || rejected ? 'Parent retained' : 'Candidate accepted';
     return '<div class="fe-choice"><div><span>Parent</span><strong>' + (rejected?'16':'4') + '<small> / 16</small></strong><b>' + parent + '</b></div>' +
       '<div><span>Candidate</span><strong>' + (retry?'13':rejected?'16':'13') + '<small> / 16</small></strong><b>' + candidate + '</b></div></div>' +
-      '<p class="fe-foot">' + reason + ' Revision notes and scripts carry forward.</p>';
+      '<div class="fe-decision">' + reason + '</div>';
   }
 
   function lineage() {
@@ -113,8 +111,7 @@
     const walks = seeds.map(seed=>'<i aria-hidden="true" style="--fe-h:' + (seed===55?'87.5%':'100%') + '"></i>').join('');
     return '<div class="fe-final"><div><span>Correct answers</span><strong>79<small> / 80</small></strong></div>' +
       '<div class="fe-walk-plot"><div class="fe-walk-bars" role="img" aria-label="Eight of eight correct in the first nine walks and seven of eight correct in the last walk.">' + walks +
-      '</div><span>Ten new walks</span></div></div>' +
-      '<p class="fe-foot">The model answered every question correctly on nine of the ten walks.</p>';
+      '</div><span>Correct answers per walk</span></div></div>';
   }
 
   const plates = {intro, execution, record, pixels, recall, development, feedback, experience, revision, candidate, checks, gate, lineage, heldout};

@@ -17,11 +17,8 @@
     --rise: 24px;
   }
 
-  [data-scroll-scene="heading"] :is(h2, h3) {
+  [data-scroll-scene="heading"] :is(h2, h3, p) {
     transform: translateY(calc(var(--remaining) * var(--rise)));
-  }
-  [data-scroll-scene="heading"] p {
-    transform: translateY(calc(var(--remaining) * var(--rise) * 1.65));
   }
   [data-scroll-scene="heading"] :is(h2, h3) em {
     background: linear-gradient(currentColor, currentColor) left bottom / calc(var(--arrival) * 100%) 2px no-repeat;

@@ -10,25 +10,25 @@
 
   const pilots = [
     {
-      tab: 'Evolved text memory', title: 'Two product pages fit the same note.',
+      title: 'Two different patterns fit the same description.',
       numbers: [['100','134','photo-detail queries answered correctly'],['1','106','pattern queries answered correctly']],
-      pose: 'archivist', speech: 'With AutoMem I could decide what to write down. My note says “teal, blue and rust spots.” That could be the vase or the table.', next: 'Try keeping every frame',
-      visual: () => `<div class="ep-notes"><div class="ep-product-pair">
-        <figure>${image(products + 'correct-vase.webp', 'Vase above a teal, blue and rust swatch.')}<figcaption>Vase</figcaption></figure>
-        <figure>${image(products + 'returned-table.webp', 'Side table with a different swatch in similar colours.')}<figcaption>Table</figcaption></figure>
-        </div><div class="ep-converge" aria-hidden="true"><i></i><i></i></div>
-        <div class="ep-notebook"><small>Both patterns in words</small><strong>Teal, blue and rust spots</strong></div></div>`
+      pose: 'archivist', speech: 'In DMV-Hard, the crop came from the vase page. AutoMem searched its text notes and returned the table.', next: 'See the visual matcher',
+      visual: () => `<div class="ep-notes">
+        <figure>${image(products + 'pattern-query.webp', 'A cropped pattern with blue and rust marks on teal.')}<figcaption>Query crop</figcaption></figure>
+        <figure>${image(products + 'correct-vase.webp', 'Vase above a teal, blue and rust swatch.')}<figcaption>Source page</figcaption></figure>
+        <figure>${image(products + 'returned-table.webp', 'Side table with a different swatch in similar colours.')}<figcaption>Text lookup</figcaption></figure>
+        </div>`
     },
     {
-      tab: 'Hand-designed visual memory', title: 'The matcher found the painting.',
+      title: 'The matcher found the painting. Which door was it at?',
       numbers: [['56','60','seen paintings in the top match'],['0','60','seen paintings located correctly']],
-      pose: 'detective', speech: 'I kept every frame. My matcher returns the patch’s pixel coordinates, but the gallery asks for the door number and which side it hung on.', next: 'Try a one-shot program',
+      pose: 'detective', speech: 'In MC Gallery, the archive kept every frame. The matcher returned pixel coordinates. The agent still had to read the door number and place the painting on its left or right.', next: 'See the one-shot program',
       visual: () => `<div class="ep-search"><div class="ep-search-image">${frame()}<i aria-hidden="true"></i></div><div class="ep-search-output"><span>Matcher output</span><b>Frame + bounding box</b><small>Door <em>?</em> &nbsp; Side <em>?</em></small></div></div>`
     },
     {
-      tab: 'One-shot program', title: 'The program logged the doors in order.',
+      title: 'Door order could not locate a painting.',
       numbers: [['0','60','seen paintings located correctly'],['11','20','unseen paintings correctly rejected']],
-      pose: 'mechanic', speech: 'When I wrote the program, all I had was “Reach the gold wall.” By the time I saw the first question, I had already walked past every painting.', next: 'Replay the comparisons',
+      pose: 'mechanic', speech: 'The model wrote its MC Gallery program from the opening instruction. Across ten walks it saved just one frame.', next: 'Return to text memory',
       visual: () => `<div class="ep-route"><div class="ep-route-label">Opening instruction</div><strong>Reach the gold wall</strong>
         <div class="ep-ledger"><small>Door order</small><div>${[1,2,3,'…',8].map((n,i)=>`<b style="--i:${i}">${n}</b>`).join('')}</div></div>
         <div class="ep-late-query">${query()}<b>Which door and side?</b></div></div>`
@@ -38,11 +38,23 @@
   function mount(id, steps, context, delay) {
     const root = document.getElementById(id);
     if (!root) return;
-    root.classList.add('ep-story');
-    root.innerHTML = `<div class="ep-chapters" role="group" aria-label="${context}">
-        ${steps.map((step,i) => `<button type="button" data-ep-index="${i}" aria-controls="${id}-stage"><span>${step.tab}</span></button>`).join('')}
-      </div>
-      <div class="ep-stage" id="${id}-stage">
+    const table = root.querySelector('.ep-comparison');
+    const rows = [...table.tBodies[0].rows];
+    const buttons = rows.map((row,i) => {
+      const heading = row.cells[0];
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = heading.textContent;
+      button.dataset.epIndex = String(i);
+      button.setAttribute('aria-controls', id + '-stage');
+      heading.replaceChildren(button);
+      for (const cell of [...row.cells].slice(1)) {
+        const value = cell.textContent;
+        cell.innerHTML = `<span class="ep-score"><i aria-hidden="true" style="--score:${Number(value)}%"></i><b>${value}</b></span>`;
+      }
+      return button;
+    });
+    root.insertAdjacentHTML('beforeend', `<div class="ep-stage" id="${id}-stage">
         <div class="ep-picture"></div>
         <div class="ep-narration">
           <h3></h3>
@@ -52,13 +64,12 @@
       </div>
       <div class="ep-playbar">
         <div class="ep-controls"><button class="ep-play" type="button"></button><button class="ep-next" type="button"></button></div>
-      </div><p class="ep-sr" role="status"></p>`;
+      </div><p class="ep-sr" role="status"></p>`);
     const picture = root.querySelector('.ep-picture');
     const title = root.querySelector('h3');
     const next = root.querySelector('.ep-next');
     const toggle = root.querySelector('.ep-play');
     const guide = root.querySelector('.ep-guide');
-    const buttons = [...root.querySelectorAll('[data-ep-index]')];
     const status = root.querySelector('[role=status]');
     let index = 0;
     let run = !motion.matches;
@@ -97,7 +108,10 @@
       if (manual) run = false;
       root.classList.toggle('ep-prompted',manual);
       const step = steps[index];
-      buttons.forEach((button,i) => button.setAttribute('aria-pressed',String(index === i)));
+      buttons.forEach((button,i) => {
+        button.setAttribute('aria-pressed',String(index === i));
+        rows[i].classList.toggle('ep-selected',index === i);
+      });
       root.dataset.beat = String(index + 1);
       picture.innerHTML = step.visual();
       title.textContent = step.title;
@@ -113,18 +127,19 @@
       if (manual) status.textContent = step.title + ' ' + step.speech;
       sync();
     }
-    buttons.forEach((button,i) => button.addEventListener('click',() => select(i,true)));
-    next.addEventListener('click', () => {
-      select((index + 1) % steps.length,true);
-      if (index === 0 && !motion.matches) {
-        run = true;
-        sync();
-      }
-    });
+    rows.forEach((row,i) => row.addEventListener('click',() => select(i,true)));
+    next.addEventListener('click', () => select((index + 1) % steps.length,true));
     toggle.addEventListener('click', () => {run = !run; sync();});
     document.addEventListener('visibilitychange',sync);
     motion.addEventListener('change', () => {if (motion.matches) run = false; sync();});
     select(0);
+    const revealScores = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        table.classList.add('ep-shown');
+        revealScores.disconnect();
+      }
+    });
+    revealScores.observe(table);
     new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
       sync();

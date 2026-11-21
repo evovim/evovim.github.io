@@ -53,10 +53,6 @@
         + [['Whole-view search', '16 / 16', 'Kept', 'kept'], ['Rework rotated queries', '16 / 16', 'More steps and tokens', ''], ['Shorten the log', '13 / 16', 'Lower score', '']]
           .map(([name, score, reason, cls], index) => '<div class="ev-verdict-line ' + cls + '" style="--order:' + index + '"><span>' + name + '</span><b>'
             + score + '</b><small>' + reason + '</small></div>').join('') + '</div>'
-        + '<details class="ev-playbook"><summary>How a failed idea helped in DMV-Hard</summary>'
-        + '<ol><li>Haiku recorded unsuccessful matcher edits in its playbook.</li>'
-        + '<li>The right page often made the shortlist. A later tool displayed each candidate beside the query at the same scale.</li></ol>'
-        + '</details>'
     },
     {
       name: 'Test', title: 'Does the program work on ten new walks?',

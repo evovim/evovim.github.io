@@ -7,7 +7,6 @@
     <div class="kitchen-case">
       <div class="kitchen-intro">
         <h3 id="kitchen-title">What do you remember about the kitchen?</h3>
-        <p><a href="https://open-eqa.github.io/" target="_blank" rel="noopener">OpenEQA</a> by Majumdar and colleagues. <a href="${annotations}" target="_blank" rel="noopener">Human-annotated answers</a>.</p>
         <button class="kitchen-play" type="button" data-time="0" aria-controls="kitchen-filmbox"><span aria-hidden="true">▶</span> Watch the kitchen visit</button>
       </div>
       <div class="kitchen-questions" id="kitchen-questions">
@@ -25,7 +24,7 @@
       <button class="kitchen-back" type="button" aria-controls="kitchen-questions kitchen-filmbox" hidden><span aria-hidden="true">←</span> Back to the kitchen visit</button>
       <figure id="kitchen-filmbox" hidden>
         <video controls playsinline preload="none" tabindex="0" aria-label="OpenEQA kitchen walkthrough with on-screen questions and visual evidence"></video>
-        <figcaption><a href="${film}" target="_blank" rel="noopener">Open the original film ↗</a></figcaption>
+        <figcaption><a href="${film}" target="_blank" rel="noopener">Original OpenEQA film</a> by Majumdar and colleagues · <a href="${annotations}" target="_blank" rel="noopener">Kitchen questions and answers</a></figcaption>
         <p class="kitchen-status" role="status"></p>
       </figure>
     </div>`;

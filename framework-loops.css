@@ -2,11 +2,18 @@
   --fw-ink:var(--ink); --fw-muted:var(--body); --fw-rule:var(--line); --fw-active:var(--clay);
   --fw-blue:var(--deep); --fw-clay:var(--clay); color:var(--fw-ink);
 }
-#method > .chapter-intro { align-items:center; margin-bottom:clamp(18px,2.2vw,32px); }
-#method > .chapter-intro p { max-width:45ch; }
+#method > .chapter-intro { margin-bottom:clamp(18px,2.2vw,32px); }
+.fw-journey { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:clamp(6px,1.6vw,22px); }
+.fw-journey button { position:relative; padding:8px 0 13px; color:var(--body); text-align:left; font:570 clamp(14px,1.16vw,18px)/1.25 var(--sans); }
+.fw-journey button::before,.fw-journey button::after { content:''; position:absolute; inset:auto 0 0; height:3px; border-radius:2px; background:var(--line); }
+.fw-journey button::after { background:var(--chapter-accent); transform-origin:left; transform:scaleX(var(--fw-progress,0)); }
+.fw-journey button[aria-current=step],.fw-journey button:hover { color:var(--chapter-accent); }
+@media (prefers-reduced-motion:no-preference) {
+  .fw-journey button::after { transition:transform .42s cubic-bezier(.2,.76,.23,1); }
+}
 .fw-toolbar {
   display:flex; justify-content:space-between; align-items:center; gap:14px 24px;
-  border-block:1px solid var(--fw-rule); padding:10px 0;
+  border-bottom:1px solid var(--fw-rule); padding:10px 0;
 }
 .fw-picker { display:flex; flex-wrap:wrap; align-items:center; gap:8px; font:600 13px/1.2 var(--sans); color:var(--fw-muted); }
 .fw-picker select { max-width:100%; padding:7px 22px 7px 6px; color:var(--fw-ink); font:inherit; background:transparent; border:0; border-bottom:1px solid var(--fw-rule); border-radius:0; cursor:pointer; }
@@ -44,6 +51,8 @@
   .fw-toolbar { position:sticky; top:var(--nav-height,65px); z-index:5; background:var(--paper); padding-block:7px; }
 }
 @media (max-width:650px) {
+  .fw-journey { grid-template-columns:1fr .75fr 1fr 1fr; align-items:stretch; }
+  .fw-journey button { align-content:center; font-size:14px; }
   .fw-toolbar { display:grid; grid-template-columns:1fr; gap:5px; }
   .fw-picker { flex-wrap:nowrap; justify-content:space-between; }
   .fw-picker select { min-width:0; flex:1; max-width:70%; }

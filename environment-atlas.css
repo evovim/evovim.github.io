@@ -14,13 +14,12 @@
 #ambient-field canvas { opacity: .65; }
 #environments, #pilots, #method, #tools, #results { border-top: 1px solid var(--line); }
 .story-chapter { padding-block: clamp(43px, 4.4vw, 72px); }
-.chapter-intro {
-  display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,.8fr); align-items: end;
-  gap: clamp(26px, 6vw, 100px); margin: 12px 0 clamp(20px, 2.4vw, 38px);
+.chapter-intro { margin: 0 0 clamp(20px, 2.4vw, 36px); }
+.chapter-intro h2 { text-wrap: balance; }
+.chapter-intro p, .lineage-intro p {
+  margin-top: clamp(10px,1.1vw,16px); max-width: 68ch; color: var(--body);
+  font: 400 clamp(16px,1.3vw,20px)/1.52 var(--sans); text-wrap: pretty;
 }
-.chapter-intro h2 { max-width: 19ch; text-wrap: balance; }
-.chapter-intro h2:only-child { grid-column: 1 / -1; max-width: none; }
-.chapter-intro p { max-width: 42ch; color: var(--body); font-size: clamp(15px,1.18vw,18px); line-height: 1.5; }
 #pilots .chapter-intro em { color: var(--clay); }
 #environments .chapter-intro em, #method .chapter-intro em, #results .chapter-intro em { color: var(--teal); }
 #tools .chapter-intro em { color: var(--deep); }
@@ -29,10 +28,9 @@
 .tool-fallback dt { margin-top: .7em; font-weight: 650; }
 .tool-fallback dd { margin: .2em 0; }
 .lineage-chapter { margin-top: clamp(40px,5vw,75px); padding-top: clamp(24px,3.5vw,48px); border-top: 1px solid var(--line); }
-.lineage-intro { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,.8fr); align-items: end; gap: clamp(26px,6vw,100px); margin-bottom: 22px; }
+.lineage-intro { margin-bottom: 22px; }
 .lineage-intro h3 { max-width: 24ch; font: 500 clamp(35px,3.5vw,56px)/1.04 var(--serif); letter-spacing: -.04em; text-wrap: balance; }
 .lineage-intro h3 em { color: var(--teal); font-weight: inherit; }
-.lineage-intro p { max-width: 43ch; color: var(--body); font: 400 clamp(14px,1.1vw,17px)/1.5 var(--sans); }
 main :is(#gallery-lineage,#framework-loops,#evolved-tools,#evolution-story) { scroll-margin-top: calc(var(--nav-height,68px) + 14px); }
 .section-id { color: var(--teal); }
 .atlas-groups { display:grid; gap:clamp(22px,3vw,40px); }
@@ -80,10 +78,8 @@ main :is(#gallery-lineage,#framework-loops,#evolved-tools,#evolution-story) { sc
 #environment-dialog #gallery-memory :is(summary,figcaption,figcaption strong) { color:var(--deep); }
 #environment-dialog #gallery-memory summary:focus-visible { outline-color:var(--deep); }
 @media (max-width:720px) {
-  .lineage-intro { grid-template-columns: 1fr; gap: 10px; }
-  .chapter-intro { grid-template-columns:1fr; gap:10px; margin-bottom:20px; }
+  .chapter-intro { margin-bottom:20px; }
   .chapter-intro h2 { font-size:clamp(36px,8vw,52px); }
-  .chapter-intro p { font-size:15px; }
   .atlas-groups { grid-template-columns:1fr; }
   .atlas-row { gap:8px; }
   .atlas-image { aspect-ratio:1.35; }
