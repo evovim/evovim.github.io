@@ -11,8 +11,8 @@
 <link rel="stylesheet" href="embodied-case.css?v=58a72ff9"><link rel="stylesheet" href="editorial.css?v=22a1cff7"><link rel="stylesheet" href="overview-film.css?v=b8430140">
 <link rel="stylesheet" href="mascot-scenes.css"><link rel="stylesheet" href="scroll-story.css?v=0e1970ce"><link rel="stylesheet" href="environment-atlas.css?v=6218cf78">
 <link rel="stylesheet" href="challenge-pilot.css?v=8b79d38a"><link rel="stylesheet" href="evolution-story.css?v=017ccfa1"><link rel="stylesheet" href="findings.css?v=8a33351e">
-<link rel="stylesheet" href="generation-results.css?v=12633b0d">
-<link rel="stylesheet" href="framework-loops.css?v=7745e5c3"><link rel="stylesheet" href="framework-evidence.css?v=73866688"><link rel="stylesheet" href="paper-framework.css?v=114c3e9b"><link rel="stylesheet" href="evolved-tools.css?v=ed139298">
+<link rel="stylesheet" href="generation-results.css?v=e98bb037">
+<link rel="stylesheet" href="framework-loops.css?v=7745e5c3"><link rel="stylesheet" href="framework-evidence.css?v=73866688"><link rel="stylesheet" href="paper-framework.css?v=114c3e9b"><link rel="stylesheet" href="evolved-tools.css?v=6eb4b8b4">
 <link rel="stylesheet" href="reading-nav.css?v=120607f3">
 <link rel="stylesheet" href="analytics.css?v=a40d35fb">
 <script defer src="analytics.js?v=7ab2aee4" data-measurement-id="G-NFL9PGZGV3"></script>
@@ -20,9 +20,9 @@
 <script defer src="gallery-memory.js?v=36816cbc"></script><script defer src="applications.js?v=226c6c13"></script>
 <script defer src="ambient.js?v=c14b31fe"></script><script defer src="overview-film.js"></script><script defer src="environment-atlas.js?v=3aa6bcfb"></script>
 <script defer src="embodied-case.js?v=1f89f387"></script><script defer src="mascot-scenes.js?v=f2807ce2"></script><script defer src="challenge-pilot.js?v=5212016a"></script>
-<script defer src="framework-evidence.js?v=a8458531"></script><script defer src="paper-framework.js?v=a0963da9"></script><script defer src="framework-loops.js?v=876476b0"></script><script defer src="evolution-story.js?v=b69e113f"></script><script defer src="evolved-tools.js?v=0748d48a"></script>
+<script defer src="framework-evidence.js?v=a8458531"></script><script defer src="paper-framework.js?v=a0963da9"></script><script defer src="framework-loops.js?v=876476b0"></script><script defer src="evolution-story.js?v=b69e113f"></script><script defer src="evolved-tools.js?v=6444ccee"></script>
 <script defer src="findings.js?v=d77ba3e4"></script><script defer src="scroll-story.js?v=5495f28e"></script>
-<script defer src="generation-results.js?v=90fe48d0"></script>
+<script defer src="generation-results.js?v=f883f057"></script>
 </head>
 <body>
 <div id="ambient-field" aria-hidden="true"><canvas></canvas></div>
@@ -174,8 +174,12 @@
   </section>
 </section>
 <section id="tools" class="section wrap story-chapter" aria-labelledby="tools-title">
-  <div class="chapter-intro"><h2 id="tools-title">Evolved <em>visual tools</em></h2><p>Each of the three models started with the same image tools on all six tasks. What did their programs learn to do differently?</p></div>
+  <div class="chapter-intro"><h2 id="tools-title">Evolved <em>visual tools</em></h2><p>EvoViM most often added ways to parse a frame and remember images. AutoMem most often added text notes.</p></div>
   <div id="evolved-tools">
+    <figure>
+      <img src="media/evolved-tools/mechanisms.svg" width="780" height="353" loading="lazy" style="height:auto" alt="Mechanisms added by EvoViM and AutoMem respectively. Image memory 39 and 0, frame parsing 42 and 17, text notes 6 and 22, workflow 19 and 16.">
+      <figcaption>Mechanisms added across 18 final programs per method.</figcaption>
+    </figure>
     <dl class="tool-fallback">
       <dt>Visual matching</dt><dd>Card Matching compares exposed card faces. DMV-Hard searches saved pages for the corner pattern in a product photo.</dd>
       <dt>Spatial recall</dt><dd>MC Gallery locates a painting beside a numbered door. Poster Maze links a poster to a cell and wall.</dd>
