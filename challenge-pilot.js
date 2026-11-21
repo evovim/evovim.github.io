@@ -47,10 +47,22 @@
       const qwen = row.dataset.qwen.split(' ');
       return [...row.cells].slice(1).map((cell,i) => {
         const claude = cell.textContent;
-        cell.innerHTML = `<span class="ep-score"><i aria-hidden="true" style="--score:${claude}%"></i><b>${claude}</b></span>`;
+        cell.innerHTML = `<span class="ep-score" role="img" aria-label="${claude}%"><i aria-hidden="true" style="--score:${claude}%"></i><b aria-hidden="true">${claude}</b></span>`;
         return {bar:cell.querySelector('i'), value:cell.querySelector('b'), claude, qwen:qwen[i]};
       });
     });
+    let tableSeen = false;
+    function drawTable(enter = false) {
+      for (const measurement of measurements) {
+        const target = Number(measurement[modelSelector.value]);
+        const label = measurement.value;
+        label.parentElement.setAttribute('aria-label', target.toFixed(1) + '%');
+        measurement.bar.style.setProperty('--score', target + '%');
+        window.EvoViMNumbers.to(label, target, {
+          from: enter ? 0 : Number(label.textContent), digits: 1, duration: 820, instant: !tableSeen
+        });
+      }
+    }
     const rows = [...table.querySelectorAll('tr[data-pilot]')];
     const buttons = rows.map((row,i) => {
       const heading = row.cells[0];
@@ -81,6 +93,16 @@
     const toggle = root.querySelector('.ep-play');
     const guide = root.querySelector('.ep-guide');
     const status = root.querySelector('[role=status]');
+    const counts = root.querySelector('.ep-counts');
+    let countsVisible = false;
+    let countsPlayed = false;
+    function animateCounts() {
+      if (!countsVisible || countsPlayed) return;
+      countsPlayed = true;
+      counts.querySelectorAll('[data-total]').forEach(node => {
+        window.EvoViMNumbers.to(node, Number(node.dataset.total), {from:0, duration:760});
+      });
+    }
     let index = 0;
     let run = !motion.matches;
     let visible = false;
@@ -125,10 +147,11 @@
       root.dataset.beat = String(index + 1);
       picture.innerHTML = step.visual();
       title.textContent = step.title;
-      const counts = root.querySelector('.ep-counts');
+      countsPlayed = false;
       counts.hidden = !step.numbers;
       if (step.numbers) counts.innerHTML = step.numbers.map(([value, all, label]) =>
-        `<div><strong>${value}<small> / ${all}</small></strong><span>${label}</span></div>`).join('');
+        `<div><strong role="img" aria-label="${value} out of ${all}"><b data-total="${value}" aria-hidden="true">${value}</b><small aria-hidden="true"> / ${all}</small></strong><span>${label}</span></div>`).join('');
+      animateCounts();
       guide.querySelector('p').textContent = step.speech;
       next.innerHTML = `<span>${step.next}</span> <i aria-hidden="true">${index === steps.length - 1 ? '↺' : '→'}</i>`;
       if (visible && !motion.matches) {
@@ -139,11 +162,7 @@
     }
     rows.forEach((row,i) => row.addEventListener('click',() => select(i,true)));
     modelSelector.addEventListener('change',() => {
-      for (const measurement of measurements) {
-        const score = measurement[modelSelector.value];
-        measurement.bar.style.setProperty('--score',score + '%');
-        measurement.value.textContent = score;
-      }
+      drawTable();
       status.textContent = 'Showing scores for ' + modelSelector.selectedOptions[0].text + '. Examples use Claude Haiku 5.5.';
     });
     next.addEventListener('click', () => select((index + 1) % steps.length,true));
@@ -151,12 +170,19 @@
     document.addEventListener('visibilitychange',sync);
     motion.addEventListener('change', () => {if (motion.matches) run = false; sync();});
     select(0);
+    table.classList.add('ep-awaiting');
+    new IntersectionObserver(([entry]) => {
+      countsVisible = entry.isIntersecting;
+      animateCounts();
+    }, {threshold:.2}).observe(counts);
     const revealScores = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
-        table.classList.add('ep-shown');
+        tableSeen = true;
+        table.classList.remove('ep-awaiting');
+        drawTable(true);
         revealScores.disconnect();
       }
-    });
+    }, {threshold:.15});
     revealScores.observe(table);
     new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;

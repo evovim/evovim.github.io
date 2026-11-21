@@ -25,13 +25,13 @@
 
   function record() {
     return '<div class="fe-file"><figure><a href="' + view('0011') + '" target="_blank" rel="noopener">' + door() + '</a><figcaption>Original saved view</figcaption></figure>' +
-      '<div class="fe-file-output"><code>SAVE_VIEW</code>' + lead('Door','7') + lead('Stored as','view_0011') + '</div></div>';
+      '<div class="fe-file-output"><code>SAVE_VIEW</code>' + lead('Door','7') + '</div></div>';
   }
 
   function pixels() {
     const ranks = [['7, left','0.791'],['1, left','0.231'],['8, left','0.230']];
     return '<div class="fe-consult"><figure>' + ask() + '<figcaption>Query</figcaption></figure>' +
-      '<div class="fe-rank"><b>Best score per door and side</b>' + ranks.map(([place,score]) => '<div><span>' + place + '</span><i aria-hidden="true" style="--fe-score:' + score + '"></i><strong>' + score + '</strong></div>').join('') +
+      '<div class="fe-rank"><b>Best match per door and side</b>' + ranks.map(([place,score]) => '<div role="img" aria-label="Door ' + place + ', similarity ' + score + '"><span>' + place + '</span><i aria-hidden="true" style="--fe-score:' + score + '"></i><strong aria-hidden="true" data-value="' + score + '">' + score + '</strong></div>').join('') +
       '</div></div><figure class="fe-match-frame"><div class="fe-hit-frame">' + door() + '<i aria-hidden="true"></i></div><figcaption>Best matching region in the saved view</figcaption></figure>';
   }
 
@@ -113,7 +113,7 @@
   function heldout() {
     const seeds = [43,44,45,47,48,49,52,53,54,55];
     const walks = seeds.map(seed=>'<i aria-hidden="true" style="--fe-h:' + (seed===55?'87.5%':'100%') + '"></i>').join('');
-    return '<div class="fe-final"><div><span>Correct answers</span><strong>79<small> / 80</small></strong></div>' +
+    return '<div class="fe-final"><div><span>Correct answers</span><strong role="img" aria-label="79 out of 80"><span data-value="79">79</span><small> / 80</small></strong></div>' +
       '<div class="fe-walk-plot"><div class="fe-walk-bars" role="img" aria-label="Eight of eight correct in the first nine walks and seven of eight correct in the last walk.">' + walks +
       '</div><span>Correct answers per walk</span></div></div>';
   }
@@ -141,6 +141,10 @@
     container.dataset.evidenceRetry = String(retry);
     container.dataset.evidenceVerdict = verdict;
     container.innerHTML = '<figure class="fe-plate">' + plates[stageId](retry, verdict) + '</figure>';
+    for (const node of container.querySelectorAll('[data-value]')) {
+      const value = node.dataset.value;
+      window.EvoViMNumbers.to(node, Number(value), {from:0, digits:(value.split('.')[1] || '').length, duration:550});
+    }
     if (!previous.size || reduced.matches) return;
     const anchor = container.getBoundingClientRect();
     for (const el of container.querySelectorAll('[data-evidence-key]')) {

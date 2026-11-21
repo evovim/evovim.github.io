@@ -7,6 +7,8 @@
   const fullView = () => small('door-four', 'The original view of door 4, with a green painting on either side.');
   const queryPrint = label => '<figure class="ev-print">' + query() + '<figcaption>' + label + '</figcaption></figure>';
 
+  const practiceScore = correct => '<div class="ev-score"><b role="img" aria-label="' + correct + ' out of 16"><span data-correct="' + correct + '">' + correct + '</span> / 16</b> practice questions correct</div>';
+
   const steps = [
     {
       name: 'Practice', title: 'Where did this painting hang?',
@@ -22,7 +24,7 @@
       next: 'Rewrite what gets saved',
       picture: () => '<div class="ev-notes">' + queryPrint('Question 8') + '<div class="ev-paper"><span>Walk notebook</span>'
         + '<p>Door 4<br><mark>Green mottled tile wall</mark></p><small>Painting location</small>'
-        + '<b class="ev-blank">No entry</b></div></div><div class="ev-score"><b>4 / 16</b> correct across two development episodes</div>'
+        + '<b class="ev-blank">No entry</b></div></div>' + practiceScore(4)
     },
     {
       name: 'Save crops', title: 'Save a crop with its door and side.',
@@ -34,7 +36,7 @@
           + crops.map(([id, label], index) => '<figure style="--order:' + index + '">' + (id ? small('crop-' + id, 'Saved crop from door ' + label)
             : '<span class="ev-absent" aria-label="No painting filed for door four">×</span>') + '<figcaption>' + label + '</figcaption></figure>').join('')
           + '</div><div class="ev-hit"><span>Closest crop for this query</span><b>0.242</b><span>Below the 0.45 cutoff</span></div></div>'
-          + '<div class="ev-score"><b>13 / 16</b> correct across two development episodes</div>';
+          + practiceScore(13);
       }
     },
     {
@@ -43,7 +45,7 @@
       next: 'Test the next two edits',
       picture: () => '<div class="ev-search"><figure class="ev-located"><div class="ev-original">' + fullView() + '<i class="ev-box" aria-hidden="true"></i></div>'
         + '<figcaption>Stored view <b>Door 4</b></figcaption></figure><div class="ev-rank">' + small('match', 'The matched patch on the right side of the doorway.')
-        + '<b>0.834</b><span>Match score</span></div></div><div class="ev-score"><b>16 / 16</b> correct across two development episodes</div>'
+        + '<b>0.834</b><span>Match score</span></div></div>' + practiceScore(16)
     },
     {
       name: 'Select', title: 'Would either edit improve the search?',
@@ -56,11 +58,11 @@
     },
     {
       name: 'Test', title: 'Does the program work on ten new walks?',
-      pose: 'presenter', line: 'I kept the program. On each walk I started with empty memory and answered eight new questions.',
+      pose: 'presenter', line: 'I missed one question on the last walk.',
       next: 'Replay the evolution',
       picture: () => {
         const walkCount = 10;
-        return '<div class="ev-test"><div class="ev-outcome"><strong>79<span> / 80</span></strong><span>questions correct</span></div>'
+        return '<div class="ev-test"><div class="ev-outcome"><strong role="img" aria-label="79 out of 80"><span class="ev-numerator" data-correct="79">79</span><span> / 80</span></strong><span>questions correct</span></div>'
           + '<div class="ev-walks" role="img" aria-label="Eight correct on each of the first nine walks. Seven correct on the final walk.">'
           + Array.from({length: walkCount}, (_, i) => '<div style="--order:' + i + '"><b>' + (i + 1) + '</b><span>' + Array.from({length: 8}, (_, q) => i === 9 && q === 0
             ? '<i class="miss">×</i>' : '<i></i>').join('') + '</span></div>').join('')
@@ -103,6 +105,8 @@
     panel.dataset.stage = String(index);
     root.classList.toggle('ev-in-view', inView);
     figure.innerHTML = step.picture();
+    const numerator = figure.querySelector('[data-correct]');
+    if (numerator) window.EvoViMNumbers.to(numerator, Number(numerator.dataset.correct), {from:0, duration:750, delay:120});
     title.textContent = step.title;
     quote.textContent = step.line;
     updatePose();

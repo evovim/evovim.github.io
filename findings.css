@@ -58,6 +58,7 @@
   .fd-ablation-panel dl { margin-top: 12px; gap: 10px; }
 }
 @media screen and (prefers-reduced-motion: no-preference) {
+  .fd-ablation-ready dd b { visibility: hidden; }
   .fd-ablation-ready .fd-score-track i { transform: scaleX(0); }
   .fd-ablation-ready .fd-trial-strip i { opacity: 0; }
   .fd-ablation-drawing .fd-score-track i { animation: fd-fill-ablation 1050ms cubic-bezier(.24,.64,.22,1) backwards; }

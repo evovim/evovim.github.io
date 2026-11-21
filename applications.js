@@ -55,7 +55,7 @@
         <footer class="archive-foot"><details><summary>Images and Python example</summary>
           <p class="archive-credit"></p>
           <a href="downloads/archive_lookup.zip" download>Download the images and lookup script ↓</a>
-          <p><a href="#install">Install EvoViM</a> and unzip the example. EvoViM stores the full images, then the script matches the crop.</p><code class="archive-command"></code></details></footer>
+          <p><a href="#install">Install EvoViM</a> and unzip the example.</p><code class="archive-command"></code></details></footer>
       </article>
       <article id="embodied-case" aria-labelledby="kitchen-title" hidden></article>
       </div>
@@ -82,7 +82,7 @@
       if (stage === 'choose') {
         picture.type = 'button';
         picture.dataset.pick = index;
-        picture.setAttribute('aria-label', 'Choose ' + record.title + ', ' + record.id);
+        picture.setAttribute('aria-label', 'Choose ' + record.title);
       }
       const image = document.createElement('img');
       Object.assign(image, {src: path + record.image, alt: record.alt, width: record.width, height: record.height, loading: 'lazy'});
@@ -240,7 +240,6 @@
     else if (stage === 'choose') {
       stage = 'answer';
       window.EvoViMMetrics?.demo(collection, 'reveal');
-      status.textContent = 'Source record ' + records[collection][sample].id + '.';
     } else {
       sample = (sample + 1) % records[collection].length;
       stage = 'choose';
@@ -263,7 +262,7 @@
     }
     stage = 'answer';
     window.EvoViMMetrics?.demo(collection, 'complete');
-    status.textContent = 'You found it. Source record ' + records[collection][sample].id + '.';
+    status.textContent = 'Correct match.';
     drawStage();
     get('.archive-instruction').focus({preventScroll: true});
   });

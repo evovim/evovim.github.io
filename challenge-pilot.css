@@ -97,6 +97,7 @@
 .ep-counts > div { max-width:15ch; }
 .ep-counts strong { display:block;color:var(--ep-teal);font:650 clamp(23px,2.6vw,39px)/1.1 var(--sans);font-variant-numeric:tabular-nums;letter-spacing:-.05em; }
 .ep-counts > div:nth-child(2) strong { color:var(--ep-rust); }
+.ep-counts [data-total] { font-weight:inherit; }
 .ep-counts strong small { color:var(--soft);font:500 max(14px,.48em) var(--sans);letter-spacing:-.04em; }
 .ep-counts span { display:block;font:500 clamp(14px,1.02vw,16px)/1.25 var(--sans);color:var(--body);margin-top:3px; }
 #pilot-story .ep-guide img { width:clamp(72px,6.6vw,94px); }
@@ -128,10 +129,9 @@
 .ep-late-query b { color:var(--ep-rust);font:600 clamp(12px,2.8cqw,22px)/1.1 var(--sans); }
 
 @media (prefers-reduced-motion:no-preference) {
-  .ep-comparison.ep-shown .ep-score i::before { animation:ep-grow .65s cubic-bezier(.2,.72,.3,1) backwards; }
-  .ep-comparison .ep-score i::before { transition:width .38s cubic-bezier(.2,.72,.3,1); }
-  .ep-comparison.ep-shown tbody tr:nth-child(2) .ep-score i::before { animation-delay:.07s; }
-  .ep-comparison.ep-shown tbody tr:nth-child(3) .ep-score i::before { animation-delay:.14s; }
+  .ep-score i::before { transition:width 820ms cubic-bezier(.215,.61,.355,1); }
+  .ep-comparison.ep-awaiting .ep-score i::before { width:0; }
+  .ep-comparison.ep-awaiting .ep-score b { visibility:hidden; }
   :is(.ep-playing,.ep-prompted) .ep-notes figure { animation:ep-rise .4s both; }
   :is(.ep-playing,.ep-prompted) .ep-notes figure:nth-child(2) { animation-delay:.12s; }
   :is(.ep-playing,.ep-prompted) .ep-notes figure:nth-child(3) { animation-delay:.25s; }
@@ -140,7 +140,6 @@
   :is(.ep-playing,.ep-prompted) .ep-ledger b { animation:ep-stamp .44s calc(.26s * var(--i)) backwards; }
   :is(.ep-playing,.ep-prompted) .ep-late-query { animation:ep-rise .7s 1.6s backwards; }
   @keyframes ep-rise { from{translate:0 13px;opacity:0;} }
-  @keyframes ep-grow { from { transform:scaleX(0); } }
   @keyframes ep-scan { 0%{translate:155% 0;scale:1.12;} 35%{translate:95% -22%;} 70%{translate:-8% 5%;} }
   @keyframes ep-stamp { from{transform:scale(1.6) rotate(-10deg);opacity:0;} }
 }

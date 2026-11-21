@@ -8,7 +8,7 @@
   const blue = '#184878', green = '#256d69', orange = '#a3473e', plum = '#76549d';
   const story = [
     {id:'intro', name:'Overview', color:blue,
-      title:'How did a gallery agent learn where paintings hang?', text:'Its starting program could save frames but had no pixel matcher. Two development walks exposed a missing link between each painting and its location.',
+      title:'How did a gallery agent learn where paintings hang?', text:'The starting program could save images. Its notes described the wall at door 4 and left out the paintings on either side.',
       next:'Run the starting program', caseStep:0},
     {id:'execution', name:'Task execution', color:blue, pose:'photographer',
       title:'Act first. Record what happens next.', text:'Each walk starts with empty memory. At the first step the model chooses an action. Once the environment responds, Record can write the new observation. Act reads memory to choose the next move.',
@@ -29,10 +29,10 @@
       title:'Give each crop a door and a side.', text:'The proposed program adds SAVE_REGION and changes the answering prompt to consult saved crops. The parent stays in place while the host tests the edit.',
       next:'Run code checks', caseStep:2},
     {id:'checks', name:'Code checks', color:orange,
-      title:'Exercise the tools before running the model.', text:'A stub calls every registered tool on recorded observations and checks that memory can be saved and restored. Passing makes the candidate eligible for a development run. A failed check sends the code and error back for one retry.',
+      title:'Check the tools on recorded frames.', text:'The checks run each tool on saved observations and test whether memory can be saved and restored. If a check fails, the model gets the code and error for one retry.',
       next:'Run the checked candidate', caseStep:2},
     {id:'evaluation', name:'Candidate evaluation', color:orange,
-      title:'Replay both development seeds.', text:'The host installs the checked candidate and starts a fresh episode on each of the parent’s two seeds. Saving labelled crops raised the number of correct answers from 4 to 13 out of 16.',
+      title:'Test the edit on the same two walks.', text:'On the same two walks, the parent answered 4 of 16 questions correctly. The revised program saved each crop with its location and answered 13 correctly.',
       next:'Apply the gate', caseStep:2},
     {id:'gate', name:'Gate', color:orange,
       title:'Does the candidate replace its parent?', text:'A higher mean development score wins. To win a tie, the candidate must succeed on both seeds and reduce steps or tokens without increasing the other.',

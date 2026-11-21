@@ -33,7 +33,7 @@
           'The catalog keeps a grayscale thumbnail and product ID for every page.'),
         step('Match the patch', plate(tile(img('dmv-win18', 'Runner-up patch on page 18'), 'Page 18 · 0.402') + tile(img('dmv-win1', 'Best matching patch on page 1'), 'Page 1 · 0.955', true), 'et-pair'),
           'The matcher slides the query across each thumbnail. A higher correlation means a closer match.'),
-        step('Return the product ID', withScore(img('dmv-p1', 'Original page for the winning product'), '9cbae018', 'Page 1 · session 1'),
+        step('Identify the page', withScore(img('dmv-p1', 'Original page for the winning product'), 'Page 1', 'First catalog'),
           '')
       ]
     },
@@ -43,7 +43,7 @@
       stages: [
         step('A painting returns', plate(tile(img('gallery-question', 'The transformed painting in the held-out gallery question'), 'Question image'), 'et-single'),
           'The query shows the painting from a different angle.'),
-        step('Search 14 saved views', plate(img('gallery-peak', 'Recomputed similarity across view 0011 with a red peak left of the doorway') + '<span class="et-image-note">Peak similarity 0.791</span>', 'et-landscape'),
+        step('Search 14 saved views', plate(img('gallery-peak', 'Heatmap showing the closest match on the left of door 7') + '<span class="et-image-note">Peak similarity 0.791</span>', 'et-landscape'),
           'The heatmap was recomputed with the evolved matcher across rotations and scales.'),
         step('Door 7, left', plate('<div class="et-shot"><img src="media/gallery-memory/view_0011.webp" alt="Saved view of doorway 7, with the matching painting marked on its left"><i class="et-box et-door-box" aria-hidden="true"></i></div>', 'et-landscape'),
           'The saved doorway shows both number and side.')
@@ -95,10 +95,26 @@
   for (const figure of mount.querySelectorAll('[data-et-chart]')) {
     const replay = figure.querySelector('.et-replay');
     const plots = [...figure.querySelectorAll('[data-et-plot]')];
+    const labels = new Map(plots.map(plot => [plot, [...plot.querySelectorAll('.et-measure')].map(measure => {
+      const label = measure.querySelector('.et-bar-value');
+      measure.setAttribute('role', 'img');
+      measure.setAttribute('aria-label', label.textContent.trim());
+      label.setAttribute('aria-hidden', 'true');
+      const target = Number(measure.style.getPropertyValue('--value'));
+      label.textContent = target;
+      const delay = Number(getComputedStyle(measure).getPropertyValue('--row')) * 100;
+      return {label, target, delay};
+    })]));
+    function drawValues(plot, instant) {
+      for (const {label, target, delay} of labels.get(plot)) {
+        window.EvoViMNumbers.to(label, target, {from:0, duration:860, delay, instant});
+      }
+    }
     const observer = 'IntersectionObserver' in window && new IntersectionObserver(entries => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
         entry.target.classList.replace('et-await', 'et-drawing');
+        drawValues(entry.target, false);
         observer.unobserve(entry.target);
       }
     }, {threshold: .24});
@@ -107,7 +123,7 @@
       replay.hidden = motion.matches || !observer;
       for (const plot of plots) {
         plot.classList.remove('et-await', 'et-drawing');
-        if (replay.hidden) continue;
+        if (replay.hidden) { drawValues(plot, true); continue; }
         plot.classList.add('et-await');
         observer.observe(plot);
       }

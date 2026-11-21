@@ -97,7 +97,7 @@
 .ev-verdict-line.kept small { font-weight: 700; }
 .ev-outcome { display: flex; align-items: baseline; justify-content: flex-start; gap: 16px; }
 .ev-outcome > strong { color: var(--ev-green); font: 600 clamp(47px,6vw,87px)/1 var(--sans); letter-spacing: -.07em; }
-.ev-outcome strong span { font-size: .5em; color: var(--ev-muted); letter-spacing: -.04em; }
+.ev-outcome strong span:not(.ev-numerator) { font-size: .5em; color: var(--ev-muted); letter-spacing: -.04em; }
 .ev-outcome > span { font: 500 clamp(13px,1.15vw,16px)/1.3 var(--sans); }
 .ev-walks { display: grid; grid-template-columns: repeat(10, minmax(0,1fr)); gap: clamp(4px,1vw,12px); margin-block: 14px; }
 .ev-walks > div b { font: 500 13px var(--mono); }

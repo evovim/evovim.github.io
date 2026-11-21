@@ -10,10 +10,23 @@
   const replay = document.querySelector('.fd-revision-replay');
   if (replay) {
     const panels = [...replay.closest('.fd-revision').querySelectorAll('.fd-ablation-panel')];
+    const readings = new Map(panels.map(panel => [panel, [...panel.querySelectorAll('dd b')].map(node => {
+      const display = node.textContent;
+      const [number, suffix] = display.match(/^(\d+(?:\.\d+)?)(.*)$/).slice(1);
+      node.setAttribute('role', 'img');
+      node.setAttribute('aria-label', display);
+      return {node, value: Number(number), digits: (number.split('.')[1] || '').length, suffix};
+    })]));
+    function drawScores(panel, instant) {
+      readings.get(panel).forEach(({node, value, digits, suffix}, index) => {
+        window.EvoViMNumbers.to(node, value, {from:0, digits, suffix, delay:index * 130, duration:suffix === '%' ? 1050 : 550, instant});
+      });
+    }
     const observer = 'IntersectionObserver' in window && new IntersectionObserver(entries => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
         entry.target.classList.replace('fd-ablation-ready', 'fd-ablation-drawing');
+        drawScores(entry.target, false);
         observer.unobserve(entry.target);
       }
     }, { threshold: .45 });
@@ -23,7 +36,7 @@
       replay.hidden = reduced.matches || !observer;
       for (const panel of panels) {
         panel.classList.remove('fd-ablation-ready', 'fd-ablation-drawing');
-        if (replay.hidden) continue;
+        if (replay.hidden) { drawScores(panel, true); continue; }
         panel.classList.add('fd-ablation-ready');
         observer.observe(panel);
       }

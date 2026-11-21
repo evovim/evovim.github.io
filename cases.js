@@ -5,15 +5,15 @@
   const cases = [
     {
       id: 'dmv-hard', environment: 'DMV-Hard',
-      first: {caption: 'Session 1 · product page 03401944', alt: 'A full gold vase with orange, fan-shaped panels on its body.'},
+      first: {caption: 'First shopping session', alt: 'A full gold vase with orange, fan-shaped panels on its body.'},
       later: {caption: 'A re-photographed detail from an earlier session', alt: 'A close-up showing the neck and fan-shaped panels of a gold vase.'},
       opening: 'Browse the first catalog.',
       introduction: 'One of these 20 vases will come up later. What would help you recognize this one?',
-      forward: 'See the later question', question: 'Which page showed this vase?',
-      prompt: 'After a second shopping session, which product ID matches this detail?',
-      options: ['715ce373', '03401944', '5ef27f12'], answer: 1,
-      result: 'The agent recovered page 03401944.',
-      evidence: 'The gold vase ranked first among 20 photos. The agent checked four candidates and returned its page ID.'
+      forward: 'See the later question', question: 'Which of these three vases matches the detail?',
+      options: ['Multicolored vase', 'Amber-and-gold vase', 'Gray-green vase'], answer: 1,
+      optionPhotos: ['cases/dmv-multicolored.webp', 'observations/dmv-hard-a.webp', 'cases/dmv-gray.webp'],
+      result: 'The detail belongs to the amber-and-gold vase.',
+      evidence: 'The agent compared 20 catalog photos. This vase ranked first, and the agent returned its page.'
     },
     {
       id: 'poster-maze', environment: 'Poster Maze',
@@ -161,8 +161,15 @@
     } else if (page === 1) {
       media = isTetris ? drawLanding(choice ?? 0) : picture('b', decisionView);
       heading = item.question;
-      explanation = `<p>${item.prompt}</p>
-        <fieldset class="cs-options"><legend>${isTetris ? 'Select a placement to preview the drop' : 'Select your answer'}</legend>${item.options.map((option, i) => `<label><input type="radio" name="case-answer" value="${i}"${i === choice ? ' checked' : ''}><span>${option}</span></label>`).join('')}</fieldset>`;
+      const options = item.options.map((option, i) => {
+        const radio = `<input type="radio" name="case-answer" value="${i}"${i === choice ? ' checked' : ''}>`;
+        const label = `${radio}<span>${option}</span>`;
+        return item.optionPhotos
+          ? `<label><img src="media/${item.optionPhotos[i]}" width="512" height="512" alt=""><span class="cs-photo-label">${label}</span></label>`
+          : `<label>${label}</label>`;
+      }).join('');
+      explanation = `${item.prompt ? `<p>${item.prompt}</p>` : ''}
+        <fieldset class="cs-options${item.optionPhotos ? ' cs-photo-options' : ''}"><legend>${isTetris ? 'Select a placement to preview the drop' : 'Select your answer'}</legend>${options}</fieldset>`;
       controls = `<button class="cs-action" type="button" data-action="check" ${choice === null ? 'disabled' : ''}>Check my answer<span class="cs-arrow" aria-hidden="true">→</span></button>` + action('evidence', 'Reveal the answer', true) + action('observe', 'Revisit first view', true);
     } else {
       media = `<div class="cs-pair">${picture('a', item.first)}${picture('b', item.later)}</div>`;

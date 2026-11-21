@@ -31,8 +31,8 @@
     "dmv-hard": {
       name: "DMV-Hard",
       views: [
-        ["Product page", "A gold Art Deco vase appears on product page 03401944 in the first shopping session."],
-        ["Deferred query", "After the second session, a close-up of the vase asks the agent to recover its product ID."]
+        ["Product page", "A gold vase with fan-shaped panels appears in the first catalog."],
+        ["Deferred query", "After the second catalog, the agent must find the original page from this close-up."]
       ],
       text: "Browse 20 products per session, then identify a product from a transformed crop."
     }

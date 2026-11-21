@@ -84,9 +84,10 @@
 }
 .et-poster-stat strong { color: var(--et-accent); font-weight: 650; }
 @media screen and (prefers-reduced-motion: no-preference) {
-  .et-await .et-bar { transform: scaleX(0); }
+  .et-await .et-bar-value { visibility: hidden; }
+  .et-await .et-bar { flex-basis: 0; }
   .et-drawing .et-bar { animation: et-grow-bar 860ms cubic-bezier(.25,.65,.22,1) calc(var(--row) * 100ms) backwards; }
-  @keyframes et-grow-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes et-grow-bar { from { flex-basis: 0; } }
 }
 @media (prefers-reduced-motion: reduce), print {
   #evolved-tools .et-replay { display: none; }

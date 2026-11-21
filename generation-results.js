@@ -51,7 +51,7 @@
     <figure>
       <figcaption class="gen-caption">Development score (%)</figcaption>
       <div class="gen-plots"></div>
-      <p class="gen-note">Generation 0 is the starting program. Each point averages the retained program’s score on the same two development seeds.</p>
+      <p class="gen-note">G0 is the starting program. Scores average two development seeds.</p>
     </figure>
     <details class="gen-values"><summary>View scores by generation</summary><div></div></details>`;
 
@@ -73,14 +73,16 @@
     const paths = methods.map(({ key }) => `<polyline class="gen-line gen-${key}"/>`).join('');
     const marks = methods.map(({ key }) => [0, 1, 2, 3].map(gen => {
       const shape = key === 'evo' ? '<circle r="3.8"/>' : '<path d="M 0 -5.7 L 5.7 0 0 5.7 -5.7 0 Z"/>';
-      return `<g class="gen-marks gen-${key}" style="--gen-index:${gen}"><title></title>${shape}</g>`;
+      return `<g class="gen-marks gen-${key}" style="--gen-index:${gen}">${shape}</g>`;
     }).join('')).join('');
     return `<div class="gen-model">
       <h4>${model.label}</h4>
+      <div class="gen-canvas">
       <svg role="img" aria-labelledby="gen-title-${model.key} gen-description-${model.key}" viewBox="0 0 354 181">
         <title id="gen-title-${model.key}"></title><desc id="gen-description-${model.key}"></desc>
         <defs><clipPath id="gen-clip-${model.key}"><rect class="gen-reveal" x="36" y="6" width="267" height="150"/></clipPath></defs>
         ${grid}${ticks}
+        <line class="gen-guide" y1="12" y2="149" visibility="hidden"/>
         <g clip-path="url(#gen-clip-${model.key})">${paths}</g>
         ${marks}
         <g class="gen-end-labels">
@@ -88,6 +90,14 @@
           <text class="gen-end gen-auto" x="316"></text>
         </g>
       </svg>
+      <div class="gen-targets" role="group" aria-label="${model.label} generation scores">
+        ${[0, 1, 2, 3].map(gen => `<button type="button" tabindex="${gen ? -1 : 0}" aria-label="Generation ${gen}"></button>`).join('')}
+      </div>
+      <div class="gen-tip" hidden aria-hidden="true">
+        <strong></strong>
+        ${methods.map(({key,label}) => `<div class="gen-${key}"><span><i></i>${label}</span><b></b></div>`).join('')}
+      </div>
+      </div>
     </div>`;
   }
 
@@ -100,8 +110,103 @@
       marks: [...element.querySelectorAll(`.gen-marks.gen-${key}`)],
       end: element.querySelector(`.gen-end.gen-${key}`)
     }));
-    return { element, model, tracks, frame: 0 };
+    return {element, model, tracks, frame: 0, generation: null,
+      canvas: element.querySelector('.gen-canvas'), guide: element.querySelector('.gen-guide'),
+      hits: [...element.querySelectorAll('.gen-targets button')], tip: element.querySelector('.gen-tip')};
   });
+
+  let inspected = null;
+  function dismiss(panel) {
+    if (inspected !== panel) return;
+    panel.guide.setAttribute('visibility', 'hidden');
+    panel.tip.hidden = true;
+    panel.tracks.forEach(track => track.marks[panel.generation].classList.remove('gen-selected'));
+    panel.generation = null;
+    inspected = null;
+  }
+  function positionTip(panel) {
+    if (panel.tip.hidden) return;
+    const {canvas, tip, generation, series} = panel;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    const anchorX = x(generation) * width / 354;
+    const anchorY = y(Math.max(series.evo[generation], series.auto[generation])) * height / 181;
+    const tipW = tip.offsetWidth, tipH = tip.offsetHeight;
+    const left = Math.max(2, Math.min(anchorX < width / 2 ? anchorX + 12 : anchorX - tipW - 12, width - tipW - 2));
+    // Find the piece of each curve beside the selected point. Prefer the nearest
+    // empty space above, between or below those two curves for the readout.
+    const generationAt = px => Math.max(0, Math.min(3, (px * 354 / width - x(0)) / 88));
+    const first = generationAt(left), last = generationAt(left + tipW);
+    const samples = [first, last, ...[1, 2].filter(g => first < g && g < last)];
+    const bands = methods.map(({key}) => {
+      const heights = samples.map(g => {
+        const lo = Math.floor(g), hi = Math.ceil(g);
+        return y(series[key][lo] + (series[key][hi] - series[key][lo]) * (g - lo)) * height / 181;
+      });
+      return [Math.min(...heights) - 6, Math.max(...heights) + 6];
+    });
+    const ideal = anchorY - tipH / 2;
+    const fits = top => bands.every(([low, high]) => top + tipH <= low || top >= high);
+    const tops = [ideal, ...bands.flatMap(([low, high]) => [low - tipH, high])]
+      .map(top => Math.max(2, Math.min(top, height - tipH - 2)))
+      .sort((a, b) => Math.abs(a - ideal) - Math.abs(b - ideal));
+    tip.style.left = left + 'px';
+    tip.style.top = (tops.find(fits) ?? tops[0]) + 'px';
+  }
+  function inspect(panel, gen) {
+    if (inspected) dismiss(inspected);
+    inspected = panel;
+    panel.generation = gen;
+    panel.guide.setAttribute('x1', x(gen));
+    panel.guide.setAttribute('x2', x(gen));
+    panel.guide.setAttribute('visibility', 'visible');
+    panel.tip.querySelector('strong').textContent = 'Generation ' + gen;
+    for (const track of panel.tracks) {
+      track.marks[gen].classList.add('gen-selected');
+      panel.tip.querySelector('.gen-' + track.key + ' b').textContent = panel.series[track.key][gen].toFixed(1) + '%';
+    }
+    panel.tip.hidden = false;
+    positionTip(panel);
+  }
+  for (const panel of panels) {
+    panel.hits.forEach((button, gen) => {
+      button.addEventListener('pointerenter', event => {
+        if (event.pointerType !== 'touch') inspect(panel, gen);
+      });
+      button.addEventListener('focus', () => {
+        panel.hits.forEach((hit, index) => { hit.tabIndex = index === gen ? 0 : -1; });
+        inspect(panel, gen);
+      });
+      button.addEventListener('click', () => inspect(panel, gen));
+      button.addEventListener('keydown', event => {
+        if (event.key === 'Escape') { dismiss(panel); return; }
+        const next = {ArrowLeft: Math.max(0, gen - 1), ArrowRight: Math.min(3, gen + 1), Home: 0, End: 3}[event.key];
+        if (next === undefined) return;
+        event.preventDefault();
+        panel.hits[next].focus();
+        if (next === gen) inspect(panel, gen);
+      });
+    });
+    panel.canvas.addEventListener('pointerleave', event => {
+      if (event.pointerType !== 'touch' && !panel.canvas.matches(':focus-within')) dismiss(panel);
+    });
+    panel.canvas.addEventListener('focusout', event => {
+      if (!panel.canvas.contains(event.relatedTarget)) dismiss(panel);
+    });
+  }
+  document.addEventListener('pointerdown', event => {
+    if (inspected && !inspected.canvas.contains(event.target)) dismiss(inspected);
+  });
+  window.addEventListener('resize', () => { if (inspected) positionTip(inspected); });
+
+  function endNumber(track, value, options) {
+    if (window.EvoViMNumbers) window.EvoViMNumbers.to(track.end, value, {digits: 1, ...options});
+    else track.end.textContent = value.toFixed(1);
+  }
+  function tracePanel(panel) {
+    if (!panel.element.classList.replace('gen-pending', 'gen-tracing')) return;
+    for (const track of panel.tracks) endNumber(track, panel.series[track.key][3], {from: 0, duration: 700, delay: 340});
+  }
 
   // On phones the panels stack. Each panel starts its own trace as it comes into view.
   const visible = new Set();
@@ -111,7 +216,7 @@
       for (const {target, intersectionRatio} of entries) {
         if (intersectionRatio >= .2) {
           visible.add(target);
-          target.classList.replace('gen-pending', 'gen-tracing');
+          tracePanel(panels.find(panel => panel.element === target));
         } else {
           visible.delete(target);
         }
@@ -128,44 +233,48 @@
     track.marks.forEach((mark, gen) => mark.setAttribute('transform', `translate(${x(gen)} ${heights[gen]})`));
   }
 
+  function placeEnds(tracks, labelY) {
+    // Keep tied or nearly tied scores legible while both trajectories move.
+    if (Math.abs(labelY[0] - labelY[1]) < 16) {
+      const middle = (labelY[0] + labelY[1]) / 2;
+      const offset = labelY[0] <= labelY[1] ? -8 : 8;
+      labelY = [middle + offset, middle - offset];
+    }
+    tracks.forEach((track, index) => track.end.setAttribute('y', labelY[index] + 4));
+  }
+
   function updatePanel(panel, task, animate) {
     const {element, model, tracks} = panel;
     const series = scores[model.key][task.key];
+    panel.series = series;
     cancelAnimationFrame(panel.frame);
     element.querySelector('svg > title').textContent = `${task.label}, ${model.label}`;
     element.querySelector('svg > desc').textContent = `Development scores in percent for generations 0 through 3.
       EvoViM: ${series.evo.join(', ')}. AutoMem: ${series.auto.join(', ')}.`;
 
     const target = tracks.map(track => series[track.key].map(y));
-    const labelY = target.map(heights => heights[3]);
-    if (Math.abs(labelY[0] - labelY[1]) < 16) {
-      const middle = (labelY[0] + labelY[1]) / 2;
-      const offset = labelY[0] <= labelY[1] ? -8 : 8;
-      labelY[0] = middle + offset;
-      labelY[1] = middle - offset;
-    }
-    tracks.forEach((track, index) => {
-      const samples = series[track.key];
-      track.marks.forEach((mark, gen) => {
-        mark.firstElementChild.textContent = `${track.label}, generation ${gen}, ${samples[gen]}%`;
-      });
-      track.end.textContent = samples[3];
-      track.end.setAttribute('y', labelY[index] + 4);
+    panel.hits.forEach((hit, gen) => {
+      hit.setAttribute('aria-label', `Generation ${gen}. EvoViM ${series.evo[gen].toFixed(1)}%. AutoMem ${series.auto[gen].toFixed(1)}%.`);
     });
+    if (inspected === panel) inspect(panel, panel.generation);
 
     if (animate && !reducedMotion.matches && canObserve && !visible.has(element)) {
       element.classList.remove('gen-tracing');
       element.classList.add('gen-pending');
     }
     if (!animate || reducedMotion.matches || element.classList.contains('gen-pending')) {
-      tracks.forEach((track, index) => paintTrack(track, target[index]));
-      element.classList.remove('gen-morphing');
+      tracks.forEach((track, index) => {
+        paintTrack(track, target[index]);
+        endNumber(track, series[track.key][3], {instant: true});
+      });
+      placeEnds(tracks, target.map(heights => heights[3]));
       return;
     }
     // A second selection can arrive mid-transition. Continue from the coordinates on screen.
     const from = tracks.map(track => Array.from(track.line.points, point => point.y));
     const start = performance.now();
-    element.classList.add('gen-morphing');
+    element.classList.remove('gen-tracing');
+    tracks.forEach(track => endNumber(track, series[track.key][3], {duration: 530}));
     function morph(now) {
       const elapsed = Math.min(1, Math.max(0, (now - start) / 530));
       const progress = elapsed * elapsed * (3 - 2 * elapsed);
@@ -173,8 +282,8 @@
         const heights = target[index].map((goal, gen) => from[index][gen] + (goal - from[index][gen]) * progress);
         paintTrack(track, heights);
       });
+      placeEnds(tracks, tracks.map(track => track.line.points.getItem(3).y));
       if (elapsed < 1) panel.frame = requestAnimationFrame(morph);
-      else element.classList.remove('gen-morphing');
     }
     panel.frame = requestAnimationFrame(morph);
   }
@@ -201,8 +310,8 @@
     render();
     // Latch the starting state before restarting the same CSS animation.
     void plots.offsetWidth;
-    for (const {element} of panels) {
-      if (!canObserve || visible.has(element)) element.classList.replace('gen-pending', 'gen-tracing');
+    for (const panel of panels) {
+      if (!canObserve || visible.has(panel.element)) tracePanel(panel);
     }
   });
   selector.addEventListener('change', () => render(true));
