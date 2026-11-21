@@ -35,29 +35,6 @@
 .wordmark i:nth-child(n+5) { color: var(--deep); }
 .hero h2 { color: var(--ink); }
 .hero h2 em, #results h2 em { color: var(--deep); }
-.paper-abstract {
-  display: grid;
-  grid-template-columns: minmax(8rem, .65fr) minmax(0, 2fr);
-  align-items: start;
-  column-gap: clamp(28px, 5vw, 84px);
-  padding-block: clamp(42px, 5.6vw, 84px);
-}
-.paper-abstract h2 {
-  color: var(--deep);
-  margin: 0;
-  font: 500 clamp(34px, 3.5vw, 56px)/1.08 var(--serif);
-  letter-spacing: -.045em;
-}
-.abstract-copy {
-  max-width: 72ch;
-  font: 400 clamp(16px, 1.16vw, 19px)/1.7 var(--sans);
-  color: var(--ink);
-}
-.abstract-copy p { margin: 0; }
-.abstract-copy p + p { margin-top: 1em; }
-@media (max-width: 760px) {
-  .paper-abstract { grid-template-columns: 1fr; gap: 20px; }
-}
 .hero-copy p { color: var(--body); }
 .hero .primary, .btn.light, .revision-guide :is(button,a) {
   background: #111;

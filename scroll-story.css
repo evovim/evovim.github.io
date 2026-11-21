@@ -17,38 +17,6 @@
     --rise: 24px;
   }
 
-  /* Ink follows each paragraph's own position, including when reading back up. */
-  [data-scroll-scene="abstract"] h2 {
-    position: relative;
-    justify-self: start;
-    width: fit-content;
-  }
-  [data-scroll-scene="abstract"] h2::after {
-    content: "";
-    position: absolute;
-    top: calc(100% + .12em);
-    left: 1%;
-    width: 98%;
-    height: .08em;
-    border-radius: 100%;
-    background: linear-gradient(90deg, #519891, #987fb3 57%, #d19a50);
-    transform: scaleX(var(--arrival));
-    transform-origin: left;
-  }
-  [data-scroll-scene="paragraph"] { --annotation: #bfe3dc; }
-  [data-scroll-scene="paragraph"]:nth-child(2) { --annotation: #e0d3ee; }
-  [data-scroll-scene="paragraph"]:nth-child(3) { --annotation: #f0d8b4; }
-  .abstract-text { display: block; }
-  [data-scroll-scene="paragraph"] .abstract-text {
-    transform: translateY(calc(var(--remaining) * var(--rise)));
-    opacity: calc(.84 + .16 * var(--arrival));
-  }
-  [data-scroll-scene="paragraph"] .abstract-mark {
-    background: linear-gradient(var(--annotation), var(--annotation)) left 94% / calc(var(--arrival) * 100%) .39em no-repeat;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-  }
-
   [data-scroll-scene="heading"] :is(h2, h3) {
     transform: translateY(calc(var(--remaining) * var(--rise)));
   }
@@ -66,12 +34,12 @@
   }
   [data-scroll-scene="environments"] .atlas-item:nth-child(2) { --distance: 30px; }
   [data-scroll-scene="environments"] .atlas-item:nth-child(3) { --distance: 44px; }
-  [data-scroll-scene="evidence"] :is(.ep-picture, .fw-map, .ev-figure) {
+  [data-scroll-scene="evidence"] :is(.ep-picture, .ev-figure) {
     translate: 0 calc(var(--remaining) * var(--rise));
     scale: calc(1 - var(--remaining) * .024);
     transform-origin: center top;
   }
-  [data-scroll-scene="evidence"] :is(.ep-narration, .fw-inspect, .ev-caption) {
+  [data-scroll-scene="evidence"] :is(.ep-narration, .ev-caption) {
     translate: 0 calc(var(--remaining) * var(--rise) * 1.8);
   }
   [data-scroll-scene="install"] .terminal::after {
@@ -87,13 +55,6 @@
 
 @media screen and (min-width: 800px) and (prefers-reduced-motion: no-preference) {
   [data-scroll-scene] { --rise: 41px; }
-  [data-scroll-scene="abstract"] h2 {
-    position: sticky;
-    top: calc(var(--nav-height, 65px) + 2.2rem);
-  }
-  [data-scroll-scene="paragraph"] .abstract-text {
-    transform: translate(calc(var(--remaining) * -13px), calc(var(--remaining) * var(--rise)));
-  }
   [data-scroll-scene="opening"] .paper-heading h1 {
     transform: translateY(calc(var(--arrival) * -24px)) scale(calc(1 - var(--arrival) * .028));
     transform-origin: left bottom;

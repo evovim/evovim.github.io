@@ -17,11 +17,11 @@
       id: 'card', name: 'Card memory + pixel matcher', task: 'Card Matching', family: 0,
       title: 'Which card completes the pair?', action: 'Compare card faces', finish: 'Reveal the next flip',
       stages: [
-        step('A card turns up', plate(tile(card('hE'), 'hE'), 'et-single et-card'), 'The agent turns over hE. It last saw the matching picture 86 steps ago.'),
+        step('A card turns up', plate(tile(card('hE'), 'hE'), 'et-single et-card'), 'The matching card appeared 86 steps earlier.'),
         step('Align and compare', plate([['aC','79.9'],['aE','54.4'],['bB','37.5'],['cG','0.0']].map(([cell,n]) => tile(card(cell), cell + ' · ' + n, cell === 'cG')).join(''), 'et-four et-card'),
-          'These pixel differences were recomputed by the evolved matcher. It aligns the card faces first. Identical faces score zero.'),
+          'Recomputing the pixel differences gives zero for the matching pair.'),
         step('Flip cG', plate(tile(card('hE'), 'hE') + '<b class="et-pair-sign" aria-hidden="true">=</b>' + tile(card('cG'), 'cG · 86 steps earlier', true), 'et-pair et-card'),
-          'The tracker recommends cG. The agent flips it and clears the pair.')
+          '')
       ]
     },
     {
@@ -29,11 +29,11 @@
       title: 'Which product carried this pattern?', action: 'Search saved pages', finish: 'Identify the product',
       stages: [
         step('A corner patch', plate(tile(img('dmv-query', 'Queried teal product swatch with colored dots'), 'Question image') + tile(img('dmv-catalog', 'Twenty saved grayscale product thumbnails'), '20 saved pages'), 'et-query-catalog'),
-          'A cropped product photo arrives after browsing. The program still has a grayscale thumbnail of every page in the first session.'),
+          'One grayscale thumbnail per page'),
         step('Match the patch', plate(tile(img('dmv-win18', 'Runner-up patch on page 18'), 'Page 18 · 0.402') + tile(img('dmv-win1', 'Best matching patch on page 1'), 'Page 1 · 0.955', true), 'et-pair'),
-          'The matcher ranks windows by normalized cross-correlation. ALIGN_PAGES shows the candidate patches side by side.'),
+          'ALIGN_PAGES shows patches ranked by normalized cross-correlation.'),
         step('Return the product ID', withScore(img('dmv-p1', 'Original page for the winning product'), '9cbae018', 'Page 1 · session 1'),
-          'The agent answers with the ID attached to the best match. It is correct. This page had no written note.')
+          'The matching thumbnail carries the product ID.')
       ]
     },
     {
@@ -41,11 +41,11 @@
       title: 'Which side of which door?', action: 'Search doorway views', finish: 'Read the door and side',
       stages: [
         step('A painting returns', plate(tile(img('gallery-question', 'The transformed painting in the held-out gallery question'), 'Question image'), 'et-single'),
-          'The agent passed this painting on its walk. The question shows it again from a different angle.'),
+          'Same painting, new viewpoint'),
         step('Search 14 saved views', plate(img('gallery-peak', 'Recomputed similarity across view 0011 with a red peak left of the doorway') + '<span class="et-image-note">Peak similarity 0.791</span>', 'et-landscape'),
-          'Replaying the matcher at different rotations and scales puts the strongest response to the left of door 7.'),
+          'The heatmap was recomputed with the evolved matcher across rotations and scales.'),
         step('Door 7, left', plate('<div class="et-shot"><img src="media/gallery-memory/view_0011.webp" alt="Saved view of doorway 7, with the matching painting marked on its left"><i class="et-box et-door-box" aria-hidden="true"></i></div>', 'et-landscape'),
-          'The matched view supplies the door number. The painting’s position in that view supplies the side. The answer is correct.')
+          'The saved doorway shows both number and side.')
       ]
     },
     {
@@ -53,11 +53,11 @@
       title: 'On which wall did the poster hang?', action: 'Find the saved view', finish: 'Trace the wall',
       stages: [
         step('A poster to locate', plate(tile(img('maze-query', 'Poster image from question six in the maze episode'), 'Question image'), 'et-single'),
-          'A poster reappears after exploration. The answer needs a cell and a wall direction.'),
+          'Answer with a cell and wall direction.'),
         step('Retrieve its camera view', plate('<div class="et-shot">' + img('maze-view', 'First-person view from cell 0,6 looking south, with the matched poster region outlined') + '<i class="et-box et-maze-box" aria-hidden="true"></i></div><span class="et-image-note">Similarity 0.908</span>', 'et-landscape'),
-          'The center patch matches. The saved camera pose places the agent at cell (0, 6), looking south.'),
+          'The matched frame places the camera at (0, 6), facing south.'),
         step('Follow the sightline', plate('<div class="et-maze-map"><div><span>Camera</span><b>(0, 6)</b></div><div><span>Open edge ↓</span><b>(1, 6)</b></div><strong>South wall</strong></div>', 'et-map'),
-          'The sightline passes through the first cell’s open edge. It hits the south wall of (1, 6), the correct answer.')
+          'An open edge reveals the wall one cell beyond the camera.')
       ]
     },
     {
@@ -65,11 +65,11 @@
       title: 'Where should the T land?', action: 'Project the landings', finish: 'Play the drop',
       stages: [
         step('Read the live well', withScore(img('tetris-well', 'Actual Tetris well with the T piece at step 30'), '298', 'Score before the move'),
-          'The parser reads occupied cells and the falling T directly from the game image.'),
+          'Occupied cells and falling piece, read from pixels'),
         step('Simulate each slide', withScore('<div class="et-drop-simulation">' + img('tetris-plan', 'Board reconstructed by the parser with the planned T landing outlined') + '<i class="et-tetromino" aria-hidden="true"></i></div>', '13 rows', 'Projected drop'),
-          'Sliding two cells left or four right gives the same projected drop. The planner chooses the shorter slide.'),
+          'Two cells left or four right give the same drop.'),
         step('Left, left, hard drop', withScore(img('tetris-drop', 'Actual board after the two left moves and the hard drop'), '320', 'Score after the drop'),
-          'The piece descends during the two moves. The actual hard drop covers 11 rows and earns 22 points.')
+          'After the shorter slide, the hard drop covers 11 rows.')
       ]
     },
     {
@@ -77,11 +77,11 @@
       title: 'Which way to the next pellet?', action: 'Trace a shortest path', finish: 'Read the first move',
       stages: [
         step('Update the pellet map', withScore(img('pacman-maze', 'Pac-Man maze at step 30'), '157', 'Regular pellets remaining'),
-          'The program tracks walls and eaten pellets across frames. Pac-Man is at (6, 23).'),
+          'The map tracks walls and eaten pellets across frames.'),
         step('Trace four moves', plate('<div class="et-route-detail">' + img('pacman-route', 'Map detail of three moves right followed by one move up to the pellet') + '<i class="et-route-dot" aria-hidden="true"></i></div>', 'et-route'),
-          'A shortest-path search reaches the pellet at (9, 22) in four moves. An equally close alternative requires reversing.'),
+          'Replaying the program recovers a four-move route to (9, 22) without reversing.'),
         step('Recommend right', plate('<div class="et-route-keys" aria-label="The suggested path is right, right, right, then up"><b>→</b><i>→</i><i>→</i><i>↑</i></div><span class="et-route-target">First move <strong>right</strong></span>', 'et-keys'),
-          'The program returns the target, the distance and the first move. The agent can use that suggestion on this turn.')
+          '')
       ]
     }
   ];

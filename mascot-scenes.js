@@ -4,10 +4,10 @@
   const clips = new Map();
 
   const caseLines = {
-    'dmv-hard': ['archivist', 'What would help me find this vase’s page again?', 'Look at the fan-shaped panels. Have you seen them on a full vase?'],
-    'poster-maze': ['detective', 'Which cell am I standing in? Which cell holds the poster?', 'Trace the line of sight through the next cell.'],
-    'card-matching': ['detective', 'Keep an eye on the two face-up cards before they turn over.', 'Did the pink squares appear in column H or column I?'],
-    tetris: ['puzzle', 'Trace the outline of the stack. How far can this piece fall?', 'Two landings give the same drop. Count the sideways moves.']
+    'dmv-hard': ['archivist', 'Which detail identifies this vase?', 'Look for the fan-shaped panels.'],
+    'poster-maze': ['detective', 'Where am I standing?', 'Follow my sightline into the next cell.'],
+    'card-matching': ['detective', 'Remember where the pink card lands.', 'Was it column H or I?'],
+    tetris: ['puzzle', 'How far can the piece fall?', 'Same drop. Which slide is shorter?']
   };
 
   function selected(scope, selector) {
@@ -31,12 +31,12 @@
         const stage = scope.querySelector('.archive-guide').dataset.stage;
         if (stage === 'answer') return ['archivist', ''];
         if (scope.querySelector('.archive-record.missed')) return ['archivist', monet
-          ? 'Try the edge of the haystack. Where do the brushstrokes line up?'
-          : 'Try matching the shapes along the edge of the crop.'];
-        if (stage === 'choose') return ['archivist', 'Which of those three records does this little detail belong to?'];
+          ? 'Compare the edges of the stacks.'
+          : 'Trace the edge of the crop.'];
+        if (stage === 'choose') return ['archivist', 'Look for a matching edge.'];
         return ['archivist', monet
-          ? 'Same subject, different light. What would help you tell these paintings apart?'
-          : 'Look through these moonwalk photographs with me. We’ll get the detail in a moment.'];
+          ? 'Watch how the light changes.'
+          : 'Notice the shapes in the dust and sky.'];
       }
     },
     {

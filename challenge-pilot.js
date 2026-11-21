@@ -11,9 +11,9 @@
   const pilots = [
     {
       tab: 'Evolved text memory', title: 'Two patterns fit the same words.',
-      caption: 'On DMV-Hard, AutoMem’s notes often identified a product from a photo detail. The same description could fit generated patterns on several pages.',
+      caption: 'In DMV-Hard, one description fit the swatches on two different product pages.',
       numbers: [['100','134','photo-detail queries answered correctly'],['1','106','pattern queries answered correctly']],
-      pose: 'archivist', speech: 'A teal field with rust and blue spots… that could describe either one.', next: 'Try keeping every frame',
+      pose: 'archivist', speech: 'Which swatch did I mean?', next: 'Try keeping every frame',
       visual: () => `<div class="ep-notes"><div class="ep-product-pair">
         <figure>${image(products + 'correct-vase.webp', 'Vase above a teal, blue and rust swatch.')}<figcaption>Vase</figcaption></figure>
         <figure>${image(products + 'returned-table.webp', 'Side table with a different swatch in similar colours.')}<figcaption>Table</figcaption></figure>
@@ -22,16 +22,16 @@
     },
     {
       tab: 'Hand-designed visual memory', title: 'Which door was beside the match?',
-      caption: 'This design saves every frame and searches for a matching patch. On DMV-Hard, finding the page gives the product ID. In MC Gallery, the match alone gives neither the door number nor the side.',
+      caption: 'The matcher returned a frame and a bounding box. MC Gallery asked for the door and side.',
       numbers: [['56','60','seen paintings in the top match'],['0','60','seen paintings located correctly']],
-      pose: 'detective', speech: 'I have a matching patch. How do I turn its position in the frame into an answer?', next: 'Try writing the program up front',
+      pose: 'detective', speech: 'How do I get a door number from these pixels?', next: 'Try writing the program up front',
       visual: () => `<div class="ep-search"><div class="ep-search-image">${frame()}<i aria-hidden="true"></i></div><div class="ep-search-output"><span>Matcher output</span><b>Frame + bounding box</b><small>Door <em>?</em> &nbsp; Side <em>?</em></small></div></div>`
     },
     {
       tab: 'One-shot program', title: 'A list of doors leaves out the paintings.',
-      caption: 'Given only the initial MC Gallery instructions, the model wrote a program to record the doors in order. At the exit, each query showed a painting and asked for its door and side.',
+      caption: 'The opening instruction led the program to log doors. At the exit, it was asked about paintings.',
       numbers: [['0','60','seen paintings located correctly'],['11','20','unseen paintings correctly rejected']],
-      pose: 'mechanic', speech: 'I prepared for the walk. My door list cannot tell me where this painting hung.', next: 'Replay the comparisons',
+      pose: 'mechanic', speech: 'Next time, what should I save beside each door?', next: 'Replay the comparisons',
       visual: () => `<div class="ep-route"><div class="ep-route-label">Opening instruction</div><strong>Reach the gold wall</strong>
         <div class="ep-ledger"><small>Door order</small><div>${[1,2,3,'…',8].map((n,i)=>`<b style="--i:${i}">${n}</b>`).join('')}</div></div>
         <div class="ep-late-query">${query()}<b>Which door and side?</b></div></div>`

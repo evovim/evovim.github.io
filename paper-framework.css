@@ -1,0 +1,92 @@
+.paper-framework {
+  width: 100%;
+  margin: 0;
+  scroll-margin-top: calc(var(--nav-height, 68px) + 12px);
+  border-block: 1px solid var(--line);
+}
+.paper-figure-controls {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 12px;
+  color: var(--body);
+  font: 550 15px/1.4 var(--sans);
+}
+.paper-figure-controls label {
+  display: inline-flex;
+  align-items: baseline;
+  min-width: 0;
+  gap: 8px;
+}
+.paper-figure-controls select {
+  min-width: 0;
+  max-width: 100%;
+  font: inherit;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  padding: 7px 4px;
+}
+.paper-figure-controls a {
+  margin-left: auto;
+  white-space: nowrap;
+  color: var(--deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.paper-figure-board {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  padding: clamp(6px, 1.75vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  margin-bottom: clamp(14px, 2vw, 28px);
+}
+.paper-figure-map {
+  position: relative;
+  width: 100%;
+  max-width: 990px;
+}
+.paper-figure-map img { display: block; width: 100%; height: auto; }
+.paper-framework[data-detail=true] .paper-figure-board {
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  gap: clamp(18px, 3vw, 52px);
+}
+.paper-figure-marker {
+  position: absolute;
+  pointer-events: none;
+  box-sizing: border-box;
+  outline: 2px solid var(--teal);
+  background: rgb(37 109 105 / 7%);
+}
+.paper-figure-region {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  width: 100%;
+  min-height: 225px;
+  border-left: 1px solid var(--line);
+  padding-left: clamp(14px, 2vw, 28px);
+}
+.paper-figure-region svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  max-height: min(440px, 66vh);
+}
+.paper-framework [hidden] { display: none; }
+@media (max-width: 700px) {
+  .paper-framework[data-detail=true] .paper-figure-board { grid-template-columns: 1fr; }
+  .paper-framework[data-detail=true] .paper-figure-map { display: none; }
+  .paper-figure-region { border: 0; padding: 6px; min-height: 176px; }
+  .paper-figure-region svg { max-height: min(56vh, 420px); }
+  .paper-figure-controls { font-size: 14px; }
+}
+@media (max-width: 360px) {
+  .paper-figure-controls { flex-wrap: wrap; gap: 8px; }
+  .paper-figure-controls select { max-width: 162px; }
+}

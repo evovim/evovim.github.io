@@ -10,9 +10,9 @@
 .reading-header .reading-label { display: block; margin-bottom: 12px; }
 .reading-links { list-style: none; margin: 0; padding: 0; }
 .reading-links li { --chapter-ink: #126d62; }
-.reading-links li:nth-child(n+4) { --chapter-ink: #165f74; }
-.reading-links li:nth-child(n+7) { --chapter-ink: #385b88; }
-.reading-links li:nth-child(n+9) { --chapter-ink: #63538a; }
+.reading-links li:nth-child(n+3) { --chapter-ink: #165f74; }
+.reading-links li:nth-child(n+6) { --chapter-ink: #385b88; }
+.reading-links li:nth-child(n+8) { --chapter-ink: #63538a; }
 .reading-header .reading-nav .reading-links a {
   display: block;
   position: relative;

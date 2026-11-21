@@ -5,13 +5,13 @@
   const collections = {
     apollo: {
       title: 'Which lunar photograph contains this detail?',
-      context: 'Buzz Aldrin photographed his bootprint so researchers could study how lunar soil responded to pressure. These three NASA photographs come from the same moonwalk.',
+      context: 'Three NASA photographs from the Apollo 11 moonwalk.',
       hints: ['The folds of a flag against black sky.', 'A row of parallel ridges in the dust.', 'A reflection in a gold visor.'],
       first: 1,
     },
     monet: {
       title: 'Which canvas contains these brushstrokes?',
-      context: 'Claude Monet painted the same wheat stacks under changing light. These three paintings belong to the Art Institute of Chicago. The reproductions come from Wikimedia Commons.',
+      context: 'Claude Monet’s wheat stacks, Art Institute of Chicago. Images via Wikimedia Commons.',
       hints: ['The small stack where sunlight meets the field.', 'The outline of a reddish stack against the sky.', 'A ridge of blue-violet paint against a distant hillside.'],
       first: 0,
     },
@@ -53,7 +53,7 @@
           <div class="archive-records" role="group" aria-label="Three archive records"></div>
         </div>
         <footer class="archive-foot"><details><summary>Run the lookup locally</summary>
-          <p>The example saves the three images with EvoViM. A scripted matcher locates the crop. <a href="#install">Install EvoViM</a>, unzip the example and run</p><code class="archive-command"></code>
+          <p>EvoViM stores the images. A scripted matcher finds the crop. <a href="#install">Install EvoViM</a>, unzip the example and run</p><code class="archive-command"></code>
           <a href="downloads/archive_lookup.zip" download>Download images and Python example ↓</a></details></footer>
       </article>
       <article id="embodied-case" aria-labelledby="kitchen-title" hidden></article>
@@ -117,7 +117,7 @@
     const record = records[collection][sample];
     const copy = {
       browse: ['Explore the three images.', 'Reveal the detail →'],
-      choose: ['Select the image that contains this crop.', 'Show the match →'],
+      choose: ['Choose the matching image.', 'Show the match →'],
       answer: [record.title, 'Try another detail →'],
     }[stage];
     get('.archive-instruction').textContent = copy[0];
@@ -257,7 +257,7 @@
       missed?.closest('.archive-record').classList.remove('missed');
       missed = button;
       button.closest('.archive-record').classList.add('missed');
-      status.textContent = records[collection][chosen].title + ' has different details. Try another image.';
+      status.textContent = records[collection][chosen].title + ' doesn’t match. Try another image.';
       return;
     }
     stage = 'answer';

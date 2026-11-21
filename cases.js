@@ -8,24 +8,24 @@
       first: {caption: 'Session 1 · product page 03401944', alt: 'A full gold vase with orange, fan-shaped panels on its body.'},
       later: {caption: 'A re-photographed detail from an earlier session', alt: 'A close-up showing the neck and fan-shaped panels of a gold vase.'},
       opening: 'Browse the first catalog.',
-      introduction: 'This is page 03401944. Later, the shopper might ask for any of the 20 vases in this session. Which details could help you find this page again?',
+      introduction: 'One of these 20 vases will come up later. What would help you recognize this one?',
       forward: 'See the later question', question: 'Which page showed this vase?',
-      prompt: 'After a second shopping session, the game shows only this detail. The original question asks for the product ID.',
+      prompt: 'After a second shopping session, which product ID matches this detail?',
       options: ['715ce373', '03401944', '5ef27f12'], answer: 1,
       result: 'The agent recovered page 03401944.',
-      evidence: 'Its program matched the close-up against 20 earlier product photos. The gold vase ranked first. The agent inspected a sheet of four candidates before returning its page ID.'
+      evidence: 'The gold vase ranked first among 20 photos. The agent checked four candidates and returned its page ID.'
     },
     {
       id: 'poster-maze', environment: 'Poster Maze',
       first: {caption: 'Cell (4, 3) · facing east', alt: 'A green and teal patterned poster on the far wall of a maze corridor.'},
       later: {caption: 'A tilted poster image shown after the exit', alt: 'An enlarged, tilted green and teal poster pattern framed in gray.'},
       opening: 'Look down the corridor.',
-      introduction: 'The agent is at (4, 3), looking east into the next cell, (4, 4). There is a poster on the far wall. Its location might matter after the agent reaches the exit.',
+      introduction: 'From (4, 3), look east into cell (4, 4). Remember where the poster hangs.',
       forward: 'See the later question', question: 'Where did this poster hang?',
-      prompt: 'The corridor is gone. Use the pattern to recall the cell and wall, or choose “Never seen” for a new poster.',
+      prompt: 'Which cell and wall held this pattern? Choose “Never seen” for a new poster.',
       options: ['East wall of (4, 3)', 'Never seen', 'East wall of (4, 4)'], answer: 2,
       result: 'The agent located the east wall of (4, 4).',
-      evidence: 'Its program ranked saved sightings by visual similarity. The two strongest matches came from different viewpoints. Both pointed to the east wall of the same cell.'
+      evidence: 'The two closest views both placed the poster on the east wall of the same cell.'
     },
     {
       id: 'card-matching', environment: 'Card Matching',
@@ -33,24 +33,24 @@
       later: {caption: 'First confirmed pair · row a', alt: 'The matching wine-red and pink cards are face up at I and K in row a.', crop: 'row'},
       decision: {caption: 'Card aK · detail from the confirmed pair', alt: 'The revealed card has a wine-red and pink checker pattern.', crop: 'tile'},
       opening: 'Remember two exposed cards.',
-      introduction: 'The goal is known from the start. Find pairs on a 12 × 12 board. These two cards have different patterns and will turn face down after this move.',
+      introduction: 'Find pairs on a 12 × 12 board. These two cards are about to turn face down.',
       forward: 'See the next move', question: 'Which square should the agent flip?',
-      prompt: 'Five moves later, the agent flips aK and sees this pattern. Which earlier square holds its twin?',
+      prompt: 'Five moves later, aK is face up. Which square holds its twin?',
       options: ['aI', 'aH', 'aJ'], answer: 0,
       result: 'The agent found its first pair at aI and aK.',
-      evidence: 'Its program compared the revealed card with saved card faces. The pixels matched the saved card at aI exactly. The agent flipped aI and the score rose from 0 to 1.'
+      evidence: 'The pixels matched aI exactly. Flipping aI scored one point.'
     },
     {
       id: 'tetris', environment: 'Tetris',
       first: {caption: 'Before the move · game score 298', alt: 'A falling T-shaped piece above a stack of blocks with room on either side.'},
       later: {caption: 'After the drop · game score 320', alt: 'The T-shaped piece has settled against the left edge of the stack. A new piece has appeared at the top.'},
       opening: 'Read the board before the piece falls.',
-      introduction: 'The goal is to reach 600 points without topping out. A hard drop earns two points per row. The program reads the occupied squares from the screen and looks for a long drop.',
+      introduction: 'Reach 600 points before the stack tops out. A hard drop earns two points per row.',
       forward: 'Try three placements', question: 'Which placement did the program choose?',
-      prompt: 'Preview each landing. Two placements offer the same long drop. The program favors the one that takes fewer sideways moves.',
+      prompt: 'Preview the landings. If two drops are equally long, choose the one with fewer sideways moves.',
       options: ['Stay put', 'Two left', 'Four right'], answer: 1,
       result: 'Two left moves, then a hard drop.',
-      evidence: 'At step 30 the program recommended two left moves and an immediate drop. The agent pressed Left, Left and Space on successive steps. By the final keypress the piece had fallen two rows, leaving an 11-row drop. The score rose from 298 to 320.'
+      evidence: 'Two left moves let the piece fall two rows before the hard drop. The remaining 11 rows earned 22 points.'
     }
   ];
 

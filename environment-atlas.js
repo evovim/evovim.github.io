@@ -2,15 +2,15 @@
   const games = {
     gallery: {
       name: "MC Gallery",
-      text: "Walk past eight numbered doors. At the exit, identify the door and side where each re-photographed painting hung, or answer “not seen.”"
+      text: "At the exit, give each painting’s door and side, or answer “not seen.”"
     },
     tetris: {
       name: "Tetris",
-      text: "Reach 600 points without topping out. The goal is known on the first move, so each falling piece and each gap in the stack can guide the next placement."
+      text: "Reach 600 points before the stack tops out."
     },
     pacman: {
       name: "Pac-Man",
-      text: "The target is 2,500 points. The agent can plan its route around pellets and moving ghosts from the moment play begins."
+      text: "Collect 2,500 points while avoiding the ghosts."
     },
     "card-matching": {
       name: "Card Matching",
@@ -18,7 +18,7 @@
         ["Exposed cards", "Two cards are face up in row a. The red pattern at aI will be hidden again."],
         ["Matched pair", "The red pattern is face up at both aI and aK. The agent has found its first pair."]
       ],
-      text: "Clear 72 pairs on a 12 × 12 board. Even a failed match tells the agent where to find two patterns the next time it needs them."
+      text: "Clear 72 pairs on a 12 × 12 board."
     },
     "poster-maze": {
       name: "Poster Maze",
@@ -26,7 +26,7 @@
         ["Maze view", "From cell (4, 3), the agent sees a teal poster on the east wall of cell (4, 4)."],
         ["Deferred query", "After the agent reaches the exit, a tilted view of the poster asks it to recall the wall location."]
       ],
-      text: "Navigating to the exit is only the first part. A later question requires the agent to connect an image to a particular wall, or recognize a poster it never saw."
+      text: "At the exit, locate each poster on a maze wall or answer “not seen.”"
     },
     "dmv-hard": {
       name: "DMV-Hard",
@@ -34,7 +34,7 @@
         ["Product page", "A gold Art Deco vase appears on product page 03401944 in the first shopping session."],
         ["Deferred query", "After the second session, a close-up of the vase asks the agent to recover its product ID."]
       ],
-      text: "Browse 20 product pages in each shopping session. Later, a transformed crop shows a photo detail or a generated pattern. Identify the product page it came from."
+      text: "Browse 20 products per session, then identify a product from a transformed crop."
     }
   };
 
@@ -46,6 +46,70 @@
   const exercise = dialog.querySelector('.env-exercise');
   const gallery = document.getElementById('gallery-memory');
   let key;
+
+  const reel = document.getElementById('environment-reel');
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  let inView = false;
+  let autoplayEnabled = !reducedMotion.matches;
+  let pauseRequested = false;
+
+  function pauseReel() {
+    if (!reel.paused) {
+      pauseRequested = true;
+      reel.pause();
+    }
+  }
+
+  function anotherVideoIsPlaying() {
+    return Array.from(document.querySelectorAll('video')).some(video => video !== reel && !video.paused && !video.ended);
+  }
+
+  function updateReel() {
+    if (!inView || document.hidden || dialog.open || anotherVideoIsPlaying()) {
+      pauseReel();
+    } else if (autoplayEnabled && reel.paused) {
+      reel.play().catch(error => {
+        if (error.name === 'NotAllowedError') autoplayEnabled = false;
+      });
+    }
+  }
+
+  reel.addEventListener('pause', () => {
+    if (!pauseRequested && inView && !document.hidden && !dialog.open && !anotherVideoIsPlaying()) autoplayEnabled = false;
+    pauseRequested = false;
+  });
+  reel.addEventListener('play', () => {
+    autoplayEnabled = true;
+    if (anotherVideoIsPlaying()) pauseReel();
+  });
+  for (const type of ['play', 'pause', 'ended']) {
+    document.addEventListener(type, event => {
+      if (event.target instanceof HTMLVideoElement && event.target !== reel) updateReel();
+    }, true);
+  }
+  reducedMotion.addEventListener('change', () => {
+    autoplayEnabled = !reducedMotion.matches;
+    if (autoplayEnabled) updateReel();
+    else pauseReel();
+  });
+  new IntersectionObserver(([entry]) => {
+    inView = entry.intersectionRatio >= 0.15;
+    updateReel();
+  }, {threshold: [0, 0.15]}).observe(reel);
+  document.addEventListener('visibilitychange', updateReel);
+
+  // Chapter boundaries in the 43-second six-environment film.
+  const chapterStarts = [0, 8, 15, 23, 29, 35];
+  const environmentLinks = [...document.querySelectorAll('.atlas-item')];
+  let previousLink;
+  reel.addEventListener('timeupdate', () => {
+    const chapter = chapterStarts.filter(start => start <= reel.currentTime).length - 1;
+    const link = environmentLinks[chapter];
+    if (link === previousLink) return;
+    previousLink?.removeAttribute('data-playing');
+    link.setAttribute('data-playing', '');
+    previousLink = link;
+  });
 
   function selectView(index) {
     const game = games[key];
@@ -61,7 +125,7 @@
     [...views.children].forEach((button, i) => button.setAttribute('aria-pressed', String(index === i)));
   }
 
-  for (const link of document.querySelectorAll('.atlas-item')) {
+  for (const link of environmentLinks) {
     link.addEventListener('click', event => {
       if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
       event.preventDefault();
@@ -90,13 +154,14 @@
       exercise.hidden = !document.querySelector('[data-case-key="' + key + '"]');
       selectView(0);
       dialog.showModal();
+      updateReel();
       dialog.scrollTop = 0;
       player.play().catch(() => {});
     });
   }
 
   dialog.querySelector('.env-close').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('close', () => player.pause());
+  dialog.addEventListener('close', () => { player.pause(); updateReel(); });
   dialog.addEventListener('click', event => {
     if (event.target !== dialog) return;
     const r = dialog.getBoundingClientRect();

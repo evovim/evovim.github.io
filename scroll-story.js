@@ -4,12 +4,10 @@
   const header = document.querySelector('.top');
   const chapters = [
     ['.hero', 'opening'],
-    ['#abstract', 'abstract'],
-    ['.abstract-copy > p', 'paragraph'],
     ['.chapter-intro, .lineage-intro', 'heading'],
     ['#environments .atlas-groups', 'environments'],
     ['#cases .cs-stage', 'decision'],
-    ['#pilot-story .ep-stage, #framework-loops .fw-spread, #ev-panel', 'evidence'],
+    ['#pilot-story .ep-stage, #ev-panel', 'evidence'],
     ['#applications .archive-records', 'archive'],
     ['#install .install-inner', 'install']
   ];
@@ -46,11 +44,8 @@
       let progress;
       if (scene.name === 'opening') {
         progress = (headerHeight - top) / (height * .7);
-      } else if (scene.name === 'abstract') {
-        // The title's underline spans the entire abstract, including long mobile paragraphs.
-        progress = (height * .85 - top) / (scene.height + height * .5);
       } else {
-        progress = (height * .96 - top) / (height * (scene.name === 'paragraph' ? .43 : .47));
+        progress = (height * .96 - top) / (height * .47);
       }
       const value = fraction(progress).toFixed(4);
       if (scene.value === value) continue;

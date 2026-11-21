@@ -7,18 +7,18 @@
     <div class="kitchen-case">
       <div class="kitchen-intro">
         <h3 id="kitchen-title">What do you remember about the kitchen?</h3>
-        <p>Watch the kitchen walkthrough from <a href="https://open-eqa.github.io/" target="_blank" rel="noopener">OpenEQA</a> by Majumdar and colleagues. Then compare what you remember with the <a href="${annotations}" target="_blank" rel="noopener">human answers</a>.</p>
+        <p><a href="https://open-eqa.github.io/" target="_blank" rel="noopener">OpenEQA</a> by Majumdar and colleagues. <a href="${annotations}" target="_blank" rel="noopener">Human-annotated answers</a>.</p>
         <button class="kitchen-play" type="button" data-time="0" aria-controls="kitchen-filmbox"><span aria-hidden="true">▶</span> Watch the kitchen visit</button>
       </div>
       <div class="kitchen-questions" id="kitchen-questions">
         <details>
           <summary>What color are the blinds?</summary>
-          <div><p><strong>White.</strong> The camera faces the slats above the radiator.</p>
+          <div><p><strong>White.</strong></p>
           <button type="button" data-time="12" aria-controls="kitchen-filmbox">See the window at 0:12 ↗</button></div>
         </details>
         <details>
           <summary>What food is on the counter?</summary>
-          <div><p><strong>Cheerios.</strong> The cereal box comes into view beside the sink.</p>
+          <div><p><strong>Cheerios.</strong></p>
           <button type="button" data-time="26" aria-controls="kitchen-filmbox">See the counter at 0:26 ↗</button></div>
         </details>
       </div>
@@ -89,6 +89,6 @@
     });
   }
   video.addEventListener('error', () => {
-    if (!figure.hidden) status.textContent = 'The official video could not load. The original film and the written answers are linked here.';
+    if (!figure.hidden) status.textContent = 'Video unavailable. Open the original film above.';
   });
 })();

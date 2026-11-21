@@ -10,8 +10,8 @@
   const steps = [
     {
       name: 'Practice', title: 'Walk first. Get the question later.',
-      text: 'Claude Haiku 5.5 walked past eight doors. At the exit, question eight asked where it had seen this green pattern.',
-      pose: 'photographer', line: 'I saw these walls on the way in. Which side was this one on?',
+      text: 'At the exit, Claude Haiku 5.5 had to place a painting it had passed on the walk.',
+      pose: 'photographer', line: 'Which side was it on?',
       next: 'Inspect the mistake',
       picture: () => '<div class="ev-encounter"><figure class="ev-door"><img src="media/framework/practice-door4.webp" alt="Door 4 in the starting program’s development episode" decoding="async">'
         + '<figcaption>On the walk <b>Door 4</b></figcaption></figure>'
@@ -19,8 +19,8 @@
     },
     {
       name: 'Diagnose', title: 'Read what survived the walk.',
-      text: 'The same model inspected the frames, tool calls and notes. A note described a green wall. The program never linked a painting to a door and side.',
-      pose: 'detective', line: 'My notes say “wall.” I called every painting unseen, including six I walked past.',
+      text: 'The trace linked “green mottled tile wall” to door 4. It gave no location for the painting.',
+      pose: 'detective', line: 'I marked six paintings I had seen as unseen.',
       next: 'Rewrite what gets saved',
       picture: () => '<div class="ev-notes">' + queryPrint('Question 8') + '<div class="ev-paper"><span>Walk notebook</span>'
         + '<p>Door 4<br><mark>Green mottled tile wall</mark></p><small>Painting location</small>'
@@ -28,8 +28,8 @@
     },
     {
       name: 'Save crops', title: 'File a picture with its address.',
-      text: 'The first accepted edit saved painting crops by door and side, and compared them to the query. It still missed this painting. Door 4 had no saved crop.',
-      pose: 'archivist', line: 'Look between doors 3 and 6. The picture I need never made it into my file.',
+      text: 'The first accepted edit indexed painting crops by door and side. Door 4 was missing.',
+      pose: 'archivist', line: 'Where is the crop from door 4?',
       next: 'Widen the saved view',
       picture: () => {
         const crops = [['1R', '1 · right'], ['3R', '3 · right'], [null, '4 · missing'], ['6L', '6 · left'], ['7L', '7 · left']];
@@ -42,8 +42,8 @@
     },
     {
       name: 'Search views', title: 'Save the whole doorway.',
-      text: 'The next edit filed full views by door. At question time it searched inside each view. The matching patch fell on the right of door 4.',
-      pose: 'mechanic', line: 'Now I can search every part of the frame, even when I missed the painting on the walk.',
+      text: 'Searching the full doorway views located the painting to the right of door 4.',
+      pose: 'mechanic', line: 'There it is, on the right!',
       next: 'Test the next two edits',
       picture: () => '<div class="ev-search"><figure class="ev-located"><div class="ev-original">' + fullView() + '<i class="ev-box" aria-hidden="true"></i></div>'
         + '<figcaption>Stored view <b>Door 4</b></figcaption></figure><div class="ev-rank">' + small('match', 'The matched patch on the right side of the doorway.')
@@ -51,22 +51,22 @@
     },
     {
       name: 'Select', title: 'Which candidate does the gate retain?',
-      text: 'The model can also rewrite the notes and analysis scripts that guide its next edit. Here it tested two more changes on the same development episodes.',
-      pose: 'puzzle', line: 'I keep the whole-view program. Both attempts stay in my revision history.',
+      text: 'Two further edits faced the same development episodes. Their outcomes informed the next revision.',
+      pose: 'puzzle', line: 'I’ll keep the whole-view search and record both attempts.',
       next: 'Try the frozen program',
       picture: () => '<div class="ev-verdict"><span class="ev-plate-label">Candidate program</span>'
         + [['Whole-view search', '16 / 16', 'Kept', 'kept'], ['Rework rotated queries', '16 / 16', 'More steps and tokens', ''], ['Shorten the log', '13 / 16', 'Lower score', '']]
           .map(([name, score, reason, cls], index) => '<div class="ev-verdict-line ' + cls + '" style="--order:' + index + '"><span>' + name + '</span><b>'
             + score + '</b><small>' + reason + '</small></div>').join('') + '</div>'
         + '<details class="ev-playbook"><summary>How a failed idea helped in DMV-Hard</summary>'
-        + '<ol><li><strong>Write down what failed.</strong> Offline matcher edits did not improve recognition. Haiku recorded them in its playbook.</li>'
-        + '<li><strong>Use that finding.</strong> The right page was often already on the shortlist. A later edit showed candidate patches beside the query at the same scale.</li></ol>'
+        + '<ol><li>Haiku recorded unsuccessful matcher edits in its playbook.</li>'
+        + '<li>The right page often made the shortlist. A later tool displayed each candidate beside the query at the same scale.</li></ol>'
         + '</details>'
     },
     {
       name: 'Test', title: 'Take the program into ten new galleries.',
-      text: 'The program is fixed for testing. Each walk starts with empty memory, new paintings and eight questions. The model’s weights stay fixed throughout.',
-      pose: 'presenter', line: 'I carry the way to remember. I fill the notebook again on every walk.',
+      text: 'The selected program started each held-out walk with empty memory and eight new questions.',
+      pose: 'presenter', line: 'New gallery, fresh notebook.',
       next: 'Replay the evolution',
       picture: () => {
         const walkCount = 10;

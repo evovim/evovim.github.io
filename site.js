@@ -10,7 +10,7 @@ const inlinePlayers = new IntersectionObserver(entries => {
 });
 document.addEventListener("play", event => {
   const active = event.target;
-  if (!(active instanceof HTMLVideoElement)) return;
+  if (!(active instanceof HTMLVideoElement) || active.id === "environment-reel") return;
   if (active.id !== "environment-film") inlinePlayers.observe(active);
   document.querySelectorAll("video").forEach(video => {
     if (video !== active && !video.paused) video.pause();
@@ -19,19 +19,6 @@ document.addEventListener("play", event => {
 document.addEventListener("pause", event => {
   if (event.target instanceof HTMLVideoElement) inlinePlayers.unobserve(event.target);
 }, true);
-
-const dialog = document.getElementById("framework-dialog");
-document.getElementById("framework-open").addEventListener("click", event => {
-  if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || !dialog.showModal) return;
-  event.preventDefault();
-  dialog.showModal();
-});
-document.getElementById("framework-close").addEventListener("click", () => dialog.close());
-dialog.addEventListener("click", event => {
-  const bounds = dialog.getBoundingClientRect();
-  if (event.target === dialog && (event.clientX < bounds.left || event.clientX > bounds.right ||
-      event.clientY < bounds.top || event.clientY > bounds.bottom)) dialog.close();
-});
 
 const installCode = document.getElementById("install-code");
 const copyButton = document.getElementById("copy-install");
