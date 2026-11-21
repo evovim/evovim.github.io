@@ -7,6 +7,31 @@
 
   const format = number => number.toFixed(1);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const replay = document.querySelector('.fd-revision-replay');
+  if (replay) {
+    const panels = [...replay.closest('.fd-revision').querySelectorAll('.fd-ablation-panel')];
+    const observer = 'IntersectionObserver' in window && new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.replace('fd-ablation-ready', 'fd-ablation-drawing');
+        observer.unobserve(entry.target);
+      }
+    }, { threshold: .45 });
+
+    function replayComparison() {
+      if (observer) observer.disconnect();
+      replay.hidden = reduced.matches || !observer;
+      for (const panel of panels) {
+        panel.classList.remove('fd-ablation-ready', 'fd-ablation-drawing');
+        if (replay.hidden) continue;
+        panel.classList.add('fd-ablation-ready');
+        observer.observe(panel);
+      }
+    }
+    replay.addEventListener('click', replayComparison);
+    reduced.addEventListener('change', replayComparison);
+    replayComparison();
+  }
   const scoreUnits = {
     average: 'Mean score across six tasks (%)',
     cards: 'Pairs cleared (%)',

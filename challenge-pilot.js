@@ -12,7 +12,7 @@
     {
       title: 'Two different patterns fit the same description.',
       numbers: [['100','134','photo-detail queries answered correctly'],['1','106','pattern queries answered correctly']],
-      pose: 'archivist', speech: 'In DMV-Hard, the crop came from the vase page. AutoMem searched its text notes and returned the table.', next: 'See the visual matcher',
+      pose: 'archivist', speech: 'In DMV-Hard, the crop came from the vase page. Claude Haiku 5.5 searched its AutoMem notes and returned the table.', next: 'See the visual matcher',
       visual: () => `<div class="ep-notes">
         <figure>${image(products + 'pattern-query.webp', 'A cropped pattern with blue and rust marks on teal.')}<figcaption>Query crop</figcaption></figure>
         <figure>${image(products + 'correct-vase.webp', 'Vase above a teal, blue and rust swatch.')}<figcaption>Source page</figcaption></figure>
@@ -22,13 +22,13 @@
     {
       title: 'The matcher found the painting. Which door was it at?',
       numbers: [['56','60','seen paintings in the top match'],['0','60','seen paintings located correctly']],
-      pose: 'detective', speech: 'In MC Gallery, the archive kept every frame. The matcher returned pixel coordinates. The agent still had to read the door number and place the painting on its left or right.', next: 'See the one-shot program',
+      pose: 'detective', speech: 'In MC Gallery, the archive kept every frame. The matcher gave Claude Haiku 5.5 pixel coordinates. The question asked for the door number and side.', next: 'See the one-shot program',
       visual: () => `<div class="ep-search"><div class="ep-search-image">${frame()}<i aria-hidden="true"></i></div><div class="ep-search-output"><span>Matcher output</span><b>Frame + bounding box</b><small>Door <em>?</em> &nbsp; Side <em>?</em></small></div></div>`
     },
     {
       title: 'Door order could not locate a painting.',
       numbers: [['0','60','seen paintings located correctly'],['11','20','unseen paintings correctly rejected']],
-      pose: 'mechanic', speech: 'The model wrote its MC Gallery program from the opening instruction. Across ten walks it saved just one frame.', next: 'Return to text memory',
+      pose: 'mechanic', speech: 'Claude Haiku 5.5 wrote its MC Gallery program from the opening instruction. Across ten walks it saved just one frame.', next: 'Return to text memory',
       visual: () => `<div class="ep-route"><div class="ep-route-label">Opening instruction</div><strong>Reach the gold wall</strong>
         <div class="ep-ledger"><small>Door order</small><div>${[1,2,3,'…',8].map((n,i)=>`<b style="--i:${i}">${n}</b>`).join('')}</div></div>
         <div class="ep-late-query">${query()}<b>Which door and side?</b></div></div>`
@@ -39,19 +39,29 @@
     const root = document.getElementById(id);
     if (!root) return;
     const table = root.querySelector('.ep-comparison');
-    const rows = [...table.tBodies[0].rows];
+    const modelSelector = document.createElement('select');
+    modelSelector.setAttribute('aria-label','Model for pilot accuracy');
+    modelSelector.innerHTML = '<option value="claude">Claude Haiku 5.5</option><option value="qwen">Qwen3.8-27B</option>';
+    table.querySelector('.ep-model-name').replaceWith(modelSelector);
+    const measurements = [...table.tBodies[0].rows].flatMap(row => {
+      const qwen = row.dataset.qwen.split(' ');
+      return [...row.cells].slice(1).map((cell,i) => {
+        const claude = cell.textContent;
+        cell.innerHTML = `<span class="ep-score"><i aria-hidden="true" style="--score:${claude}%"></i><b>${claude}</b></span>`;
+        return {bar:cell.querySelector('i'), value:cell.querySelector('b'), claude, qwen:qwen[i]};
+      });
+    });
+    const rows = [...table.querySelectorAll('tr[data-pilot]')];
     const buttons = rows.map((row,i) => {
       const heading = row.cells[0];
       const button = document.createElement('button');
       button.type = 'button';
-      button.textContent = heading.textContent;
+      const label = document.createElement('span');
+      label.append(...heading.childNodes);
+      button.append(label);
       button.dataset.epIndex = String(i);
       button.setAttribute('aria-controls', id + '-stage');
       heading.replaceChildren(button);
-      for (const cell of [...row.cells].slice(1)) {
-        const value = cell.textContent;
-        cell.innerHTML = `<span class="ep-score"><i aria-hidden="true" style="--score:${Number(value)}%"></i><b>${value}</b></span>`;
-      }
       return button;
     });
     root.insertAdjacentHTML('beforeend', `<div class="ep-stage" id="${id}-stage">
@@ -128,6 +138,14 @@
       sync();
     }
     rows.forEach((row,i) => row.addEventListener('click',() => select(i,true)));
+    modelSelector.addEventListener('change',() => {
+      for (const measurement of measurements) {
+        const score = measurement[modelSelector.value];
+        measurement.bar.style.setProperty('--score',score + '%');
+        measurement.value.textContent = score;
+      }
+      status.textContent = 'Showing scores for ' + modelSelector.selectedOptions[0].text + '. Examples use Claude Haiku 5.5.';
+    });
     next.addEventListener('click', () => select((index + 1) % steps.length,true));
     toggle.addEventListener('click', () => {run = !run; sync();});
     document.addEventListener('visibilitychange',sync);

@@ -14,14 +14,13 @@
   const green = () => img(dev+'question.webp', 'Rotated green painting in question eight of walk 42', 'green');
 
   function intro() {
-    return '<div class="fe-duo"><figure>' + door() + '<figcaption>Door 7 during exploration</figcaption></figure>' +
-      '<figure>' + ask() + '<figcaption>Painting in the exit question</figcaption></figure></div>';
+    return '<div class="fe-duo"><figure>' + practiceFrame() + '<figcaption>Door 4 on the development walk</figcaption></figure>' +
+      '<figure>' + green() + '<figcaption>Painting in the exit question</figcaption></figure></div>';
   }
 
   function execution() {
-    return '<div class="fe-walk"><figure>' + img(view('0011'), 'Number seven above the approaching doorway', 'frame12') +
-      '<figcaption>Step 12</figcaption></figure><figure>' + img(view('0012'), 'The model approaches the paintings by the same doorway') +
-      '<figcaption>Step 13</figcaption></figure></div>';
+    return '<div class="fe-note-pair"><figure>' + practiceFrame() +
+      '<figcaption>After moving toward door 4</figcaption></figure><div class="fe-note"><code>exploration.txt</code><q>Green mottled tile wall</q></div></div>';
   }
 
   function record() {
@@ -50,7 +49,7 @@
   }
 
   function feedback() {
-    return '<table class="fe-score-table"><caption>Change from the crop program</caption><thead><tr><th scope="col">Measure</th><th scope="col">Predicted</th><th scope="col">Measured</th></tr></thead><tbody>' +
+    return '<table class="fe-score-table"><caption>Feedback from a later gallery edit</caption><thead><tr><th scope="col">Crop to whole view</th><th scope="col">Predicted</th><th scope="col">Measured</th></tr></thead><tbody>' +
       correct('+12.5','+18.75','Score (percentage points)') + correct('+9','+18','View saves per walk') +
       '</tbody></table><p class="fe-foot">The program answered 16 of 16 development questions correctly, up from 13.</p>';
   }
@@ -78,11 +77,16 @@
       photo(dev+'crop-3R.webp','Saved painting pixels for door 3, right side','3, right') + '</div><div class="fe-rewrite-ops"><span>During play</span><b>Save crops with a door and side</b><code>SAVE_REGION</code><em>Prompt the model to cite a match.</em></div></div>';
   }
 
-  function checks(retry) {
+  function checks() {
+    return '<div class="fe-file"><figure>' + img(visual+'development-walk.webp','Recorded observations used to exercise the gallery tools') +
+      '<figcaption>24 frames from the recorded walk</figcaption></figure><div class="fe-file-output">' +
+      lead('Model requests','0') + lead('Saved state','Restored') + '</div></div>';
+  }
+
+  function evaluation(retry) {
     const rows = retry ? correct('8 / 8','8 / 8','1') + correct('8 / 8','5 / 8','2')
       : correct('2 / 8','7 / 8','1') + correct('2 / 8','6 / 8','2');
-    return '<div class="fe-preflight"><b>24 steps replayed</b><b>Memory state restored</b></div>' +
-      '<table class="fe-score-table"><thead><tr><th scope="col">Development episode</th><th scope="col">Parent</th><th scope="col">' + (retry ? 'Retry' : 'Crop program') +
+    return '<table class="fe-score-table"><thead><tr><th scope="col">Development episode</th><th scope="col">Parent</th><th scope="col">' + (retry ? 'Retry' : 'Crop program') +
       '</th></tr></thead><tbody>' + rows + '</tbody><tfoot>' + correct(retry?'16 / 16':'4 / 16','13 / 16','Total') + '</tfoot></table>' +
       (retry ? '' : '<p class="fe-foot">On question 8 the crop program still misses. Door 4 has no saved crop. Its best score, 0.242, falls below the 0.45 cutoff.</p>');
   }
@@ -114,7 +118,8 @@
       '</div><span>Correct answers per walk</span></div></div>';
   }
 
-  const plates = {intro, execution, record, pixels, recall, development, feedback, experience, revision, candidate, checks, gate, lineage, heldout};
+  const plates = {intro, execution, record, pixels, recall, development, feedback, experience, revision, candidate, checks, evaluation, gate, lineage,
+    rejection:() => revision(true), retained:() => gate(true,'reject'), heldout};
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
   function sharedPositions(container) {

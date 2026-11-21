@@ -16,21 +16,55 @@
   max-width: 78ch; margin: 0; color: var(--body);
   font: 400 clamp(16px, 1.24vw, 19px)/1.55 var(--sans);
 }
-.fd-revision table {
-  margin: 18px 0 0; width: min(100%, 860px); border-collapse: collapse;
-  color: var(--ink); text-align: left; font: 500 clamp(15px, 1.18vw, 18px)/1.4 var(--sans);
+.fd-revision-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; }
+.fd-revision-replay {
+  padding: 7px 0 7px 8px; color: var(--deep); cursor: pointer;
+  font: 600 15px/1.4 var(--sans);
 }
-.fd-revision tr { border-bottom: 1px solid var(--line); }
-.fd-revision thead { border-top: 1px solid var(--line); background-color: var(--paper); }
-.fd-revision th, .fd-revision td { padding: 10px clamp(6px, 1.1vw, 16px); vertical-align: middle; }
-.fd-revision th:first-child { padding-inline-start: 0; }
-.fd-revision th { font-weight: 600; }
-.fd-revision th span { display: block; color: var(--body); font-weight: 400; }
-.fd-revision td { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.fd-revision td:nth-child(2) { color: var(--teal); }
-@media (min-width: 700px) {
-  .fd-revision :is(td, th):not(:first-child) { text-align: right; }
+.fd-revision-replay span { font-size: 19px; vertical-align: -.04em; }
+.fd-revision-replay:hover { text-decoration: underline; text-underline-offset: .2em; }
+.fd-ablation-grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px clamp(22px, 3.8vw, 60px); margin-top: clamp(20px, 2.4vw, 36px);
 }
+.fd-ablation-panel {
+  margin: 0; border-top: 2px solid var(--line); padding-top: 12px;
+  display: grid; grid-template-rows: subgrid; grid-row: span 2;
+}
+.fd-ablation-panel figcaption { color: var(--body); font: 450 clamp(15px, 1.14vw, 17px)/1.4 var(--sans); }
+.fd-ablation-panel h4 { margin: 0 0 6px; color: var(--ink); font: 600 clamp(20px, 1.55vw, 25px)/1.2 var(--sans); }
+.fd-ablation-panel dl { display: grid; gap: 14px; margin: 0; }
+.fd-ablation-panel dt { color: var(--body); font: 550 15px/1.4 var(--sans); }
+.fd-ablation-panel dd { display: grid; align-items: center; grid-template-columns: minmax(0, 1fr) 4.5rem; gap: 10px; margin: 3px 0 0; }
+.fd-supported { --fd-condition: #11766c; }
+.fd-ablated { --fd-condition: #687c86; }
+.fd-ablation-panel b {
+  color: var(--fd-condition); text-align: right;
+  font: 650 clamp(19px, 1.55vw, 24px)/1.2 var(--sans); font-variant-numeric: tabular-nums;
+  white-space: nowrap; justify-self: end;
+}
+.fd-trial-strip { display: flex; gap: clamp(7px, 1vw, 12px); }
+.fd-trial-strip i { width: 24px; height: 24px; box-sizing: border-box; border: 2px solid var(--fd-condition); border-radius: 50%; }
+.fd-supported .fd-trial-strip i { background: var(--fd-condition); }
+.fd-score-track { display: block; height: 14px; background: #e3e8e7; }
+.fd-score-track i { display: block; height: 100%; background: var(--fd-condition); transform-origin: left; }
+@media (max-width: 740px) {
+  .fd-ablation-grid { grid-template-columns: minmax(0, 1fr); gap: 25px; }
+  .fd-ablation-panel { display: block; grid-row: auto; }
+  .fd-ablation-panel dl { margin-top: 12px; gap: 10px; }
+}
+@media screen and (prefers-reduced-motion: no-preference) {
+  .fd-ablation-ready .fd-score-track i { transform: scaleX(0); }
+  .fd-ablation-ready .fd-trial-strip i { opacity: 0; }
+  .fd-ablation-drawing .fd-score-track i { animation: fd-fill-ablation 1050ms cubic-bezier(.24,.64,.22,1) backwards; }
+  .fd-ablation-drawing .fd-trial-strip i { animation: fd-mark-trial 520ms ease-out backwards; }
+  .fd-ablation-drawing .fd-trial-strip i:nth-child(2) { animation-delay: 150ms; }
+  .fd-ablation-drawing .fd-trial-strip i:nth-child(3) { animation-delay: 300ms; }
+  .fd-ablation-drawing .fd-ablated .fd-score-track i { animation-delay: 130ms; }
+  @keyframes fd-fill-ablation { from { transform: scaleX(0); } }
+  @keyframes fd-mark-trial { from { opacity: 0; transform: scale(.5); } }
+}
+@media (prefers-reduced-motion: reduce), print { .fd-revision-replay { display: none; } }
 #score-explorer {
   --fd-green: #11766c;
   --fd-rule: #c2cece;

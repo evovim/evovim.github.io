@@ -10,18 +10,18 @@
 <link rel="stylesheet" href="gallery-memory.css?v=eb6d76cd"><link rel="stylesheet" href="ambient.css?v=eb76d2be">
 <link rel="stylesheet" href="embodied-case.css?v=58a72ff9"><link rel="stylesheet" href="editorial.css?v=22a1cff7"><link rel="stylesheet" href="overview-film.css?v=b8430140">
 <link rel="stylesheet" href="mascot-scenes.css"><link rel="stylesheet" href="scroll-story.css?v=7724b019"><link rel="stylesheet" href="environment-atlas.css?v=ed46bf9e">
-<link rel="stylesheet" href="challenge-pilot.css?v=b73f789a"><link rel="stylesheet" href="evolution-story.css?v=f65dda8c"><link rel="stylesheet" href="findings.css?v=ccb3708b">
+<link rel="stylesheet" href="challenge-pilot.css?v=921696e8"><link rel="stylesheet" href="evolution-story.css?v=f65dda8c"><link rel="stylesheet" href="findings.css?v=3f1e9fb1">
 <link rel="stylesheet" href="generation-results.css?v=0c4d817e">
-<link rel="stylesheet" href="framework-loops.css?v=d186669f"><link rel="stylesheet" href="framework-evidence.css?v=2f018030"><link rel="stylesheet" href="paper-framework.css?v=6705a733"><link rel="stylesheet" href="evolved-tools.css?v=ed7bb6fa">
+<link rel="stylesheet" href="framework-loops.css?v=d186669f"><link rel="stylesheet" href="framework-evidence.css?v=2f018030"><link rel="stylesheet" href="paper-framework.css?v=ba544bc1"><link rel="stylesheet" href="evolved-tools.css?v=010c659e">
 <link rel="stylesheet" href="reading-nav.css?v=120607f3">
 <link rel="stylesheet" href="analytics.css?v=a40d35fb">
 <script defer src="analytics.js?v=7ab2aee4" data-measurement-id="G-NFL9PGZGV3"></script>
 <script defer src="results-data.js"></script><script defer src="site.js?v=629cdfdd"></script><script defer src="cases.js?v=905d7e86"></script>
 <script defer src="gallery-memory.js?v=36816cbc"></script><script defer src="applications.js?v=d3332265"></script>
 <script defer src="ambient.js?v=c14b31fe"></script><script defer src="overview-film.js"></script><script defer src="environment-atlas.js?v=3aa6bcfb"></script>
-<script defer src="embodied-case.js?v=56882243"></script><script defer src="mascot-scenes.js?v=f2807ce2"></script><script defer src="challenge-pilot.js?v=f860dc68"></script>
-<script defer src="framework-evidence.js?v=c400884e"></script><script defer src="paper-framework.js?v=2d2304d4"></script><script defer src="framework-loops.js?v=bdc65f9b"></script><script defer src="evolution-story.js?v=3dbff47e"></script><script defer src="evolved-tools.js?v=c4837170"></script>
-<script defer src="findings.js?v=d77ba3e4"></script><script defer src="scroll-story.js?v=5495f28e"></script>
+<script defer src="embodied-case.js?v=56882243"></script><script defer src="mascot-scenes.js?v=f2807ce2"></script><script defer src="challenge-pilot.js?v=eace9462"></script>
+<script defer src="framework-evidence.js?v=61e80a71"></script><script defer src="paper-framework.js?v=b2456cf4"></script><script defer src="framework-loops.js?v=672193d4"></script><script defer src="evolution-story.js?v=3dbff47e"></script><script defer src="evolved-tools.js?v=0d93f1ae"></script>
+<script defer src="findings.js?v=9d9c158f"></script><script defer src="scroll-story.js?v=5495f28e"></script>
 <script defer src="generation-results.js?v=f883f057"></script>
 </head>
 <body>
@@ -146,12 +146,14 @@
   <div class="chapter-intro"><h2 id="pilots-title">Pilot <em>studies</em></h2></div>
   <div id="pilot-story" class="ep-story">
     <table class="ep-comparison">
-      <caption>Accuracy on deferred queries (%) with Claude Haiku 5.5</caption>
+      <caption>Accuracy on deferred queries (%) <span class="ep-model">with <span class="ep-model-name">Claude Haiku 5.5</span></span></caption>
       <thead><tr><th scope="col">Memory design</th><th scope="col">MC Gallery</th><th scope="col">Poster Maze</th><th scope="col">DMV-Hard</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Evolved text memory</th><td>23.8</td><td>16.3</td><td>42.1</td></tr>
-        <tr><th scope="row">Hand-designed visual memory</th><td>18.8</td><td>16.3</td><td>80.8</td></tr>
-        <tr><th scope="row">One-shot program</th><td>13.8</td><td>20.0</td><td>28.8</td></tr>
+        <tr data-qwen="23.8 23.8 7.9"><th scope="row">Basic image tools</th><td>15.0</td><td>18.8</td><td>13.8</td></tr>
+        <tr data-pilot="text" data-qwen="25.0 17.5 37.9"><th scope="row">Evolved text memory</th><td>23.8</td><td>16.3</td><td>42.1</td></tr>
+        <tr data-qwen="25.0 21.3 20.4"><th scope="row">Hand-designed visual memory <span class="ep-variant">Archive only</span></th><td>20.0</td><td>16.3</td><td>22.1</td></tr>
+        <tr data-pilot="visual" data-qwen="47.5 15.0 81.7"><th scope="row">Hand-designed visual memory <span class="ep-variant">Archive + matcher</span></th><td>18.8</td><td>16.3</td><td>80.8</td></tr>
+        <tr data-pilot="one-shot" data-qwen="13.8 25.0 14.2"><th scope="row">One-shot program</th><td>13.8</td><td>20.0</td><td>28.8</td></tr>
       </tbody>
     </table>
     <noscript><p>On DMV-Hard, evolved text memory answered only 1 of 106 pattern questions correctly. In MC Gallery, the hand-designed matcher ranked 56 of 60 seen paintings first, yet the agent located none. The one-shot program recorded the door order and also located none of the 60 paintings.</p></noscript>
@@ -159,10 +161,10 @@
 </section>
 <section id="method" class="section wrap story-chapter" aria-labelledby="method-title">
   <div class="chapter-intro"><h2 id="method-title">The EvoViM <em>framework</em></h2>
-    <p>The pilots showed how a program could keep the right image and still miss the answer. EvoViM lets the same frozen model inspect a failed episode, edit its visual program, and revise the playbook and scripts that guide its next edit.</p></div>
+    <p>The agent starts with basic image tools and runs two development episodes. The same frozen model inspects the episodes, edits its program, and updates the playbook, notes and scripts it uses for later revisions.</p></div>
   <div id="framework-loops">
     <figure class="method-fallback">
-      <img src="media/method/framework-paper.svg" width="990" height="518" loading="lazy" alt="During task execution the agent records observations and consults a visual memory program before acting. During memory evolution it uses development episodes, enhanced feedback and revision experience to propose a candidate. Code checks and a gate determine which program becomes the next parent.">
+      <img src="media/method/framework-paper.svg" width="990" height="518" loading="lazy" alt="The model acts on the first observation, then records each action’s outcome before acting again. Development episodes, feedback and revision experience guide its edits. Candidates that pass code checks run on the parent’s two development seeds. The gate selects the next parent. The final accepted program runs on held-out seeds.">
       <figcaption><a id="framework-open" href="media/method/framework-paper.svg" target="_blank" rel="noopener">Open full-size figure ↗</a></figcaption>
     </figure>
   </div>
@@ -186,17 +188,35 @@
     </header>
     <div id="generation-chart"></div>
   </section>
-  <section class="fd-revision" aria-labelledby="revision-support-heading">
-    <h3 id="revision-support-heading">Revision support sped up learning on MC Gallery</h3>
-    <p>We removed enhanced feedback and inherited revision experience together for Claude Haiku 5.5. The full program scored higher on held-out MC Gallery walks. On DMV-Hard, the run without revision support finished ahead.</p>
-    <table>
-      <thead><tr><th scope="col">Measure</th><th scope="col">EvoViM</th><th scope="col">Without revision support</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">MC Gallery <span>Runs reaching ≥75% on development by generation 2</span></th><td>3 of 3</td><td>0 of 3</td></tr>
-        <tr><th scope="row">MC Gallery <span>Mean held-out score across three runs</span></th><td>88.3%</td><td>60.0%</td></tr>
-        <tr><th scope="row">DMV-Hard <span>Final held-out score, one run per setting</span></th><td>77.1%</td><td>82.9%</td></tr>
-      </tbody>
-    </table>
+  <section id="revision-support" class="fd-revision" aria-labelledby="revision-support-heading">
+    <div class="fd-revision-head">
+      <h3 id="revision-support-heading">Revision support ablation</h3>
+      <button type="button" class="fd-revision-replay" hidden aria-label="Replay revision support comparison"><span aria-hidden="true">↻</span> Replay</button>
+    </div>
+    <p>We removed enhanced feedback and inherited revision experience together in the Claude Haiku 5.5 runs.</p>
+    <div class="fd-ablation-grid">
+      <figure class="fd-ablation-panel">
+        <figcaption><h4>MC Gallery</h4>Development runs at ≥75% by generation&nbsp;2</figcaption>
+        <dl>
+          <div class="fd-supported"><dt>Full EvoViM</dt><dd><span class="fd-trial-strip" aria-hidden="true"><i></i><i></i><i></i></span><b>3 of 3</b></dd></div>
+          <div class="fd-ablated"><dt>Without revision support</dt><dd><span class="fd-trial-strip" aria-hidden="true"><i></i><i></i><i></i></span><b>0 of 3</b></dd></div>
+        </dl>
+      </figure>
+      <figure class="fd-ablation-panel">
+        <figcaption><h4>MC Gallery</h4>Mean held-out score across three runs</figcaption>
+        <dl>
+          <div class="fd-supported"><dt>Full EvoViM</dt><dd><span class="fd-score-track" aria-hidden="true"><i style="width:88.3%"></i></span><b>88.3%</b></dd></div>
+          <div class="fd-ablated"><dt>Without revision support</dt><dd><span class="fd-score-track" aria-hidden="true"><i style="width:60%"></i></span><b>60.0%</b></dd></div>
+        </dl>
+      </figure>
+      <figure class="fd-ablation-panel">
+        <figcaption><h4>DMV-Hard</h4>Final held-out score, one run per setting</figcaption>
+        <dl>
+          <div class="fd-supported"><dt>Full EvoViM</dt><dd><span class="fd-score-track" aria-hidden="true"><i style="width:77.1%"></i></span><b>77.1%</b></dd></div>
+          <div class="fd-ablated"><dt>Without revision support</dt><dd><span class="fd-score-track" aria-hidden="true"><i style="width:82.9%"></i></span><b>82.9%</b></dd></div>
+        </dl>
+      </figure>
+    </div>
   </section>
 </section>
 <section id="tools" class="section wrap story-chapter" aria-labelledby="tools-title">
@@ -208,10 +228,10 @@
     </figure>
     <dl class="tool-fallback">
       <dt>Visual matching</dt><dd>Card Matching compares exposed card faces. DMV-Hard searches saved pages for the corner pattern in a product photo.</dd>
-      <dt>Spatial recall</dt><dd>MC Gallery locates a painting beside a numbered door. Poster Maze links a poster to a cell and wall.</dd>
+      <dt>Spatial recall</dt><dd>MC Gallery locates a painting beside a numbered door. Poster Maze links a poster to a cell and wall.
+        <p class="et-poster-stat">With its evolved wall map, Qwen3.8-27B saw <strong>4.3</strong> posters clearly per episode, up from <strong>1.5</strong> with the starting program (10 held-out episodes).</p></dd>
       <dt>Sequential decision-making</dt><dd>Tetris reads the board and plans a drop. Pac-Man updates its pellet map and finds the first move on a route.</dd>
     </dl>
-    <p>In Poster Maze, Qwen3.8-27B’s evolved program tracks visited walls and suggests moves toward unexplored areas. The agent saw 4.3 posters clearly per held-out episode, up from 1.5 with the starting program.</p>
   </div>
 </section>
 <section id="applications" aria-labelledby="applications-title"></section>

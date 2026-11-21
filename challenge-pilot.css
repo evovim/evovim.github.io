@@ -9,24 +9,31 @@
 .ep-story * { box-sizing: border-box; }
 .ep-comparison { width:100%; table-layout:fixed; border-collapse:collapse; text-align:left; font:500 clamp(14px,1.14vw,17px)/1.3 var(--sans); }
 .ep-comparison caption { text-align:left; color:var(--ink); font:600 clamp(17px,1.55vw,23px)/1.3 var(--sans); margin-bottom:14px; text-wrap:balance; }
+.ep-model { display:inline-block; white-space:nowrap; }
+.ep-model select { background:transparent; border:0; border-bottom:1px solid var(--line); border-radius:0; padding:2px 0; color:var(--body); font:inherit; cursor:pointer; }
 .ep-comparison thead { color:var(--soft); }
 .ep-comparison thead th { font-weight:550; }
 .ep-comparison th:first-child { width:32%; }
 .ep-comparison :is(th,td) { padding:10px clamp(9px,1.5vw,24px); border-bottom:1px solid var(--line); vertical-align:middle; }
 .ep-comparison tr > :first-child { padding-left:8px; }
-.ep-comparison tbody tr { --ep-bar:#74948d; }
+.ep-comparison tbody tr { --ep-bar:#818e94; --ep-strong:var(--body); }
+.ep-comparison [data-pilot=text] { --ep-bar:#b56855; --ep-strong:#984b3a; }
+.ep-comparison [data-pilot=visual] { --ep-bar:#6386a7; --ep-strong:#406588; }
+.ep-comparison [data-pilot=one-shot] { --ep-bar:#9482ab; --ep-strong:#70538b; }
+.ep-comparison tbody tr:not([data-pilot]) th { padding-left:26px; font-weight:500; color:var(--soft); }
+.ep-variant { display:block; margin-top:.1em; color:var(--body); font-weight:450; }
 .ep-comparison tbody tr:has(button) { cursor:pointer; }
-.ep-comparison tbody tr:has(button):hover { background: #167c7209; }
-.ep-comparison tbody tr.ep-selected { background: #167c720d; --ep-bar:var(--ep-teal); }
+.ep-comparison tbody tr:has(button):hover { background: color-mix(in srgb,var(--ep-bar) 5%,transparent); }
+.ep-comparison tbody tr.ep-selected { background: color-mix(in srgb,var(--ep-bar) 10%,transparent); }
 .ep-comparison tbody button { display:inline-flex; align-items:center; gap:9px; min-height:30px; text-align:left; padding:0; color:var(--body); font:inherit; font-weight:600; }
-.ep-comparison tbody button::before { content:''; display:block; flex:none; width:9px; height:9px; border:1.5px solid #839992; border-radius:50%; }
-.ep-comparison button[aria-pressed=true] { color:var(--ep-teal); }
-.ep-comparison button[aria-pressed=true]::before { border-color:var(--ep-teal); background:var(--ep-teal); }
+.ep-comparison tbody button::before { content:''; display:block; flex:none; width:9px; height:9px; border:1.5px solid var(--ep-bar); border-radius:50%; }
+.ep-comparison button[aria-pressed=true] { color:var(--ep-strong); }
+.ep-comparison button[aria-pressed=true]::before { border-color:var(--ep-strong); background:var(--ep-strong); }
 .ep-score { display:grid; grid-template-columns:minmax(16px,1fr) 3.6ch; align-items:center; gap:10px; }
 .ep-score i { height:.5em; background:#dce6e1; overflow:hidden; border-radius:2px; }
 .ep-score i::before { content:''; display:block; height:100%; width:var(--score); background:var(--ep-bar); transform-origin:left; }
 .ep-score b { text-align:right; font-weight:550; color:var(--body); font-variant-numeric:tabular-nums; }
-.ep-selected .ep-score b { color:var(--ep-ink); }
+.ep-selected .ep-score b { color:var(--ep-strong); }
 .ep-stage {
   display: grid;
   grid-template-columns: minmax(0,1.35fr) minmax(0,1fr);
@@ -122,6 +129,7 @@
 
 @media (prefers-reduced-motion:no-preference) {
   .ep-comparison.ep-shown .ep-score i::before { animation:ep-grow .65s cubic-bezier(.2,.72,.3,1) backwards; }
+  .ep-comparison .ep-score i::before { transition:width .38s cubic-bezier(.2,.72,.3,1); }
   .ep-comparison.ep-shown tbody tr:nth-child(2) .ep-score i::before { animation-delay:.07s; }
   .ep-comparison.ep-shown tbody tr:nth-child(3) .ep-score i::before { animation-delay:.14s; }
   :is(.ep-playing,.ep-prompted) .ep-notes figure { animation:ep-rise .4s both; }
@@ -149,6 +157,7 @@
   .ep-comparison th:first-child { width:38%; }
   .ep-comparison :is(th,td) { padding:7px 5px; }
   .ep-comparison tr > :first-child { padding-left:2px; }
+  .ep-comparison tbody tr:not([data-pilot]) th { padding-left:16px; }
   .ep-comparison tbody button { gap:5px; min-height:36px; }
   .ep-score { display:flex; flex-direction:column-reverse; align-items:flex-start; gap:3px; }
   .ep-score i { width:100%; height:4px; }

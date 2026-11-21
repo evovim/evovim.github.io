@@ -1,6 +1,7 @@
 (() => {
   const mount = document.getElementById('evolved-tools');
   if (!mount) return;
+  const posterStat = mount.querySelector('.et-poster-stat');
 
   const media = 'media/evolved-tools/';
   const img = (name, alt) => '<img src="' + media + name + '.webp" alt="' + alt + '" decoding="async">';
@@ -64,7 +65,7 @@
     },
     {
       id: 'poster', name: 'Frames on a map + wall finder', task: 'Poster Maze', family: 1,
-      title: 'On which wall did the poster hang?', action: 'Find the saved view', finish: 'Trace the wall',
+      title: 'GPT-6.1 Sol locates the poster from a saved view.', action: 'Find the saved view', finish: 'Trace the wall',
       stages: [
         step('A poster to locate', plate(tile(img('maze-query', 'Poster image from question six in the maze episode'), 'Question image'), 'et-single'),
           'Answer with a cell and wall direction.'),
@@ -141,19 +142,6 @@
       ${functionTables}
     </table>
   </details>
-  <figure class="et-coverage" aria-labelledby="maze-coverage-heading">
-    <figcaption>
-      <h3 id="maze-coverage-heading">In Poster Maze, memory guided the next move</h3>
-      <p>Qwen3.8-27B’s evolved program tracked which walls it had explored and suggested moves toward unexplored areas. The agent followed those suggestions on most navigation steps.</p>
-    </figcaption>
-    <div class="et-coverage-chart">
-      <p>Posters seen clearly per episode <span>(10 held-out episodes)</span></p>
-      <dl>
-        <div><dt>Starting program</dt><dd style="--coverage:30%"><i aria-hidden="true"></i><strong>1.5</strong></dd></div>
-        <div><dt>Evolved program</dt><dd style="--coverage:86%"><i aria-hidden="true"></i><strong>4.3</strong></dd></div>
-      </dl>
-    </div>
-  </figure>
   <h3 class="et-examples-title">A tool from each task</h3><div class="et-menu">${familyNav}</div><div class="et-trace"></div>`;
 
   const chart = mount.querySelector('.et-mechanism-chart');
@@ -164,22 +152,13 @@
     chart.classList.add('et-drawing');
   }
   if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const coverage = mount.querySelector('.et-coverage-chart');
+    chart.classList.add('et-await');
     const observer = new IntersectionObserver(entries => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        if (entry.target === chart) drawBars();
-        else {
-          coverage.classList.remove('et-await');
-          coverage.classList.add('et-drawing');
-        }
-        observer.unobserve(entry.target);
-      }
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      drawBars();
+      observer.disconnect();
     }, { threshold: 0.25 });
-    for (const figure of [chart, coverage]) {
-      figure.classList.add('et-await');
-      observer.observe(figure);
-    }
+    observer.observe(chart);
   }
   chart.querySelector('.et-replay').addEventListener('click', drawBars);
   const trace = mount.querySelector('.et-trace');
@@ -213,6 +192,7 @@
         '<section class="et-stage"><button type="button" class="et-stage-button" data-step="' + i + '" aria-pressed="false"><i>' + ['Input','Computation','Outcome'][i] + '</i><b>' + s.label + '</b></button>' + 
         '<div class="et-stage-body"><h4>' + s.label + '</h4>' + s.picture + (s.caption ? '<p>' + s.caption + '</p>' : '') + '</div></section>'
       ).join('') + '</div><div class="et-controls"><a class="et-code-link" href="' + media + 'source/' + active.id + '.txt" target="_blank" rel="noopener">View tool code</a><button class="et-next" type="button"></button></div><span class="et-sr-update" aria-live="polite"></span>';
+    if (id === 'poster' && posterStat) trace.append(posterStat);
     showStep(0, true);
   }
 
