@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="embodied-case.css?v=58a72ff9"><link rel="stylesheet" href="editorial.css?v=22a1cff7"><link rel="stylesheet" href="overview-film.css?v=b8430140">
 <link rel="stylesheet" href="mascot-scenes.css"><link rel="stylesheet" href="scroll-story.css?v=7724b019"><link rel="stylesheet" href="environment-atlas.css?v=99065ab9">
 <link rel="stylesheet" href="research-question.css?v=759bf0fe">
-<link rel="stylesheet" href="challenge-pilot.css?v=9a79467c"><link rel="stylesheet" href="evolution-story.css?v=95a47ba6"><link rel="stylesheet" href="findings.css?v=d4657d84">
+<link rel="stylesheet" href="challenge-pilot.css?v=1953a8d7"><link rel="stylesheet" href="evolution-story.css?v=95a47ba6"><link rel="stylesheet" href="findings.css?v=d4657d84">
 <link rel="stylesheet" href="generation-results.css?v=7023b6cc">
 <link rel="stylesheet" href="framework-loops.css?v=56b905c0"><link rel="stylesheet" href="framework-evidence.css?v=2f018030"><link rel="stylesheet" href="paper-framework.css?v=ba544bc1"><link rel="stylesheet" href="evolved-tools.css?v=9f52084f">
 <link rel="stylesheet" href="reading-nav.css?v=120607f3">
@@ -21,7 +21,7 @@
 <script defer src="gallery-memory.js?v=36816cbc"></script><script defer src="applications.js?v=3a15ed09"></script>
 <script defer src="ambient.js?v=c14b31fe"></script><script defer src="overview-film.js"></script><script defer src="environment-atlas.js?v=8aa9d9f8"></script>
 <script defer src="research-question.js?v=7224c476"></script>
-<script defer src="embodied-case.js?v=56882243"></script><script defer src="mascot-scenes.js?v=f2807ce2"></script><script defer src="challenge-pilot.js?v=8cdc0d47"></script>
+<script defer src="embodied-case.js?v=56882243"></script><script defer src="mascot-scenes.js?v=f2807ce2"></script><script defer src="challenge-pilot.js?v=dd8eff82"></script>
 <script defer src="framework-evidence.js?v=23b77210"></script><script defer src="paper-framework.js?v=253bc26f"></script><script defer src="framework-loops.js?v=9112e53c"></script><script defer src="evolution-story.js?v=dbd56b9e"></script><script defer src="evolved-tools.js?v=dfc9a753"></script>
 <script defer src="findings.js?v=872c04d3"></script><script defer src="scroll-story.js?v=5495f28e"></script>
 <script defer src="generation-results.js?v=ea8bbe95"></script>
@@ -192,14 +192,38 @@
       <section aria-labelledby="pilot-text-heading">
         <h3 id="pilot-text-heading">Evolved text memory</h3>
         <p>Its descriptions of one pattern often fit several others, so the stored notes cannot distinguish the queried item.</p>
+        <div class="ep-counts">
+          <div><strong><b>100</b><small> / 134</small></strong><span>photo-detail queries answered correctly</span></div>
+          <div><strong><b>1</b><small> / 106</small></strong><span>pattern queries answered correctly</span></div>
+        </div>
+        <div class="ep-guide">
+          <img src="media/mascot-scenes/archivist.webp" data-motion-src="media/mascot-scenes/archivist-motion.webp" width="82" height="82" loading="lazy" alt="">
+          <span>Claude Haiku 5.5 on DMV-Hard</span>
+        </div>
       </section>
       <section aria-labelledby="pilot-visual-heading">
         <h3 id="pilot-visual-heading">Hand-designed visual memory</h3>
         <p>The program lacks operations that associate the match with a location and determine whether the queried picture was seen at all.</p>
+        <div class="ep-counts">
+          <div><strong><b>56</b><small> / 60</small></strong><span>seen paintings in the top match</span></div>
+          <div><strong><b>0</b><small> / 60</small></strong><span>seen paintings located correctly</span></div>
+        </div>
+        <div class="ep-guide">
+          <img src="media/mascot-scenes/detective.webp" data-motion-src="media/mascot-scenes/detective-motion.webp" width="82" height="82" loading="lazy" alt="">
+          <span>Claude Haiku 5.5 on MC Gallery</span>
+        </div>
       </section>
       <section aria-labelledby="pilot-one-shot-heading">
         <h3 id="pilot-one-shot-heading">One-shot program</h3>
         <p>One gallery program records the order of the doors passed, whereas the later questions ask where each painting hung.</p>
+        <div class="ep-counts">
+          <div><strong><b>0</b><small> / 60</small></strong><span>seen paintings located correctly</span></div>
+          <div><strong><b>11</b><small> / 20</small></strong><span>unseen paintings correctly rejected</span></div>
+        </div>
+        <div class="ep-guide">
+          <img src="media/mascot-scenes/mechanic.webp" data-motion-src="media/mascot-scenes/mechanic-motion.webp" width="82" height="82" loading="lazy" alt="">
+          <span>Claude Haiku 5.5 on MC Gallery</span>
+        </div>
       </section>
     </div>
   </div>

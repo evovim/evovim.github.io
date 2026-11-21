@@ -29,6 +29,17 @@
     const notebook = root.querySelector('.ep-notes');
     const narration = root.querySelector('.ep-narration');
     const findings = [...narration.children];
+    const evidence = findings.map(finding => {
+      const counts = finding.querySelector('.ep-counts');
+      const numbers = [...counts.querySelectorAll('strong')].map(ratio => {
+        const node = ratio.querySelector('b');
+        ratio.setAttribute('role', 'img');
+        ratio.setAttribute('aria-label', ratio.textContent.replace(' / ', ' out of '));
+        return {node, total: Number(node.textContent)};
+      });
+      const mascot = finding.querySelector('.ep-guide img');
+      return {counts, numbers, mascot, still: mascot.getAttribute('src')};
+    });
     const modelSelector = document.createElement('select');
     modelSelector.setAttribute('aria-label','Model for pilot accuracy');
     modelSelector.innerHTML = '<option value="claude">Claude Haiku 5.5</option><option value="qwen">Qwen3.8-27B</option>';
@@ -80,9 +91,33 @@
     let index = 0;
     let run = !motion.matches;
     let visible = false;
+    let mascotVisible = false;
+    let mascotPaused = false;
     let timer;
     let elapsed = 0;
     let started = 0;
+
+    const countObserver = new IntersectionObserver(entries => {
+      const current = evidence[index];
+      if (!entries.some(entry => entry.isIntersecting && entry.target === current.counts)) return;
+      for (const {node, total} of current.numbers) {
+        window.EvoViMNumbers.to(node, total, {from:0, duration:820});
+      }
+      countObserver.unobserve(current.counts);
+    }, {threshold: .2});
+
+    function updateMascot() {
+      const {mascot, still} = evidence[index];
+      const animate = mascotVisible && !mascotPaused && !motion.matches && !document.hidden;
+      const source = animate ? mascot.dataset.motionSrc : still;
+      if (mascot.getAttribute('src') !== source) mascot.src = source;
+    }
+    const mascotObserver = new IntersectionObserver(entries => {
+      const entry = entries.find(item => item.target === evidence[index].mascot);
+      if (!entry) return;
+      mascotVisible = entry.isIntersecting;
+      updateMascot();
+    });
 
     function sync() {
       if (timer !== undefined) {
@@ -91,6 +126,7 @@
         timer = undefined;
       }
       const playing = run && visible && !document.hidden;
+      updateMascot();
       root.classList.toggle('ep-playing', playing);
       toggle.innerHTML = run ? '<span aria-hidden="true">Ⅱ</span> Pause' : '<span aria-hidden="true">▶</span> Play';
       toggle.setAttribute('aria-label', (run ? 'Pause ' : 'Play ') + context.toLowerCase());
@@ -107,6 +143,10 @@
       clearTimeout(timer);
       timer = undefined;
       elapsed = 0;
+      countObserver.disconnect();
+      mascotObserver.disconnect();
+      mascotVisible = false;
+      updateMascot();
       index = newIndex;
       if (manual) run = false;
       root.classList.toggle('ep-prompted',manual);
@@ -119,11 +159,17 @@
       if (step.visual) picture.innerHTML = step.visual();
       else picture.replaceChildren(notebook);
       findings.forEach((finding, i) => { finding.hidden = i !== index; });
+      const current = evidence[index];
+      for (const {node, total} of current.numbers) {
+        window.EvoViMNumbers.to(node, motion.matches ? total : 0, {instant:true});
+      }
+      countObserver.observe(current.counts);
+      mascotObserver.observe(current.mascot);
       next.innerHTML = `<span>${step.next}</span> <i aria-hidden="true">${index === steps.length - 1 ? '↺' : '→'}</i>`;
       if (visible && !motion.matches) {
         narration.animate([{opacity: .45, transform: 'translateY(5px)'},{opacity:1,transform:'none'}],{duration:250});
       }
-      if (manual) status.textContent = findings[index].textContent.trim();
+      if (manual) status.textContent = findings[index].querySelector('p').textContent;
       sync();
     }
     rows.forEach((row,i) => row.addEventListener('click',() => select(i,true)));
@@ -132,7 +178,11 @@
       status.textContent = 'Showing scores for ' + modelSelector.selectedOptions[0].text + '. Examples use Claude Haiku 5.5.';
     });
     next.addEventListener('click', () => select((index + 1) % steps.length,true));
-    toggle.addEventListener('click', () => {run = !run; sync();});
+    toggle.addEventListener('click', () => {
+      run = !run;
+      mascotPaused = !run;
+      sync();
+    });
     document.addEventListener('visibilitychange',sync);
     motion.addEventListener('change', () => {if (motion.matches) run = false; sync();});
     select(0);
