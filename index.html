@@ -10,9 +10,9 @@
 <link rel="stylesheet" href="gallery-memory.css?v=eb6d76cd"><link rel="stylesheet" href="ambient.css?v=eb76d2be">
 <link rel="stylesheet" href="embodied-case.css?v=58a72ff9"><link rel="stylesheet" href="editorial.css?v=22a1cff7"><link rel="stylesheet" href="overview-film.css?v=b8430140">
 <link rel="stylesheet" href="mascot-scenes.css"><link rel="stylesheet" href="scroll-story.css?v=7724b019"><link rel="stylesheet" href="environment-atlas.css?v=ed46bf9e">
-<link rel="stylesheet" href="challenge-pilot.css?v=921696e8"><link rel="stylesheet" href="evolution-story.css?v=f65dda8c"><link rel="stylesheet" href="findings.css?v=3f1e9fb1">
-<link rel="stylesheet" href="generation-results.css?v=0c4d817e">
-<link rel="stylesheet" href="framework-loops.css?v=d186669f"><link rel="stylesheet" href="framework-evidence.css?v=2f018030"><link rel="stylesheet" href="paper-framework.css?v=ba544bc1"><link rel="stylesheet" href="evolved-tools.css?v=010c659e">
+<link rel="stylesheet" href="challenge-pilot.css?v=921696e8"><link rel="stylesheet" href="evolution-story.css?v=f65dda8c"><link rel="stylesheet" href="findings.css?v=cddaa1f7">
+<link rel="stylesheet" href="generation-results.css?v=8a8511de">
+<link rel="stylesheet" href="framework-loops.css?v=56b905c0"><link rel="stylesheet" href="framework-evidence.css?v=2f018030"><link rel="stylesheet" href="paper-framework.css?v=ba544bc1"><link rel="stylesheet" href="evolved-tools.css?v=67ad25b9">
 <link rel="stylesheet" href="reading-nav.css?v=120607f3">
 <link rel="stylesheet" href="analytics.css?v=a40d35fb">
 <script defer src="analytics.js?v=7ab2aee4" data-measurement-id="G-NFL9PGZGV3"></script>
@@ -20,7 +20,7 @@
 <script defer src="gallery-memory.js?v=36816cbc"></script><script defer src="applications.js?v=d3332265"></script>
 <script defer src="ambient.js?v=c14b31fe"></script><script defer src="overview-film.js"></script><script defer src="environment-atlas.js?v=3aa6bcfb"></script>
 <script defer src="embodied-case.js?v=56882243"></script><script defer src="mascot-scenes.js?v=f2807ce2"></script><script defer src="challenge-pilot.js?v=eace9462"></script>
-<script defer src="framework-evidence.js?v=61e80a71"></script><script defer src="paper-framework.js?v=b2456cf4"></script><script defer src="framework-loops.js?v=672193d4"></script><script defer src="evolution-story.js?v=3dbff47e"></script><script defer src="evolved-tools.js?v=0d93f1ae"></script>
+<script defer src="framework-evidence.js?v=61e80a71"></script><script defer src="paper-framework.js?v=253bc26f"></script><script defer src="framework-loops.js?v=ddf609b1"></script><script defer src="evolution-story.js?v=3dbff47e"></script><script defer src="evolved-tools.js?v=a3417866"></script>
 <script defer src="findings.js?v=9d9c158f"></script><script defer src="scroll-story.js?v=5495f28e"></script>
 <script defer src="generation-results.js?v=f883f057"></script>
 </head>
@@ -143,15 +143,15 @@
   </details>
 </section>
 <section id="pilots" class="section wrap story-chapter" aria-labelledby="pilots-title">
-  <div class="chapter-intro"><h2 id="pilots-title">Pilot <em>studies</em></h2></div>
+  <div class="chapter-intro"><h2 id="pilots-title">Why Do Existing Memory Designs Fall Short with <em>Deferred Queries?</em></h2></div>
   <div id="pilot-story" class="ep-story">
     <table class="ep-comparison">
       <caption>Accuracy on deferred queries (%) <span class="ep-model">with <span class="ep-model-name">Claude Haiku 5.5</span></span></caption>
       <thead><tr><th scope="col">Memory design</th><th scope="col">MC Gallery</th><th scope="col">Poster Maze</th><th scope="col">DMV-Hard</th></tr></thead>
       <tbody>
         <tr data-qwen="23.8 23.8 7.9"><th scope="row">Basic image tools</th><td>15.0</td><td>18.8</td><td>13.8</td></tr>
-        <tr data-pilot="text" data-qwen="25.0 17.5 37.9"><th scope="row">Evolved text memory</th><td>23.8</td><td>16.3</td><td>42.1</td></tr>
         <tr data-qwen="25.0 21.3 20.4"><th scope="row">Hand-designed visual memory <span class="ep-variant">Archive only</span></th><td>20.0</td><td>16.3</td><td>22.1</td></tr>
+        <tr data-pilot="text" data-qwen="25.0 17.5 37.9"><th scope="row">Evolved text memory</th><td>23.8</td><td>16.3</td><td>42.1</td></tr>
         <tr data-pilot="visual" data-qwen="47.5 15.0 81.7"><th scope="row">Hand-designed visual memory <span class="ep-variant">Archive + matcher</span></th><td>18.8</td><td>16.3</td><td>80.8</td></tr>
         <tr data-pilot="one-shot" data-qwen="13.8 25.0 14.2"><th scope="row">One-shot program</th><td>13.8</td><td>20.0</td><td>28.8</td></tr>
       </tbody>
@@ -177,10 +177,6 @@
   <div class="chapter-intro"><h2 id="results-title">Main <em>results</em></h2></div>
   <p class="fd-lead">Across the three models, EvoViM outscored AutoMem by <strong>31.3 to 47.6 percentage points</strong> on the six-task held-out average.</p>
   <div id="score-explorer"><a href="downloads/main_results.csv" download>Download scores</a></div>
-  <section class="fd-attribution" aria-labelledby="retrieval-heading">
-    <h3 id="retrieval-heading">Retrieval accounts for the largest gap</h3>
-    <p>Across six tasks and three models, retrieval errors cost AutoMem <strong>25.0 points</strong> and EvoViM <strong>4.7</strong>. EvoViM’s largest remaining loss came when deciding how to act (<strong>13.9 points</strong>). Each lost point counts toward the first stage that failed.</p>
-  </section>
   <section id="generation-results" aria-labelledby="generation-heading">
     <header class="gen-intro">
       <h3 id="generation-heading">Scores across generations</h3>
@@ -222,10 +218,105 @@
 <section id="tools" class="section wrap story-chapter" aria-labelledby="tools-title">
   <div class="chapter-intro"><h2 id="tools-title">Evolved <em>visual tools</em></h2></div>
   <div id="evolved-tools">
-    <figure>
-      <img src="media/evolved-tools/mechanisms.svg" width="780" height="353" loading="lazy" style="height:auto" alt="Mechanisms added by EvoViM and AutoMem respectively. Image memory 39 and 0, frame parsing 42 and 17, text notes 6 and 22, workflow 19 and 16.">
-      <figcaption>Mechanisms added across 18 final programs per method.</figcaption>
+    <figure class="et-taxonomy" data-et-chart aria-labelledby="et-taxonomy-title">
+      <figcaption>
+        <h3 id="et-taxonomy-title">Mechanisms added by evolution</h3>
+        <p>EvoViM most often added frame parsing and image memory. AutoMem most often added text notes. A final program can add several mechanisms in one group.</p>
+      </figcaption>
+      <div class="et-mechanism-chart">
+        <div class="et-chart-tools">
+          <div class="et-legend"><span class="et-evo"><i></i>EvoViM</span><span class="et-auto"><i></i>AutoMem</span></div>
+          <button type="button" class="et-replay" hidden aria-label="Replay mechanism chart animation"><span aria-hidden="true">↻</span> Replay</button>
+        </div>
+        <div class="et-plot" data-et-plot>
+          <div class="et-grid" aria-hidden="true"><i style="--tick:0"></i><i style="--tick:10"></i><i style="--tick:20"></i><i style="--tick:30"></i><i style="--tick:40"></i></div>
+          <ol class="et-mechanism-rows">
+          <li class="et-mechanism-row"><strong>Image memory</strong><div class="et-pair-bars">
+            <span class="et-measure et-evo" style="--value:39"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">EvoViM </span>39</span></span>
+            <span class="et-measure et-auto" style="--value:0"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">AutoMem </span>0</span></span>
+          </div></li>
+          <li class="et-mechanism-row"><strong>Frame parsing</strong><div class="et-pair-bars">
+            <span class="et-measure et-evo" style="--value:42"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">EvoViM </span>42</span></span>
+            <span class="et-measure et-auto" style="--value:17"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">AutoMem </span>17</span></span>
+          </div></li>
+          <li class="et-mechanism-row"><strong>Text notes</strong><div class="et-pair-bars">
+            <span class="et-measure et-evo" style="--value:6"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">EvoViM </span>6</span></span>
+            <span class="et-measure et-auto" style="--value:22"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">AutoMem </span>22</span></span>
+          </div></li>
+          <li class="et-mechanism-row"><strong>Workflow</strong><div class="et-pair-bars">
+            <span class="et-measure et-evo" style="--value:19"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">EvoViM </span>19</span></span>
+            <span class="et-measure et-auto" style="--value:16"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">AutoMem </span>16</span></span>
+          </div></li>
+          </ol>
+          <div class="et-axis" aria-hidden="true"><span style="--tick:0">0</span><span style="--tick:10">10</span><span style="--tick:20">20</span><span style="--tick:30">30</span><span style="--tick:40">40</span></div>
+        </div>
+        <p class="et-axis-title">Mechanisms added across 18 final programs per method</p>
+      </div>
     </figure>
+    <figure class="et-functions" data-et-chart aria-labelledby="et-functions-title">
+      <figcaption>
+        <div class="et-function-heading">
+          <h3 id="et-functions-title">Programs that gained each function</h3>
+          <button type="button" class="et-replay" hidden aria-label="Replay function chart animation"><span aria-hidden="true">↻</span> Replay</button>
+        </div>
+        <p class="et-function-key">Each function is counted once per program, across 18 <span class="et-evo"><i></i>EvoViM</span> and 18 <span class="et-auto"><i></i>AutoMem</span> programs.</p>
+      </figcaption>
+      <div class="et-function-groups">
+        <section class="et-function-group" data-et-plot>
+          <h4>Image memory</h4>
+          <ol>
+          <li class="et-function-row"><strong>Pixel matching</strong><div class="et-pair-bars">
+            <span class="et-measure et-evo" style="--value:14"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">EvoViM </span>14</span></span>
+            <span class="et-measure et-auto" style="--value:0"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">AutoMem </span>0</span></span>
+          </div></li>
+          <li class="et-function-row"><strong>Visual store</strong><div class="et-pair-bars">
+            <span class="et-measure et-evo" style="--value:12"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">EvoViM </span>12</span></span>
+            <span class="et-measure et-auto" style="--value:0"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">AutoMem </span>0</span></span>
+          </div></li>
+          <li class="et-function-row"><strong>Visual recall</strong><div class="et-pair-bars">
+            <span class="et-measure et-evo" style="--value:11"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">EvoViM </span>11</span></span>
+            <span class="et-measure et-auto" style="--value:0"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">AutoMem </span>0</span></span>
+          </div></li>
+          </ol>
+        </section>
+        <section class="et-function-group" data-et-plot>
+          <h4>Frame parsing</h4>
+          <ol>
+          <li class="et-function-row"><strong>Frame parsing</strong><div class="et-pair-bars">
+            <span class="et-measure et-evo" style="--value:13"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">EvoViM </span>13</span></span>
+            <span class="et-measure et-auto" style="--value:1"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">AutoMem </span>1</span></span>
+          </div></li>
+          <li class="et-function-row"><strong>Spatial index</strong><div class="et-pair-bars">
+            <span class="et-measure et-evo" style="--value:8"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">EvoViM </span>8</span></span>
+            <span class="et-measure et-auto" style="--value:6"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">AutoMem </span>6</span></span>
+          </div></li>
+          <li class="et-function-row"><strong>Decision support</strong><div class="et-pair-bars">
+            <span class="et-measure et-evo" style="--value:12"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">EvoViM </span>12</span></span>
+            <span class="et-measure et-auto" style="--value:7"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">AutoMem </span>7</span></span>
+          </div></li>
+          </ol>
+        </section>
+        <section class="et-function-group" data-et-plot>
+          <h4>Text notes</h4>
+          <ol>
+          <li class="et-function-row"><strong>Text ledger</strong><div class="et-pair-bars">
+            <span class="et-measure et-evo" style="--value:6"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">EvoViM </span>6</span></span>
+            <span class="et-measure et-auto" style="--value:13"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">AutoMem </span>13</span></span>
+          </div></li>
+          </ol>
+        </section>
+        <section class="et-function-group" data-et-plot>
+          <h4>Workflow</h4>
+          <ol>
+          <li class="et-function-row"><strong>Workflow control</strong><div class="et-pair-bars">
+            <span class="et-measure et-evo" style="--value:16"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">EvoViM </span>16</span></span>
+            <span class="et-measure et-auto" style="--value:13"><i class="et-bar" aria-hidden="true"></i><span class="et-bar-value"><span class="et-sr-update">AutoMem </span>13</span></span>
+          </div></li>
+          </ol>
+        </section>
+      </div>
+    </figure>
+    <h3 class="et-examples-title">A tool from each task</h3>
     <dl class="tool-fallback">
       <dt>Visual matching</dt><dd>Card Matching compares exposed card faces. DMV-Hard searches saved pages for the corner pattern in a product photo.</dd>
       <dt>Spatial recall</dt><dd>MC Gallery locates a painting beside a numbered door. Poster Maze links a poster to a cell and wall.

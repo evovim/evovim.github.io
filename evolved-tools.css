@@ -12,45 +12,71 @@
   display: grid; grid-template-columns: minmax(0,.8fr) minmax(0,1.24fr);
   gap: 24px clamp(32px,5vw,76px); margin: 0; align-items: center;
 }
-.et-taxonomy h3, .et-examples-title { margin: 0; color: var(--ink); font: 500 clamp(28px,3vw,44px)/1.12 var(--serif); letter-spacing: -.04em; }
+.et-taxonomy h3, .et-functions h3, .et-examples-title { margin: 0; color: var(--ink); font: 500 clamp(28px,3vw,44px)/1.12 var(--serif); letter-spacing: -.04em; }
 .et-taxonomy figcaption p { max-width: 45ch; margin: 13px 0 0; color: var(--body); font: 400 clamp(15px,1.19vw,18px)/1.55 var(--sans); }
 .et-mechanism-chart {
+  --maximum: 45;
   --label-width: clamp(87px, 10vw, 128px);
   --plot-gutter: 12px;
   font-family: var(--sans); min-width: 0;
 }
-.et-evo { --series-fill: #76a74f; --series-outline: #507b39; }
-.et-auto { --series-fill: #d4d7d5; --series-outline: #858d88; }
+.et-evo { --series-fill: var(--evovim-series, #11766c); }
+.et-auto { --series-fill: var(--automem-series, #b56855); }
 .et-chart-tools, .et-legend, .et-legend > span, .et-replay { display: flex; align-items: center; }
 .et-chart-tools { justify-content: space-between; gap: 12px; margin-bottom: 9px; }
 .et-legend { flex-wrap: wrap; gap: 6px 19px; color: var(--ink); font: 550 14px/1.4 var(--sans); }
 .et-legend > span { gap: 6px; }
-.et-legend i { width: 17px; height: 11px; background: var(--series-fill); border: 1px solid var(--series-outline); }
+.et-legend i, .et-function-key i { width: 13px; height: 13px; background: var(--series-fill); border-radius: 2px; }
 #evolved-tools .et-replay { gap: 5px; min-height: 40px; padding: 4px 2px 4px 9px; color: var(--deep); font: 600 14px/1.35 var(--sans); }
+#evolved-tools .et-replay[hidden] { display: none; }
 .et-replay span { font-size: 20px; line-height: 1; }
 .et-replay:hover { text-decoration: underline; text-underline-offset: 3px; }
-.et-plot { position: relative; padding-right: 8px; }
-.et-grid { position: absolute; top: 0; bottom: 27px; left: calc(var(--label-width) + var(--plot-gutter)); right: 8px; pointer-events: none; }
+.et-plot { position: relative; padding-right: 22px; }
+.et-grid { position: absolute; top: 0; bottom: 27px; left: calc(var(--label-width) + var(--plot-gutter)); right: 22px; pointer-events: none; }
 .et-grid i { position: absolute; inset-block: 0; width: 1px; background: var(--line); }
+.et-grid i, .et-axis span { left: calc(var(--tick) * 100% / var(--maximum)); }
 .et-grid i:first-child { background: #8b9992; }
 .et-mechanism-rows { position: relative; margin: 0; padding: 0; list-style: none; }
-.et-mechanism-row { display: grid; grid-template-columns: var(--label-width) minmax(0,1fr); gap: var(--plot-gutter); align-items: center; min-height: 57px; }
-.et-mechanism-row > strong { color: var(--ink); text-align: right; font: 550 clamp(14px,1.15vw,17px)/1.25 var(--sans); }
+.et-mechanism-row, .et-function-row { display: grid; grid-template-columns: var(--label-width) minmax(0,1fr); gap: var(--plot-gutter); align-items: center; min-height: 57px; }
+.et-mechanism-row > strong, .et-function-row > strong { color: var(--ink); text-align: right; font: 550 clamp(14px,1.15vw,17px)/1.25 var(--sans); }
 .et-pair-bars { display: grid; gap: 4px; padding: 4px 0; }
 .et-measure { display: flex; align-items: center; height: 15px; }
-.et-bar { flex: 0 0 var(--length); height: 100%; background: var(--series-fill); box-shadow: inset 0 0 0 1px var(--series-outline); transform-origin: left center; }
+/* Both plots share a zero baseline. A zero has a label and no visible bar. */
+.et-bar { flex: 0 0 calc(var(--value) * 100% / var(--maximum)); height: 100%; background: var(--series-fill); transform-origin: left center; }
+[data-et-plot] li { --row: 0; }
+[data-et-plot] li:nth-child(2) { --row: 1; }
+[data-et-plot] li:nth-child(3) { --row: 2; }
+[data-et-plot] li:nth-child(4) { --row: 3; }
 .et-bar-value { margin-left: 5px; color: var(--ink); font: 600 14px/1 var(--sans); font-variant-numeric: tabular-nums; }
 .et-axis { position: relative; height: 27px; margin-left: calc(var(--label-width) + var(--plot-gutter)); border-top: 1px solid #8b9992; }
 .et-axis span { position: absolute; top: 5px; transform: translateX(-50%); color: var(--soft); font: 450 13px/1.2 var(--sans); }
 .et-axis-title { margin: 0 8px 0 calc(var(--label-width) + var(--plot-gutter)); text-align: center; color: var(--body); font: 500 14px/1.4 var(--sans); }
-.et-functions { margin: 20px 0 clamp(30px,4vw,60px); border-block: 1px solid var(--line); }
-.et-functions summary { width: fit-content; min-height: 44px; padding: 12px 0; color: var(--deep); cursor: pointer; font: 600 14px/1.45 var(--sans); }
-.et-functions table { width: 100%; max-width: 720px; margin-bottom: 18px; border-collapse: collapse; color: var(--ink); font: 450 15px/1.4 var(--sans); }
-.et-functions caption { text-align: left; color: var(--body); padding-block: 6px 12px; }
-.et-functions :is(td, th) { padding: 4px 6px; text-align: right; font-variant-numeric: tabular-nums; }
-.et-functions th:first-child { text-align: left; }
-.et-functions th[scope=rowgroup] { padding-top: 10px; border-top: 1px solid var(--line); color: var(--et-accent); }
-.et-functions th[scope=row] { font-weight: 450; }
+.et-functions {
+  --maximum: 18;
+  --label-width: clamp(105px, 10vw, 150px);
+  --plot-gutter: 12px;
+  margin: clamp(32px, 4vw, 60px) 0;
+}
+.et-function-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.et-functions figcaption p { margin: 8px 0 18px; color: var(--body); font: 400 clamp(15px, 1.19vw, 18px)/1.5 var(--sans); }
+.et-function-key span { display: inline-flex; align-items: baseline; gap: .3em; color: var(--ink); font-weight: 550; }
+.et-function-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px clamp(28px, 4.5vw, 64px); }
+.et-function-group { min-width: 0; border-top: 1px solid var(--line); padding-top: 10px; }
+.et-function-group h4 { font: 620 clamp(17px, 1.4vw, 21px)/1.3 var(--sans); margin: 0 0 5px; color: var(--ink); }
+.et-function-group ol { list-style: none; margin: 0; padding: 0; }
+.et-function-row { min-height: 43px; }
+.et-function-row > strong { text-align: left; }
+.et-function-row .et-pair-bars {
+  border-left: 1px solid #bcc8c7; border-right: 1px solid var(--line);
+  background: linear-gradient(to right, transparent calc(50% - 1px), var(--line) 50%, transparent 50%);
+  gap: 3px;
+}
+.et-function-row .et-measure { height: 12px; }
+@media (max-width: 790px) {
+  .et-function-groups { grid-template-columns: 1fr; gap: 15px; }
+  .et-functions { --label-width: clamp(100px, 26vw, 135px); --plot-gutter: 8px; }
+  .et-function-row { min-height: 41px; }
+}
 .et-examples-title { margin-bottom: 18px; }
 .et-poster-stat {
   max-width: 78ch; margin: 18px 0 0; color: var(--body);
@@ -59,11 +85,8 @@
 .et-poster-stat strong { color: var(--et-accent); font-weight: 650; }
 @media screen and (prefers-reduced-motion: no-preference) {
   .et-await .et-bar { transform: scaleX(0); }
-  .et-await .et-bar-value { opacity: 0; }
   .et-drawing .et-bar { animation: et-grow-bar 860ms cubic-bezier(.25,.65,.22,1) calc(var(--row) * 100ms) backwards; }
-  .et-drawing .et-bar-value { animation: et-show-value 250ms ease-out calc(610ms + var(--row) * 100ms) backwards; }
   @keyframes et-grow-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-  @keyframes et-show-value { from { opacity: 0; } to { opacity: 1; } }
 }
 @media (prefers-reduced-motion: reduce), print {
   #evolved-tools .et-replay { display: none; }
@@ -78,7 +101,6 @@
   .et-chart-tools { margin-bottom: 3px; }
   .et-mechanism-row { min-height: 49px; }
   .et-measure { height: 12px; }
-  .et-functions table { font-size: 14px; }
 }
 @media (forced-colors: active) {
   .et-bar, .et-legend i { forced-color-adjust: none; }

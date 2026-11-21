@@ -60,51 +60,64 @@
       next:'Restart walkthrough', caseStep:5}
   ];
   const chapters = [
-    {name:'Development walks', start:'execution', color:blue},
-    {name:'Revision', start:'feedback', color:plum},
-    {name:'Candidate selection', start:'checks', color:orange},
-    {name:'Held-out evaluation', start:'record', color:green}
+    {name:'Development walks', start:'execution'},
+    {name:'Revision', start:'feedback'},
+    {name:'Candidate selection', start:'checks'},
+    {name:'Held-out evaluation', start:'record'}
   ];
   const indexOf = id => story.findIndex(step => step.id === id);
   const initial = () => ({index:0, retry:false, verdict:'accept'});
-  let state = initial(), playing = false, visible = false, timer = 0;
+  let state = initial(), mode = 'manual', visible = false, timer = 0, started = 0, remaining = 0;
   const history = [];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const originalFigure = document.getElementById('framework-open');
 
-  root.innerHTML = '<nav class="fw-journey" aria-label="Walkthrough stages"></nav><div class="fw-toolbar"><label class="fw-picker"><span>Step</span><select aria-label="Choose a framework component"></select></label>' +
-    '<div class="fw-nav"><button type="button" class="fw-back" aria-label="Previous step">Back</button><button type="button" class="fw-auto" aria-pressed="false"><span aria-hidden="true">▷</span><span class="fw-auto-label">Auto-play</span></button><button type="button" class="fw-next" aria-controls="fw-title"></button></div></div>' +
+  root.innerHTML = '<div class="fw-toolbar"><div class="fw-location"><button type="button" class="fw-overview"><span aria-hidden="true">←</span> Back to overview</button>' +
+    '<label class="fw-picker"><select aria-label="Jump to a walkthrough step"></select></label></div>' +
+    '<div class="fw-nav"><button type="button" class="fw-back" aria-label="Previous step">Previous</button><button type="button" class="fw-auto"></button><button type="button" class="fw-next" aria-controls="fw-title"></button></div>' +
+    '<p class="fw-instruction" id="fw-instruction"></p></div>' +
     '<div class="fw-spread"><div class="fw-map"></div><section class="fw-inspect" aria-labelledby="fw-title">' +
     '<div class="fw-heading"><h3 id="fw-title"></h3><picture class="fw-guide" hidden><source><img alt="" width="70" height="72"></picture></div><p class="fw-explain"></p>' +
     '<div class="fw-verdicts" role="group" aria-label="Gallery gate decisions" hidden><button type="button" data-verdict="accept">Accepted edit</button><button type="button" data-verdict="reject">Rejected edit</button></div>' +
     '<div class="fw-evidence"></div></section></div>' +
     '<div class="fw-footer"><a class="fw-case" href="#gallery-lineage" data-gallery-step="0">Follow the gallery revision history</a></div><span class="fw-sr" role="status"></span>';
 
-  const find = s => root.querySelector(s);
+  const find = selector => root.querySelector(selector);
   find('.fw-footer').prepend(originalFigure);
-  const journey = find('.fw-journey');
-  for (const chapter of chapters) {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.textContent = chapter.name;
-    button.style.setProperty('--chapter-accent',chapter.color);
-    button.addEventListener('click',() => jump(chapter.start));
-    journey.append(button);
-  }
   const picker = find('.fw-picker select');
-  for (const [index, step] of story.entries()) picker.add(new Option((index + 1) + ' / ' + story.length + ' · ' + step.name, step.id));
-  const next = find('.fw-next'), back = find('.fw-back'), auto = find('.fw-auto');
-  const gate = find('.fw-verdicts'), guide = find('.fw-guide');
-  const map = figure.mount(find('.fw-map'), id => jump(id), () => { playing=false; transport(); });
+  picker.add(new Option('Framework overview','intro'));
+  let group;
+  for (const [index, step] of story.entries()) {
+    if (!index) continue;
+    const chapter = chapters.find(part => part.start === step.id);
+    if (chapter) {
+      group = document.createElement('optgroup');
+      group.label = chapter.name;
+      picker.append(group);
+    }
+    group.append(new Option(index+' / '+(story.length-1)+' · '+step.name,step.id));
+  }
+  const next = find('.fw-next'), back = find('.fw-back'), auto = find('.fw-auto'), overview = find('.fw-overview');
+  const gate = find('.fw-verdicts'), guide = find('.fw-guide'), instruction = find('.fw-instruction');
+  const map = figure.mount(find('.fw-map'),jump,() => { mode='manual'; transport(); });
 
   function jump(id) {
+    if (id === 'intro') { returnToOverview(); return; }
     const index = indexOf(id);
-    if (index >= 0 && state.index !== index) navigate({...initial(), index});
-    else if (playing) { playing = false; transport(); }
+    if (index >= 0 && state.index !== index) navigate({...initial(),index});
+    else if (mode !== 'manual') { mode = 'manual'; transport(); }
   }
-  function schedule() {
-    clearTimeout(timer);
-    if (playing && visible && !document.hidden) timer = setTimeout(() => advance(false),Math.max(7800,map.duration()+950));
+  function schedule(reset=false) {
+    if (timer) {
+      clearTimeout(timer);
+      remaining = Math.max(0,remaining-(performance.now()-started));
+      timer = 0;
+    }
+    if (reset) remaining = Math.max(7800,map.duration()+950);
+    if (mode === 'auto' && visible && !document.hidden) {
+      started = performance.now();
+      timer = setTimeout(() => { timer=0; advance(false); },remaining);
+    }
   }
   function updateGuide() {
     const pose = story[state.index].pose;
@@ -112,18 +125,35 @@
     if (!pose) return;
     const path = 'media/mascot-scenes/'+pose;
     guide.querySelector('img').src = path+'.webp';
-    guide.querySelector('source').srcset = path+(visible && !document.hidden && !reduced.matches ? '-motion.webp' : '.webp');
+    guide.querySelector('source').srcset = path+(visible && !document.hidden && !reduced.matches && mode!=='paused' ? '-motion.webp' : '.webp');
   }
-  function transport() {
-    back.disabled = !history.length;
-    auto.setAttribute('aria-pressed',String(playing));
-    auto.setAttribute('aria-label',playing ? 'Pause walkthrough' : 'Play walkthrough automatically');
-    auto.firstElementChild.textContent = playing ? 'Ⅱ' : '▷';
-    auto.lastElementChild.textContent = playing ? 'Pause' : 'Auto-play';
-    const step = story[state.index];
-    next.textContent = step.id === 'gate' && state.verdict === 'reject'
-      ? (state.retry ? 'Keep the parent' : 'Follow the retry') : step.next;
-    schedule();
+  function transport(reset=false) {
+    const intro = state.index === 0, end = state.index === story.length-1;
+    find('.fw-location').hidden = intro;
+    const nav = next.parentElement;
+    if (intro !== (next.nextElementSibling === auto)) {
+      const focused = document.activeElement === next;
+      nav.insertBefore(next,intro ? auto : null);
+      if (focused) next.focus({preventScroll:true});
+    }
+    back.hidden = intro || history.length === 0 || (history.length === 1 && history[0].index === 0);
+    auto.hidden = end;
+    auto.textContent = mode === 'auto' ? 'Pause playback' : mode === 'paused' ? 'Resume playback' : 'Play automatically';
+    next.textContent = intro ? 'Start step by step →' : end ? 'Replay walkthrough' : 'Next step →';
+    next.title = intro || end ? '' : story[state.index].next;
+    root.dataset.playback = mode;
+    instruction.hidden = intro;
+    const connections = map.connectionCount();
+    let hint = 'Choose Next step when you’re ready.';
+    if (end) hint = 'Walkthrough complete.';
+    else if (mode === 'auto') hint = 'Steps advance automatically.';
+    else if (mode === 'paused') hint = 'Paused. Resume playback or choose Next step.';
+    else if (reduced.matches && connections > 1) hint = 'Select a connection to inspect its arrow, or choose Next step.';
+    else if (!reduced.matches && connections) hint = (connections === 1 ? 'The arrow plays' : 'Arrows play')+' automatically. Choose Next step when you’re ready.';
+    instruction.textContent = hint;
+    map.setPlayback(mode);
+    schedule(reset);
+    updateGuide();
   }
   const retryText = {
     revision:'After rejection, the model gets one retry from the same parent. The rejected code, cost measurements, playbook, notes and scripts guide the next revision.',
@@ -139,45 +169,45 @@
     const rejected = step.id === 'gate' && state.verdict === 'reject' && !state.retry;
     root.dataset.stage = step.id;
     root.style.setProperty('--fw-active',step.color);
-    const active = chapters.findLastIndex(chapter => state.index >= indexOf(chapter.start));
-    for (const [index,button] of [...journey.children].entries()) {
-      const start = indexOf(chapters[index].start);
-      const end = chapters[index+1] ? indexOf(chapters[index+1].start) : story.length;
-      const progress = Math.min(1,Math.max(0,(state.index-start+1)/(end-start)));
-      button.style.setProperty('--fw-progress',String(progress));
-      if (index === active) button.setAttribute('aria-current','step');
-      else button.removeAttribute('aria-current');
-    }
+    const intro = state.index === 0;
+    find('.fw-inspect').hidden = intro;
+    find('.fw-map .paper-map-actions').hidden = intro;
     picker.value = step.id;
     const retryTitles = {revision:'Retry from the same parent.', candidate:'Shorten the logging instructions.', evaluation:'Score the retry on the same walks.'};
     find('#fw-title').textContent = state.retry && retryTitles[step.id] || step.title;
     find('.fw-explain').textContent = rejected ? 'A later gallery edit ties the whole-view parent at 16 of 16, but takes more steps and tokens. The gate retains the parent. Follow the retry to see what the model changes next.' : state.retry && retryText[step.id] ? retryText[step.id] : step.text;
     gate.hidden = step.id !== 'gate' || state.retry;
     for (const button of gate.children) button.setAttribute('aria-pressed',String(button.dataset.verdict === state.verdict));
-    evidence.render(find('.fw-evidence'),step.id,state);
-    find('.fw-case').hidden = step.id === 'experience';
+    if (intro) find('.fw-evidence').replaceChildren();
+    else evidence.render(find('.fw-evidence'),step.id,state);
+    find('.fw-case').hidden = intro || step.id === 'experience';
     find('.fw-case').dataset.galleryStep = String(state.retry || rejected ? 4 : step.caseStep);
     map.update(step,state);
-    updateGuide();
-    transport();
-    if (announce) find('.fw-sr').textContent = 'Step '+(state.index+1)+' of '+story.length+'. '+step.name+'. '+step.title;
+    transport(true);
+    if (announce) find('.fw-sr').textContent = intro ? 'Framework overview.' : 'Step '+state.index+' of '+(story.length-1)+'. '+step.name+'. '+step.title;
   }
-  function navigate(newState, manual = true) {
-    if (manual) playing = false;
+  function returnToOverview() {
+    mode = 'manual';
+    history.length = 0;
+    state = initial();
+    if (location.hash.startsWith('#method-')) window.history.replaceState(window.history.state,'','#method');
+    render();
+    next.focus({preventScroll:true});
+    root.scrollIntoView({block:'start',behavior:'instant'});
+  }
+  function navigate(newState, manual=true) {
+    if (manual) mode='manual';
     history.push({...state});
     state = newState;
-
-    if (story[state.index].id === 'heldout') playing = false;
+    if (story[state.index].id === 'heldout') mode='manual';
     render();
   }
-  function advance(manual = true) {
+  function advance(manual=true) {
     const id = story[state.index].id;
     if (id === 'heldout') {
       history.length = 0;
       state = initial();
-      playing = false;
-
-      render();
+      navigate({...initial(),index:1});
     } else if (id === 'gate' && state.verdict === 'reject' && !state.retry) {
       navigate({index:indexOf('revision'),retry:true,verdict:'reject'},manual);
     } else if (id === 'gate' && state.retry) {
@@ -190,30 +220,35 @@
   }
   picker.addEventListener('change',() => jump(picker.value));
   next.addEventListener('click',() => advance());
+  overview.addEventListener('click',returnToOverview);
+  root.addEventListener('keydown',event => {
+    if (event.key === 'Escape' && state.index && event.target !== picker) {
+      event.preventDefault();
+      returnToOverview();
+    }
+  });
   back.addEventListener('click',() => {
     if (!history.length) return;
-    playing = false;
-    state = history.pop();
-
+    mode='manual';
+    state=history.pop();
     render();
+    if (back.hidden) next.focus({preventScroll:true});
   });
   auto.addEventListener('click',() => {
-    if (playing) { playing = false; transport(); return; }
-    if (state.index === story.length-1) { state = initial(); history.length = 0; }
-    playing = true;
+    mode = mode === 'auto' ? 'paused' : 'auto';
     if (!state.index) advance(false);
     else transport();
   });
   gate.addEventListener('click',event => {
     const button = event.target.closest('[data-verdict]');
     if (!button) return;
-    playing = false;
+    mode='manual';
     state = {...state, verdict:button.dataset.verdict};
     render();
   });
   new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; updateGuide(); schedule(); }).observe(find('.fw-spread'));
   document.addEventListener('visibilitychange',() => { updateGuide(); schedule(); });
-  reduced.addEventListener('change',() => { playing = false; render(false); });
+  reduced.addEventListener('change',() => { mode='manual'; render(false); });
   function followFigureLink() {
     const hotspot = document.getElementById(location.hash.slice(1));
     if (!hotspot?.matches('.fm-spot[data-stage]')) return;

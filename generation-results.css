@@ -1,6 +1,6 @@
 #generation-results {
-  --gen-evo: #11766c;
-  --gen-auto: #a25443;
+  --gen-evo: var(--evovim-series);
+  --gen-auto: var(--automem-series);
   container-type: inline-size;
   margin-top: clamp(44px, 5vw, 78px);
   color: var(--ink);
@@ -51,6 +51,7 @@
 .gen-marks.gen-evo { fill: var(--gen-evo); }
 .gen-marks.gen-auto { fill: transparent; stroke: var(--gen-auto); stroke-width: 1.8; }
 .gen-end { fill: var(--gen-series); font-size: 13px; font-weight: 650; }
+.gen-end.gen-auto { fill: color-mix(in srgb, var(--gen-auto) 84%, var(--ink)); }
 .gen-note { margin: 12px 0 18px; color: var(--soft); font: 400 14px/1.55 var(--sans); }
 .gen-values { border-block: 1px solid var(--line); }
 .gen-values summary { width: fit-content; min-height: 44px; padding: 12px 0; color: var(--deep); cursor: pointer; font: 600 14px/1.5 var(--sans); }

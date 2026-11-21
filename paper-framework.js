@@ -86,6 +86,7 @@
     let base = null, component = null, chain = [], leg = 0, stage = '', staticLabel = '';
     let zoomed = false, visible = false, frame = 0, scale = 1;
     let runSequence = true, length = 0, stateKey = '';
+    let playback = 'manual', elapsed = 0, finished = false;
 
     function viewport() {
       const edge = edges[chain[leg]];
@@ -109,7 +110,7 @@
       Object.assign(canvas.style,{width:(scale*100)+'%',left:(dx*100)+'%',top:(dy*100)+'%'});
       map.style.setProperty('--wire-width',2.6/Math.max(.5,canvas.offsetWidth/width));
       focusButton.hidden = !target;
-      focusButton.textContent = zoomed ? 'Show whole figure' : 'Enlarge component';
+      focusButton.textContent = zoomed ? 'Zoom out' : 'Zoom in';
       focusButton.setAttribute('aria-pressed',String(zoomed));
       [...spots.children].forEach((button,i) => {
         const region = regions[i];
@@ -133,20 +134,29 @@
     function animate() {
       cancelAnimationFrame(frame);
       if (!chain.length) return;
-      if (reduced.matches || !visible || document.hidden) { place(1); return; }
-      const start = performance.now();
+      if (reduced.matches) place(1);
+      if (!visible || document.hidden || playback==='paused' || (reduced.matches && playback!=='auto')) return;
+      if (finished) {
+        if (runSequence && leg+1 < chain.length) setLeg(leg+1);
+        return;
+      }
+      const start = performance.now()-elapsed;
       const duration = Math.min(1450,760 + length*1.8);
       function tick(now) {
-        const elapsed = now-start;
+        elapsed = now-start;
         const t = Math.max(0,Math.min(1,(elapsed-100)/duration));
-        place(t * (2-t));
+        if (!reduced.matches) place(t * (2-t));
         if (elapsed < duration+480) frame = requestAnimationFrame(tick);
-        else if (runSequence && leg+1 < chain.length) setLeg(leg+1);
+        else {
+          finished = true;
+          if (runSequence && leg+1 < chain.length) setLeg(leg+1);
+        }
       }
       frame = requestAnimationFrame(tick);
     }
     function setLeg(index) {
       cancelAnimationFrame(frame);
+      elapsed=0; finished=false;
       leg = index;
       const id = chain[leg], edge = edges[id];
       map.dataset.edge = id || '';
@@ -216,7 +226,12 @@
     reduced.addEventListener('change',() => { replay.hidden=!chain.length || reduced.matches; animate(); });
     new IntersectionObserver(([entry]) => { visible=entry.isIntersecting; animate(); }).observe(map);
     document.addEventListener('visibilitychange',animate);
-    return {update,duration:() => chain.length * 1930};
+    return {update,connectionCount:() => chain.length,duration:() => chain.length * 1930,setPlayback(mode) {
+      if (mode===playback) return;
+      playback=mode;
+      if (mode==='auto') runSequence=true;
+      animate();
+    }};
   }
   window.EvoViMFrameworkMap = {mount};
 })();

@@ -13,20 +13,6 @@
   const step = (label, picture, caption) => ({label, picture, caption});
   const families = ['Visual matching', 'Spatial recall', 'Sequential decision-making'];
 
-  // The main mechanisms figure counts additions. The supplementary functions
-  // table counts final programs with each addition (18 programs per method).
-  const mechanismGroups = [
-    { name: 'Image memory', evo: 39, auto: 0, functions: [
-      ['Pixel matching', 14, 0], ['Visual store', 12, 0], ['Visual recall', 11, 0]
-    ] },
-    { name: 'Frame parsing', evo: 42, auto: 17, functions: [
-      ['Frame parsing', 13, 1], ['Spatial index', 8, 6], ['Decision support', 12, 7]
-    ] },
-    { name: 'Text notes', evo: 6, auto: 22, functions: [['Text ledger', 6, 13]] },
-    { name: 'Workflow', evo: 19, auto: 16, functions: [['Workflow control', 16, 13]] }
-  ];
-  const methods = [{ key: 'evo', name: 'EvoViM' }, { key: 'auto', name: 'AutoMem' }];
-
   const tools = [
     {
       id: 'card', name: 'Card memory + pixel matcher', task: 'Card Matching', family: 0,
@@ -105,62 +91,35 @@
     '<button type="button" class="et-picker" data-tool="' + t.id + '" aria-pressed="false"><span>' + t.task + '</span></button>'
   ).join('') + '</div></div>').join('');
 
-  const scaleMax = 45;
-  const axisTicks = [0, 10, 20, 30, 40];
-  const rows = mechanismGroups.map((group, index) => {
-    const bars = methods.map(({key, name}) => `
-      <div class="et-measure et-${key}" style="--length:${group[key] / scaleMax * 100}%">
-        <span class="et-bar"></span><span class="et-bar-value"><span class="et-sr-update">${name} </span>${group[key]}</span>
-      </div>`).join('');
-    return `<li class="et-mechanism-row" style="--row:${index}"><strong>${group.name}</strong>
-      <div class="et-pair-bars">${bars}</div></li>`;
-  }).join('');
-  const functionTables = mechanismGroups.map(group => `<tbody>
-    <tr><th colspan="3" scope="rowgroup">${group.name}</th></tr>
-    ${group.functions.map(([name, evo, auto]) => `<tr><th scope="row">${name}</th><td>${evo}</td><td>${auto}</td></tr>`).join('')}
-  </tbody>`).join('');
-
-  mount.innerHTML = `<figure class="et-taxonomy" aria-labelledby="et-taxonomy-title">
-    <figcaption><h3 id="et-taxonomy-title">Mechanisms added by evolution</h3>
-      <p>EvoViM most often added frame parsing and image memory. AutoMem most often added text notes. The bars count additions across 18 final programs per method. A program can add several mechanisms in one group.</p>
-    </figcaption>
-    <div class="et-mechanism-chart">
-      <div class="et-chart-tools"><div class="et-legend" aria-hidden="true">
-        ${methods.map(({key, name}) => `<span class="et-${key}"><i></i>${name}</span>`).join('')}
-      </div><button type="button" class="et-replay" aria-label="Replay mechanism chart animation"><span aria-hidden="true">↻</span> Replay</button></div>
-      <div class="et-plot">
-        <div class="et-grid" aria-hidden="true">${axisTicks.map(n => `<i style="left:${n / scaleMax * 100}%"></i>`).join('')}</div>
-        <ol class="et-mechanism-rows">${rows}</ol>
-        <div class="et-axis" aria-hidden="true">${axisTicks.map(n => `<span style="left:${n / scaleMax * 100}%">${n}</span>`).join('')}</div>
-      </div>
-      <p class="et-axis-title">Number of mechanisms added</p>
-    </div>
-  </figure>
-  <details class="et-functions"><summary>Functions added to the final programs</summary>
-    <table><caption>Number of final programs that gained each function, out of 18 per method.</caption>
-      <thead><tr><th scope="col">Function</th><th scope="col">EvoViM</th><th scope="col">AutoMem</th></tr></thead>
-      ${functionTables}
-    </table>
-  </details>
-  <h3 class="et-examples-title">A tool from each task</h3><div class="et-menu">${familyNav}</div><div class="et-trace"></div>`;
-
-  const chart = mount.querySelector('.et-mechanism-chart');
-  function drawBars() {
-    chart.classList.remove('et-await', 'et-drawing');
-    // Restart a replay from the common zero baseline, including midway through a draw.
-    void chart.offsetWidth;
-    chart.classList.add('et-drawing');
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  for (const figure of mount.querySelectorAll('[data-et-chart]')) {
+    const replay = figure.querySelector('.et-replay');
+    const plots = [...figure.querySelectorAll('[data-et-plot]')];
+    const observer = 'IntersectionObserver' in window && new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.replace('et-await', 'et-drawing');
+        observer.unobserve(entry.target);
+      }
+    }, {threshold: .24});
+    function prepareChart() {
+      if (observer) observer.disconnect();
+      replay.hidden = motion.matches || !observer;
+      for (const plot of plots) {
+        plot.classList.remove('et-await', 'et-drawing');
+        if (replay.hidden) continue;
+        plot.classList.add('et-await');
+        observer.observe(plot);
+      }
+    }
+    motion.addEventListener('change', prepareChart);
+    replay.addEventListener('click', prepareChart);
+    prepareChart();
   }
-  if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    chart.classList.add('et-await');
-    const observer = new IntersectionObserver(entries => {
-      if (!entries.some(entry => entry.isIntersecting)) return;
-      drawBars();
-      observer.disconnect();
-    }, { threshold: 0.25 });
-    observer.observe(chart);
-  }
-  chart.querySelector('.et-replay').addEventListener('click', drawBars);
+
+  const fallback = mount.querySelector('.tool-fallback');
+  fallback.insertAdjacentHTML('beforebegin', '<div class="et-menu">' + familyNav + '</div><div class="et-trace"></div>');
+  fallback.remove();
   const trace = mount.querySelector('.et-trace');
   const buttons = [...mount.querySelectorAll('.et-picker')];
   let active;

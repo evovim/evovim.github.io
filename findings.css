@@ -1,18 +1,22 @@
+:root {
+  --evovim-series: #11766c;
+  --automem-series: #b56855;
+}
 .fd-lead {
   max-width: 55ch;
   color: var(--body);
   font: 400 clamp(18px, 1.5vw, 23px)/1.5 var(--sans);
 }
-.fd-lead strong, .fd-attribution strong { color: var(--teal); font-weight: 650; }
-.fd-attribution, .fd-revision { margin-top: clamp(32px, 3.6vw, 58px); }
-.fd-attribution h3, .fd-revision h3 {
+.fd-lead strong { color: var(--teal); font-weight: 650; }
+.fd-revision { margin-top: clamp(32px, 3.6vw, 58px); }
+.fd-revision h3 {
   margin: 0 0 12px;
   color: var(--ink);
   font: 500 clamp(27px, 2.7vw, 40px)/1.12 var(--serif);
   letter-spacing: -.035em;
   text-wrap: balance;
 }
-.fd-attribution p, .fd-revision p {
+.fd-revision p {
   max-width: 78ch; margin: 0; color: var(--body);
   font: 400 clamp(16px, 1.24vw, 19px)/1.55 var(--sans);
 }
@@ -36,7 +40,7 @@
 .fd-ablation-panel dl { display: grid; gap: 14px; margin: 0; }
 .fd-ablation-panel dt { color: var(--body); font: 550 15px/1.4 var(--sans); }
 .fd-ablation-panel dd { display: grid; align-items: center; grid-template-columns: minmax(0, 1fr) 4.5rem; gap: 10px; margin: 3px 0 0; }
-.fd-supported { --fd-condition: #11766c; }
+.fd-supported { --fd-condition: var(--evovim-series); }
 .fd-ablated { --fd-condition: #687c86; }
 .fd-ablation-panel b {
   color: var(--fd-condition); text-align: right;
@@ -66,7 +70,7 @@
 }
 @media (prefers-reduced-motion: reduce), print { .fd-revision-replay { display: none; } }
 #score-explorer {
-  --fd-green: #11766c;
+  --fd-green: var(--evovim-series);
   --fd-rule: #c2cece;
   --fd-soft: #526269;
   --fd-axis: 32px;
@@ -116,7 +120,7 @@
 .fd-legend .fd-muted { color: var(--fd-soft); }
 .fd-legend .fd-muted i { background: transparent; box-shadow: inset 0 0 0 1px var(--series); transform: scale(.68); }
 .fd-series-0 { --series: var(--fd-green); }
-.fd-series-1 { --series: #b56855; }
+.fd-series-1 { --series: var(--automem-series); }
 .fd-series-2 { --series: #6386a7; }
 .fd-series-3 { --series: #9482ab; }
 .fd-series-4 { --series: #baa16a; }
