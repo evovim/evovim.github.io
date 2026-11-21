@@ -9,14 +9,27 @@
 }
 .reading-header .reading-label { display: block; margin-bottom: 12px; }
 .reading-links { list-style: none; margin: 0; padding: 0; }
-.reading-links li { --chapter-ink: #126d62; }
-.reading-links li:nth-child(n+3) { --chapter-ink: #165f74; }
-.reading-links li:nth-child(n+6) { --chapter-ink: #385b88; }
-.reading-links li:nth-child(n+8) { --chapter-ink: #63538a; }
+/* A chapter keeps its colour in the rail, the menu and its collapsed label. */
+.reading-links a[href="#top"],
+.reading-nav:has(a[href="#top"][aria-current="location"]) { --chapter-ink: #ad3759; }
+.reading-links a[href="#environments"],
+.reading-nav:has(a[href="#environments"][aria-current="location"]) { --chapter-ink: #a14b20; }
+.reading-links a[href="#pilots"],
+.reading-nav:has(a[href="#pilots"][aria-current="location"]) { --chapter-ink: #836018; }
+.reading-links a[href="#method"],
+.reading-nav:has(a[href="#method"][aria-current="location"]) { --chapter-ink: #3e743f; }
+.reading-links a[href="#tools"],
+.reading-nav:has(a[href="#tools"][aria-current="location"]) { --chapter-ink: #08706b; }
+.reading-links a[href="#results"],
+.reading-nav:has(a[href="#results"][aria-current="location"]) { --chapter-ink: #216396; }
+.reading-links a[href="#applications"],
+.reading-nav:has(a[href="#applications"][aria-current="location"]) { --chapter-ink: #554d9b; }
+.reading-links a[href="#install"],
+.reading-nav:has(a[href="#install"][aria-current="location"]) { --chapter-ink: #86477f; }
 .reading-header .reading-nav .reading-links a {
   display: block;
   position: relative;
-  color: var(--soft);
+  color: var(--chapter-ink, var(--soft));
   font: 450 14px/1.35 var(--sans);
   padding: 7px 12px 7px 15px;
   text-decoration: none;
@@ -34,7 +47,7 @@
   border-radius: 2px;
   background: currentColor;
 }
-.reading-header .reading-nav .reading-links a:hover { color: var(--deep); text-decoration: underline; text-underline-offset: 4px; }
+.reading-header .reading-nav .reading-links a:hover { color: var(--chapter-ink); text-decoration: underline; text-underline-offset: 4px; }
 .reading-header .reading-nav .reading-links a:focus-visible { outline-offset: -2px; }
 .reading-header .reading-toggle { display: none; }
 main > section[id] { scroll-margin-top: calc(var(--nav-height, 0px) + 12px); }
@@ -74,7 +87,7 @@ main > section[id] { scroll-margin-top: calc(var(--nav-height, 0px) + 12px); }
     align-items: center;
     height: clamp(29px, 4.3vh, 39px);
     padding: 0 2px 0 25px;
-    color: #52626b;
+    color: var(--chapter-ink, #52626b);
     font-weight: 500;
     white-space: nowrap;
     text-decoration: none;
@@ -84,12 +97,12 @@ main > section[id] { scroll-margin-top: calc(var(--nav-height, 0px) + 12px); }
     content: "";
     position: absolute;
     inset: 50% auto auto 2px;
-    width: 15px;
+    width: 18px;
     height: 4px;
     border-radius: 9px;
-    background: color-mix(in srgb, var(--chapter-ink) 32%, #e8efee);
+    background: var(--chapter-ink);
     transform-origin: left center;
-    transform: translateY(-50%) scale(.42, .6);
+    transform: translateY(-50%) scale(.45, .75);
   }
   .reading-links .reading-name {
     display: inline-block;
@@ -117,7 +130,7 @@ main > section[id] { scroll-margin-top: calc(var(--nav-height, 0px) + 12px); }
     transition: transform 190ms cubic-bezier(.2,.75,.25,1), color 180ms ease;
   }
   .reading-links a::before {
-    transform: translateY(calc(-50% + var(--dock-spread, 0px))) scale(calc(.42 + .58 * var(--dock-lift, 0)), calc(.6 + .4 * var(--dock-lift, 0)));
+    transform: translateY(calc(-50% + var(--dock-spread, 0px))) scale(calc(.45 + .55 * var(--dock-lift, 0)), calc(.75 + .25 * var(--dock-lift, 0)));
     transition: transform 190ms cubic-bezier(.2,.75,.25,1), background-color 200ms ease;
   }
   .reading-links a[aria-current="location"]::before {
@@ -157,7 +170,7 @@ main > section[id] { scroll-margin-top: calc(var(--nav-height, 0px) + 12px); }
     font-family: var(--sans);
     cursor: pointer;
   }
-  .reading-current { font-size: 14px; font-weight: 650; color: var(--teal); }
+  .reading-current { font-size: 14px; font-weight: 650; color: var(--chapter-ink, var(--teal)); }
   .reading-chevron {
     width: 7px;
     height: 7px;

@@ -4,22 +4,22 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#fcfcfd">
 <title>EvoViM: Recursively Self-Evolving Visual Agents for Exploration with Deferred Queries</title>
-<meta name="description" content="How can a visual agent explore before it knows the question? EvoViM lets a frozen multimodal model evolve a visual program for memory and skills from its own experience.">
+<meta name="description" content="EvoViM lets a visual agent learn from missed questions by revising its own image memory and tools. Explore the six environments, the programs it evolved and their results.">
 <link rel="icon" href="media/mascot.png" type="image/png">
 <link rel="stylesheet" href="site.css?v=7471b2d7"><link rel="stylesheet" href="cases.css?v=526d6124"><link rel="stylesheet" href="applications.css?v=590e17ec">
 <link rel="stylesheet" href="gallery-memory.css?v=eb6d76cd"><link rel="stylesheet" href="ambient.css?v=eb76d2be">
 <link rel="stylesheet" href="embodied-case.css?v=58a72ff9"><link rel="stylesheet" href="editorial.css?v=22a1cff7"><link rel="stylesheet" href="overview-film.css?v=b8430140">
-<link rel="stylesheet" href="mascot-scenes.css"><link rel="stylesheet" href="scroll-story.css?v=0e1970ce"><link rel="stylesheet" href="environment-atlas.css?v=0a9c2c2c">
-<link rel="stylesheet" href="challenge-pilot.css?v=0cea514e"><link rel="stylesheet" href="evolution-story.css?v=96342654"><link rel="stylesheet" href="findings.css?v=8a33351e">
-<link rel="stylesheet" href="paper-framework.css?v=bebc3ced"><link rel="stylesheet" href="evolved-tools.css?v=ca642fd9">
-<link rel="stylesheet" href="reading-nav.css?v=2ad1ab5d">
+<link rel="stylesheet" href="mascot-scenes.css"><link rel="stylesheet" href="scroll-story.css?v=0e1970ce"><link rel="stylesheet" href="environment-atlas.css?v=af7baee6">
+<link rel="stylesheet" href="challenge-pilot.css?v=8b79d38a"><link rel="stylesheet" href="evolution-story.css?v=603e61e8"><link rel="stylesheet" href="findings.css?v=8a33351e">
+<link rel="stylesheet" href="framework-loops.css?v=7745e5c3"><link rel="stylesheet" href="framework-evidence.css?v=73866688"><link rel="stylesheet" href="paper-framework.css?v=114c3e9b"><link rel="stylesheet" href="evolved-tools.css?v=ca642fd9">
+<link rel="stylesheet" href="reading-nav.css?v=d9d62d1a">
 <link rel="stylesheet" href="analytics.css?v=a40d35fb">
 <script defer src="analytics.js?v=7ab2aee4" data-measurement-id="G-NFL9PGZGV3"></script>
-<script defer src="results-data.js"></script><script defer src="site.js?v=9253fe57"></script><script defer src="cases.js?v=905d7e86"></script>
-<script defer src="gallery-memory.js?v=36816cbc"></script><script defer src="applications.js?v=ec34a5d2"></script>
-<script defer src="ambient.js?v=c14b31fe"></script><script defer src="overview-film.js"></script><script defer src="environment-atlas.js?v=4afb34ca"></script>
-<script defer src="embodied-case.js?v=1f89f387"></script><script defer src="mascot-scenes.js?v=f2807ce2"></script><script defer src="challenge-pilot.js?v=b5ed66b3"></script>
-<script defer src="paper-framework.js?v=8cfab028"></script><script defer src="evolution-story.js?v=54abc4f5"></script><script defer src="evolved-tools.js?v=ed35c89d"></script>
+<script defer src="results-data.js"></script><script defer src="site.js?v=629cdfdd"></script><script defer src="cases.js?v=905d7e86"></script>
+<script defer src="gallery-memory.js?v=36816cbc"></script><script defer src="applications.js?v=226c6c13"></script>
+<script defer src="ambient.js?v=c14b31fe"></script><script defer src="overview-film.js"></script><script defer src="environment-atlas.js?v=3aa6bcfb"></script>
+<script defer src="embodied-case.js?v=1f89f387"></script><script defer src="mascot-scenes.js?v=f2807ce2"></script><script defer src="challenge-pilot.js?v=5212016a"></script>
+<script defer src="framework-evidence.js?v=a8458531"></script><script defer src="paper-framework.js?v=a0963da9"></script><script defer src="framework-loops.js?v=876476b0"></script><script defer src="evolution-story.js?v=8057738f"></script><script defer src="evolved-tools.js?v=493aecb3"></script>
 <script defer src="findings.js?v=d77ba3e4"></script><script defer src="scroll-story.js?v=4d9f812a"></script>
 </head>
 <body>
@@ -66,6 +66,7 @@
         <li><span class="paper-author">Tianjie Ju</span><a href="https://nus.edu.sg/" title="National University of Singapore"><span class="author-logo nus-logo"><img src="media/institutions/nus-lockup.svg" width="475" height="218" alt="National University of Singapore"></span><span class="school-short" aria-hidden="true">NUS</span></a></li>
         <li><span class="paper-author">Zhuosheng Zhang<sup title="Corresponding author">†</sup><span class="visually-hidden"> (corresponding author)</span></span><a href="https://en.sjtu.edu.cn/" title="Shanghai Jiao Tong University"><span class="author-logo sjtu-logo"><img src="media/institutions/sjtu.png" width="4283" height="1408" alt="Shanghai Jiao Tong University"></span><span class="school-short" aria-hidden="true">SJTU</span></a></li>
       </ul>
+      <p>With EvoViM, a visual agent can revisit a question it missed during practice and rewrite the code it uses to save and search images. Its model weights stay fixed.</p>
       <div class="actions">
         <a class="btn primary" data-site-action="github_hero_click" href="https://github.com/Lewis-Xinyu/EvoViM">Code on GitHub</a>
         <a class="btn paper-btn" href="#environments">Explore environments <span aria-hidden="true">↓</span></a>
@@ -90,77 +91,62 @@
   </div>
 </section>
 <section id="environments" class="section wrap story-chapter" aria-labelledby="environment-title">
-  <div class="chapter-intro"><h2 id="environment-title">Six <em>environments</em></h2></div>
-  <div class="atlas-showcase">
-  <video id="environment-reel" width="960" height="720" muted loop playsinline controls preload="none" poster="media/live/overview.jpg" aria-label="A tour of all six benchmark environments" src="media/live/overview.mp4"></video>
+  <div class="chapter-intro"><h2 id="environment-title">Six <em>environments</em></h2>
+    <p>In the first three tasks, the agent explores before it knows the question. In the other three, the goal guides what it remembers from the first move.</p></div>
   <div class="atlas-groups">
-    <div class="atlas-group deferred"><h3>Deferred queries</h3><div class="atlas-row">
+    <div class="atlas-group deferred"><div class="atlas-group-heading"><h3>Deferred queries</h3><button type="button" class="atlas-preview-toggle" hidden>Pause previews</button></div><div class="atlas-row">
       <a class="atlas-item" data-env="dmv-hard" href="media/live/dmv-hard.mp4" aria-label="Watch DMV-Hard. Match a crop to a page.">
-        <span class="atlas-image"><img src="media/observations/dmv-hard-a.webp" alt="" loading="lazy"><i class="atlas-play" aria-hidden="true">▶</i></span>
+        <span class="atlas-image"><video class="atlas-preview" data-src="media/previews/dmv-hard.mp4" poster="media/observations/dmv-hard-a.webp" width="480" height="320" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture></video><i class="atlas-play" aria-hidden="true">↗</i></span>
         <strong>DMV-Hard</strong><span class="atlas-task">Match a crop to a page.</span>
       </a>
       <a class="atlas-item" data-env="gallery" href="media/live/gallery.mp4" aria-label="Watch MC Gallery. Recall a painting’s door and side.">
-        <span class="atlas-image"><img src="media/episodes/gallery-door7.webp" alt="" loading="lazy"><i class="atlas-play" aria-hidden="true">▶</i></span>
+        <span class="atlas-image"><video class="atlas-preview" data-src="media/previews/gallery.mp4" poster="media/episodes/gallery-door7.webp" width="480" height="320" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture></video><i class="atlas-play" aria-hidden="true">↗</i></span>
         <strong>MC Gallery</strong><span class="atlas-task">Recall a painting’s door and side.</span>
       </a>
       <a class="atlas-item" data-env="poster-maze" href="media/live/poster-maze.mp4" aria-label="Watch Poster Maze. Locate a poster’s wall.">
-        <span class="atlas-image"><img src="media/observations/poster-maze-a.webp" alt="" loading="lazy"><i class="atlas-play" aria-hidden="true">▶</i></span>
+        <span class="atlas-image"><video class="atlas-preview" data-src="media/previews/poster-maze.mp4" poster="media/observations/poster-maze-a.webp" width="480" height="320" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture></video><i class="atlas-play" aria-hidden="true">↗</i></span>
         <strong>Poster Maze</strong><span class="atlas-task">Locate a poster’s wall.</span>
       </a>
     </div></div>
     <div class="atlas-group known"><h3>Goal known from the start</h3><div class="atlas-row">
       <a class="atlas-item" data-env="tetris" href="media/live/tetris.mp4" aria-label="Watch Tetris. Reach 600 points.">
-        <span class="atlas-image"><img src="media/live/tetris.jpg" alt="" loading="lazy"><i class="atlas-play" aria-hidden="true">▶</i></span>
+        <span class="atlas-image"><video class="atlas-preview" data-src="media/previews/tetris.mp4" poster="media/live/tetris.jpg" width="480" height="320" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture></video><i class="atlas-play" aria-hidden="true">↗</i></span>
         <strong>Tetris</strong><span class="atlas-task">Reach 600 points.</span>
       </a>
       <a class="atlas-item" data-env="pacman" href="media/live/pacman.mp4" aria-label="Watch Pac-Man. Reach 2,500 points.">
-        <span class="atlas-image"><img src="media/live/pacman.jpg" alt="" loading="lazy"><i class="atlas-play" aria-hidden="true">▶</i></span>
+        <span class="atlas-image"><video class="atlas-preview" data-src="media/previews/pacman.mp4" poster="media/live/pacman.jpg" width="480" height="320" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture></video><i class="atlas-play" aria-hidden="true">↗</i></span>
         <strong>Pac-Man</strong><span class="atlas-task">Reach 2,500 points.</span>
       </a>
       <a class="atlas-item" data-env="card-matching" href="media/live/card-matching.mp4" aria-label="Watch Card Matching. Find all 72 pairs.">
-        <span class="atlas-image"><img src="media/observations/card-matching-a.webp" alt="" loading="lazy"><i class="atlas-play" aria-hidden="true">▶</i></span>
+        <span class="atlas-image"><video class="atlas-preview" data-src="media/previews/card-matching.mp4" poster="media/observations/card-matching-a.webp" width="480" height="320" muted playsinline loop preload="none" aria-hidden="true" tabindex="-1" disablepictureinpicture></video><i class="atlas-play" aria-hidden="true">↗</i></span>
         <strong>Card Matching</strong><span class="atlas-task">Find all 72 pairs.</span>
       </a>
     </div></div>
-  </div>
   </div>
   <details id="case-exercises" class="secondary-evidence"><summary>Try a decision from a real episode</summary>
     <div id="cases" aria-label="Four interactive benchmark episodes"></div>
   </details>
 </section>
 <section id="pilots" class="section wrap story-chapter" aria-labelledby="pilots-title">
-  <div class="chapter-intro"><h2 id="pilots-title">Pilot <em>studies</em></h2></div>
+  <div class="chapter-intro"><h2 id="pilots-title">Pilot <em>studies</em></h2><p>A visual match often gave Claude Haiku 5.5 the product ID in DMV-Hard. In MC Gallery, it still had to work out where the painting hung.</p></div>
   <div id="pilot-story"><p>Compare evolved text memory, hand-designed visual memory and a one-shot program.</p></div>
 </section>
 <section id="method" class="section wrap story-chapter" aria-labelledby="method-title">
-  <div class="chapter-intro"><h2 id="method-title">The EvoViM <em>framework</em></h2></div>
-  <figure id="framework-loops" class="paper-framework" aria-labelledby="method-title">
-    <figcaption class="paper-figure-controls">
-      <label for="framework-detail" hidden>View
-        <select id="framework-detail" aria-controls="framework-board"><option value="overview">Full framework</option></select>
-      </label>
-      <a href="media/method/framework-paper.svg" target="_blank" rel="noopener">Open full size <span aria-hidden="true">↗</span></a>
-    </figcaption>
-    <div id="framework-board" class="paper-figure-board">
-      <div class="paper-figure-map">
-        <img src="media/method/framework-paper.svg" width="990" height="518" loading="lazy" alt="The agent records frames, computes on pixels and recalls evidence to act. During memory evolution, development episodes, enhanced feedback and revision experience guide edits to the program and to the playbook, notes and scripts. Code checks and a gate select the next parent.">
-        <span class="paper-figure-marker" aria-hidden="true" hidden></span>
-      </div>
-      <div class="paper-figure-region" hidden>
-        <svg viewBox="0 0 495 259" role="img" aria-labelledby="framework-region-title">
-          <title id="framework-region-title">Framework detail</title>
-          <image href="media/method/framework-paper.svg" width="495" height="259"/>
-        </svg>
-      </div>
-    </div>
-  </figure>
+  <div class="chapter-intro"><h2 id="method-title">The EvoViM <em>framework</em></h2>
+    <p>We let the same model that missed a painting inspect the episode and edit its memory program. It can also rewrite the playbook and analysis scripts it uses to make the next edit.</p></div>
+  <div id="framework-loops">
+    <figure class="method-fallback">
+      <img src="media/method/framework-paper.svg" width="990" height="518" loading="lazy" alt="During task execution the agent records observations and consults a visual memory program before acting. During memory evolution it uses development episodes, enhanced feedback and revision experience to propose a candidate. Code checks and a gate determine which program becomes the next parent.">
+      <figcaption><a id="framework-open" href="media/method/framework-paper.svg" target="_blank" rel="noopener">Open full-size figure ↗</a></figcaption>
+    </figure>
+  </div>
   <section id="gallery-lineage" class="lineage-chapter" aria-labelledby="gallery-lineage-title">
-    <div class="lineage-intro"><h3 id="gallery-lineage-title">Memory evolution in <em>MC Gallery</em></h3></div>
+    <div class="lineage-intro"><h3 id="gallery-lineage-title">Memory evolution in <em>MC Gallery</em></h3><p>Claude Haiku 5.5 tested each edit on the same two development walks, with eight questions per walk.</p></div>
     <div id="evolution-story"><p>Across two development episodes, the agent answered 4 of 16 questions with notes, 13 with painting crops and 16 with doorway views.</p></div>
   </section>
 </section>
 <section id="tools" class="section wrap story-chapter" aria-labelledby="tools-title">
-  <div class="chapter-intro"><h2 id="tools-title">Evolved <em>visual tools</em></h2></div>
+  <div class="chapter-intro"><h2 id="tools-title">Evolved <em>visual tools</em></h2><p>All six programs began with the same basic image tools. Pick a task to trace an operation the agent wrote during practice, from the image it saw to the move or answer it proposed.</p></div>
   <div id="evolved-tools">
     <dl class="tool-fallback">
       <dt>Visual matching</dt><dd>Card Matching compares exposed card faces. DMV-Hard searches saved pages for the corner pattern in a product photo.</dd>
@@ -170,7 +156,7 @@
   </div>
 </section>
 <section id="results" class="section wrap story-chapter" aria-labelledby="results-title">
-  <div class="chapter-intro"><h2 id="results-title">Main <em>results</em></h2><p>EvoViM gains 31.3–47.6 points over AutoMem on the six-task held-out average.</p></div>
+  <div class="chapter-intro"><h2 id="results-title">Main <em>results</em></h2><p>On new episodes, EvoViM scored 31.3 to 47.6 percentage points above AutoMem across the three models. Each task counts equally in the average.</p></div>
   <div id="score-explorer"><a href="downloads/main_results.csv" download>Download scores</a></div>
 </section>
 <section id="applications" aria-labelledby="applications-title"></section>

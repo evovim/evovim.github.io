@@ -46,14 +46,13 @@
   color: var(--ev-muted); font: 500 13px/1.45 var(--sans);
 }
 .ev-caption h3 { margin: .3em 0 .24em; font: normal clamp(28px,3.15vw,49px)/1.05 var(--serif); letter-spacing: -.043em; color: var(--ev-ink); }
-#evolution-story .ev-caption p { color: var(--body); font: 450 clamp(15px,1.18vw,18px)/1.52 var(--sans); max-width: 47ch; }
 .ev-guide { grid-area: guide; display: flex; align-items: center; gap: clamp(9px,1vw,16px); align-self: start; margin-top: 18px; }
 .ev-guide picture { flex: 0 0 clamp(85px,8.7vw,135px); }
 .ev-guide img { width: 100%; height: clamp(87px,8.7vw,132px); display: block; object-fit: contain; }
 #evolution-story .ev-quote {
   position: relative; padding: .75em 1em; width: fit-content;
   background: #fffdf8; border: 1px solid #9fb4ad; border-radius: 13px;
-  font: 600 clamp(13px,1.18vw,17px)/1.4 var(--sans); max-width: 35ch;
+  font: 550 clamp(15px,1.18vw,17px)/1.45 var(--sans); max-width: 35ch;
 }
 .ev-quote::before { content: ''; position: absolute; inset: 50% auto auto -6px; width: 10px; height: 10px; transform: translateY(-50%) rotate(45deg); background: #fffdf8; border: solid #9fb4ad; border-width: 0 0 1px 1px; }
 .ev-encounter, .ev-notes, .ev-search { display: flex; align-items: center; justify-content: center; }

@@ -9,27 +9,24 @@
 
   const steps = [
     {
-      name: 'Practice', title: 'Walk first. Get the question later.',
-      text: 'At the exit, Claude Haiku 5.5 had to place a painting it had passed on the walk.',
-      pose: 'photographer', line: 'Which side was it on?',
+      name: 'Practice', title: 'Where did this painting hang?',
+      pose: 'photographer', line: 'I answered “not seen.” Let’s check what I wrote at door 4.',
       next: 'Inspect the mistake',
       picture: () => '<div class="ev-encounter"><figure class="ev-door"><img src="media/framework/practice-door4.webp" alt="Door 4 in the starting program’s development episode" decoding="async">'
         + '<figcaption>On the walk <b>Door 4</b></figcaption></figure>'
         + queryPrint('At the exit') + '</div>'
     },
     {
-      name: 'Diagnose', title: 'Read what survived the walk.',
-      text: 'The trace linked “green mottled tile wall” to door 4. It gave no location for the painting.',
-      pose: 'detective', line: 'I marked six paintings I had seen as unseen.',
+      name: 'Diagnose', title: 'The note described the wall.',
+      pose: 'detective', line: 'I never wrote down which painting hung on each side. I marked all eight queries “not seen,” even the six I’d passed.',
       next: 'Rewrite what gets saved',
       picture: () => '<div class="ev-notes">' + queryPrint('Question 8') + '<div class="ev-paper"><span>Walk notebook</span>'
         + '<p>Door 4<br><mark>Green mottled tile wall</mark></p><small>Painting location</small>'
         + '<b class="ev-blank">No entry</b></div></div><div class="ev-score"><b>4 / 16</b> correct across two development episodes</div>'
     },
     {
-      name: 'Save crops', title: 'File a picture with its address.',
-      text: 'The first accepted edit indexed painting crops by door and side. Door 4 was missing.',
-      pose: 'archivist', line: 'Where is the crop from door 4?',
+      name: 'Save crops', title: 'Save a crop with its door and side.',
+      pose: 'archivist', line: 'I can compare the query to my crops now. But I didn’t save a crop at door 4, so its painting never comes up.',
       next: 'Widen the saved view',
       picture: () => {
         const crops = [['1R', '1 · right'], ['3R', '3 · right'], [null, '4 · missing'], ['6L', '6 · left'], ['7L', '7 · left']];
@@ -41,18 +38,16 @@
       }
     },
     {
-      name: 'Search views', title: 'Save the whole doorway.',
-      text: 'Searching the full doorway views located the painting to the right of door 4.',
-      pose: 'mechanic', line: 'There it is, on the right!',
+      name: 'Search views', title: 'Search the full doorway view.',
+      pose: 'mechanic', line: 'Now I can look for the patch after I see the question. There it is, to the right of door 4.',
       next: 'Test the next two edits',
       picture: () => '<div class="ev-search"><figure class="ev-located"><div class="ev-original">' + fullView() + '<i class="ev-box" aria-hidden="true"></i></div>'
         + '<figcaption>Stored view <b>Door 4</b></figcaption></figure><div class="ev-rank">' + small('match', 'The matched patch on the right side of the doorway.')
         + '<b>0.834</b><span>Match score</span></div></div><div class="ev-score"><b>16 / 16</b> correct across two development episodes</div>'
     },
     {
-      name: 'Select', title: 'Which candidate does the gate retain?',
-      text: 'Two further edits faced the same development episodes. Their outcomes informed the next revision.',
-      pose: 'puzzle', line: 'I’ll keep the whole-view search and record both attempts.',
+      name: 'Select', title: 'Would either edit improve the search?',
+      pose: 'puzzle', line: 'The rotation edit tied the score but used more steps and tokens. I kept the whole-view search.',
       next: 'Try the frozen program',
       picture: () => '<div class="ev-verdict"><span class="ev-plate-label">Candidate program</span>'
         + [['Whole-view search', '16 / 16', 'Kept', 'kept'], ['Rework rotated queries', '16 / 16', 'More steps and tokens', ''], ['Shorten the log', '13 / 16', 'Lower score', '']]
@@ -64,9 +59,8 @@
         + '</details>'
     },
     {
-      name: 'Test', title: 'Take the program into ten new galleries.',
-      text: 'The selected program started each held-out walk with empty memory and eight new questions.',
-      pose: 'presenter', line: 'New gallery, fresh notebook.',
+      name: 'Test', title: 'Does the program work on ten new walks?',
+      pose: 'presenter', line: 'I kept the program. On each walk I started with empty memory and answered eight new questions.',
       next: 'Replay the evolution',
       picture: () => {
         const walkCount = 10;
@@ -82,7 +76,7 @@
   root.innerHTML = '<div class="ev-rail" role="group" aria-label="Stages in one gallery program’s evolution">'
     + steps.map(({name}, i) => '<button type="button" data-step="' + i + '" aria-controls="ev-panel"><span>' + (i + 1) + '</span>' + name + '</button>').join('')
     + '</div><article id="ev-panel"><div class="ev-figure"></div><div class="ev-caption" aria-live="polite" aria-atomic="true">'
-    + '<h3></h3><p></p></div><div class="ev-guide"><picture><source><img alt="" width="124" height="120" decoding="async"></picture>'
+    + '<h3></h3></div><div class="ev-guide"><picture><source><img alt="" width="124" height="120" decoding="async"></picture>'
     + '<p class="ev-quote"></p></div></article><div class="ev-controls"><button class="ev-back" type="button">Back</button>'
     + '<a href="#tools" class="ev-tools-link" hidden>Explore the six evolved tools</a><button class="ev-next" type="button"></button></div>';
 
@@ -91,7 +85,6 @@
   const panel = root.querySelector('#ev-panel');
   const figure = root.querySelector('.ev-figure');
   const title = root.querySelector('.ev-caption h3');
-  const body = root.querySelector('.ev-caption p');
   const guideImage = root.querySelector('.ev-guide img');
   const motionSource = root.querySelector('.ev-guide source');
   const quote = root.querySelector('.ev-quote');
@@ -115,7 +108,6 @@
     root.classList.toggle('ev-in-view', inView);
     figure.innerHTML = step.picture();
     title.textContent = step.title;
-    body.textContent = step.text;
     quote.textContent = step.line;
     updatePose();
     previous.disabled = index === 0;

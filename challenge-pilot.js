@@ -10,10 +10,9 @@
 
   const pilots = [
     {
-      tab: 'Evolved text memory', title: 'Two patterns fit the same words.',
-      caption: 'In DMV-Hard, one description fit the swatches on two different product pages.',
+      tab: 'Evolved text memory', title: 'Two product pages fit the same note.',
       numbers: [['100','134','photo-detail queries answered correctly'],['1','106','pattern queries answered correctly']],
-      pose: 'archivist', speech: 'Which swatch did I mean?', next: 'Try keeping every frame',
+      pose: 'archivist', speech: 'With AutoMem I could decide what to write down. My note says “teal, blue and rust spots.” That could be the vase or the table.', next: 'Try keeping every frame',
       visual: () => `<div class="ep-notes"><div class="ep-product-pair">
         <figure>${image(products + 'correct-vase.webp', 'Vase above a teal, blue and rust swatch.')}<figcaption>Vase</figcaption></figure>
         <figure>${image(products + 'returned-table.webp', 'Side table with a different swatch in similar colours.')}<figcaption>Table</figcaption></figure>
@@ -21,17 +20,15 @@
         <div class="ep-notebook"><small>Both patterns in words</small><strong>Teal, blue and rust spots</strong></div></div>`
     },
     {
-      tab: 'Hand-designed visual memory', title: 'Which door was beside the match?',
-      caption: 'The matcher returned a frame and a bounding box. MC Gallery asked for the door and side.',
+      tab: 'Hand-designed visual memory', title: 'The matcher found the painting.',
       numbers: [['56','60','seen paintings in the top match'],['0','60','seen paintings located correctly']],
-      pose: 'detective', speech: 'How do I get a door number from these pixels?', next: 'Try writing the program up front',
+      pose: 'detective', speech: 'I kept every frame. My matcher returns the patch’s pixel coordinates, but the gallery asks for the door number and which side it hung on.', next: 'Try a one-shot program',
       visual: () => `<div class="ep-search"><div class="ep-search-image">${frame()}<i aria-hidden="true"></i></div><div class="ep-search-output"><span>Matcher output</span><b>Frame + bounding box</b><small>Door <em>?</em> &nbsp; Side <em>?</em></small></div></div>`
     },
     {
-      tab: 'One-shot program', title: 'A list of doors leaves out the paintings.',
-      caption: 'The opening instruction led the program to log doors. At the exit, it was asked about paintings.',
+      tab: 'One-shot program', title: 'The program logged the doors in order.',
       numbers: [['0','60','seen paintings located correctly'],['11','20','unseen paintings correctly rejected']],
-      pose: 'mechanic', speech: 'Next time, what should I save beside each door?', next: 'Replay the comparisons',
+      pose: 'mechanic', speech: 'When I wrote the program, all I had was “Reach the gold wall.” By the time I saw the first question, I had already walked past every painting.', next: 'Replay the comparisons',
       visual: () => `<div class="ep-route"><div class="ep-route-label">Opening instruction</div><strong>Reach the gold wall</strong>
         <div class="ep-ledger"><small>Door order</small><div>${[1,2,3,'…',8].map((n,i)=>`<b style="--i:${i}">${n}</b>`).join('')}</div></div>
         <div class="ep-late-query">${query()}<b>Which door and side?</b></div></div>`
@@ -48,7 +45,7 @@
       <div class="ep-stage" id="${id}-stage">
         <div class="ep-picture"></div>
         <div class="ep-narration">
-          <h3></h3><p class="ep-caption"></p>
+          <h3></h3>
           <div class="ep-counts"></div>
           <div class="ep-guide"><img alt="" width="112" height="112"><p></p></div>
         </div>
@@ -58,7 +55,6 @@
       </div><p class="ep-sr" role="status"></p>`;
     const picture = root.querySelector('.ep-picture');
     const title = root.querySelector('h3');
-    const caption = root.querySelector('.ep-caption');
     const next = root.querySelector('.ep-next');
     const toggle = root.querySelector('.ep-play');
     const guide = root.querySelector('.ep-guide');
@@ -105,7 +101,6 @@
       root.dataset.beat = String(index + 1);
       picture.innerHTML = step.visual();
       title.textContent = step.title;
-      caption.textContent = step.caption;
       const counts = root.querySelector('.ep-counts');
       counts.hidden = !step.numbers;
       if (step.numbers) counts.innerHTML = step.numbers.map(([value, all, label]) =>
@@ -115,7 +110,7 @@
       if (visible && !motion.matches) {
         root.querySelector('.ep-narration').animate([{opacity: .45, transform: 'translateY(5px)'},{opacity:1,transform:'none'}],{duration:250});
       }
-      if (manual) status.textContent = step.title + ' ' + step.caption;
+      if (manual) status.textContent = step.title + ' ' + step.speech;
       sync();
     }
     buttons.forEach((button,i) => button.addEventListener('click',() => select(i,true)));

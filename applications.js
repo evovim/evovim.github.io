@@ -5,13 +5,13 @@
   const collections = {
     apollo: {
       title: 'Which lunar photograph contains this detail?',
-      context: 'Three NASA photographs from the Apollo 11 moonwalk.',
+      context: 'In DMV-Hard a crop leads back to a product page. Here, finding the source photograph gives you its NASA archive ID.',
       hints: ['The folds of a flag against black sky.', 'A row of parallel ridges in the dust.', 'A reflection in a gold visor.'],
       first: 1,
     },
     monet: {
       title: 'Which canvas contains these brushstrokes?',
-      context: 'Claude Monet’s wheat stacks, Art Institute of Chicago. Images via Wikimedia Commons.',
+      context: 'Monet painted the same stacks in different light. All three canvases are at the Art Institute of Chicago. Images via Wikimedia Commons.',
       hints: ['The small stack where sunlight meets the field.', 'The outline of a reddish stack against the sky.', 'A ridge of blue-violet paint against a distant hillside.'],
       first: 0,
     },

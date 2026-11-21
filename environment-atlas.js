@@ -47,69 +47,46 @@
   const gallery = document.getElementById('gallery-memory');
   let key;
 
-  const reel = document.getElementById('environment-reel');
-  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  let inView = false;
-  let autoplayEnabled = !reducedMotion.matches;
-  let pauseRequested = false;
-
-  function pauseReel() {
-    if (!reel.paused) {
-      pauseRequested = true;
-      reel.pause();
-    }
-  }
-
-  function anotherVideoIsPlaying() {
-    return Array.from(document.querySelectorAll('video')).some(video => video !== reel && !video.paused && !video.ended);
-  }
-
-  function updateReel() {
-    if (!inView || document.hidden || dialog.open || anotherVideoIsPlaying()) {
-      pauseReel();
-    } else if (autoplayEnabled && reel.paused) {
-      reel.play().catch(error => {
-        if (error.name === 'NotAllowedError') autoplayEnabled = false;
-      });
-    }
-  }
-
-  reel.addEventListener('pause', () => {
-    if (!pauseRequested && inView && !document.hidden && !dialog.open && !anotherVideoIsPlaying()) autoplayEnabled = false;
-    pauseRequested = false;
-  });
-  reel.addEventListener('play', () => {
-    autoplayEnabled = true;
-    if (anotherVideoIsPlaying()) pauseReel();
-  });
-  for (const type of ['play', 'pause', 'ended']) {
-    document.addEventListener(type, event => {
-      if (event.target instanceof HTMLVideoElement && event.target !== reel) updateReel();
-    }, true);
-  }
-  reducedMotion.addEventListener('change', () => {
-    autoplayEnabled = !reducedMotion.matches;
-    if (autoplayEnabled) updateReel();
-    else pauseReel();
-  });
-  new IntersectionObserver(([entry]) => {
-    inView = entry.intersectionRatio >= 0.15;
-    updateReel();
-  }, {threshold: [0, 0.15]}).observe(reel);
-  document.addEventListener('visibilitychange', updateReel);
-
-  // Chapter boundaries in the 43-second six-environment film.
-  const chapterStarts = [0, 8, 15, 23, 29, 35];
   const environmentLinks = [...document.querySelectorAll('.atlas-item')];
-  let previousLink;
-  reel.addEventListener('timeupdate', () => {
-    const chapter = chapterStarts.filter(start => start <= reel.currentTime).length - 1;
-    const link = environmentLinks[chapter];
-    if (link === previousLink) return;
-    previousLink?.removeAttribute('data-playing');
-    link.setAttribute('data-playing', '');
-    previousLink = link;
+  const previews = [...document.querySelectorAll('.atlas-preview')];
+  const toggle = document.querySelector('.atlas-preview-toggle');
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const visible = new Set();
+  let previewsEnabled = !reducedMotion.matches;
+
+  function updatePreview(video) {
+    if (!visible.has(video) || !previewsEnabled || document.hidden) {
+      video.pause();
+      return;
+    }
+    if (!video.hasAttribute('src')) video.src = video.dataset.src;
+    video.play().catch(() => {}); // The poster remains available if autoplay is restricted.
+  }
+
+  function updatePreviews() {
+    toggle.textContent = previewsEnabled ? 'Pause previews' : 'Play previews';
+    previews.forEach(updatePreview);
+  }
+
+  const previewObserver = new IntersectionObserver(entries => {
+    for (const {target, isIntersecting} of entries) {
+      if (isIntersecting) visible.add(target);
+      else visible.delete(target);
+      updatePreview(target);
+    }
   });
+  previews.forEach(video => previewObserver.observe(video));
+  document.addEventListener('visibilitychange', updatePreviews);
+  reducedMotion.addEventListener('change', () => {
+    previewsEnabled = !reducedMotion.matches;
+    updatePreviews();
+  });
+  toggle.addEventListener('click', () => {
+    previewsEnabled = !previewsEnabled;
+    updatePreviews();
+  });
+  toggle.hidden = false;
+  updatePreviews();
 
   function selectView(index) {
     const game = games[key];
@@ -154,14 +131,13 @@
       exercise.hidden = !document.querySelector('[data-case-key="' + key + '"]');
       selectView(0);
       dialog.showModal();
-      updateReel();
       dialog.scrollTop = 0;
       player.play().catch(() => {});
     });
   }
 
   dialog.querySelector('.env-close').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('close', () => { player.pause(); updateReel(); });
+  dialog.addEventListener('close', () => player.pause());
   dialog.addEventListener('click', event => {
     if (event.target !== dialog) return;
     const r = dialog.getBoundingClientRect();

@@ -8,46 +8,46 @@
   const blue = '#184878', green = '#256d69', orange = '#a3473e', plum = '#76549d';
   const story = [
     {id:'intro', name:'Overview', color:blue,
-      title:'A walk raises a question.', text:'In MC Gallery, a painting reappears at the exit. Follow the agent’s answer, then see how the program learned to find the painting in its saved views.',
+      title:'Where did the agent see this painting?', text:'MC Gallery asks for a door number and a side. Follow one answer through the program, then trace the edits that made it possible.',
       next:'Follow task execution', caseStep:0},
     {id:'execution', name:'Task execution', color:blue, parts:['execution','environment','record','act'], pose:'photographer',
-      title:'Walk through door seven.', text:'The goal during the walk is to reach the gold wall. Each move reveals a view the agent can record before choosing what to do next.',
+      title:'Record the outcome, then choose an action.', text:'After each move, Record can store the new observation. Act consults the same episode memory before choosing the next move.',
       next:'Inspect frame memory', caseStep:0},
     {id:'record', name:'Frame memory', color:green, parts:['record','memory','frames'],
-      title:'Save the view before moving on.', text:'A call to save_view files the original doorway image under door 7. It remains available when the first question appears six steps later.',
+      title:'Save the doorway with its number.', text:'At step 12, save_view filed the pixels under door 7. That association survived after the agent walked on.',
       next:'Compare the query image', caseStep:3},
     {id:'pixels', name:'Pixel computation', color:green, parts:['pixels'],
-      title:'Where did this painting hang?', text:'The matcher searches the saved views. The patch with the highest similarity falls to the left of door 7.',
+      title:'Search the pixels for the queried painting.', text:'The program compares the query against its saved views at different rotations and scales. The closest patch is left of door 7.',
       next:'See the next prompt', caseStep:3},
     {id:'recall', name:'Visual recall and Act', color:green, parts:['recall','prompt','act'],
-      title:'Look at the retrieved paintings.', text:'The tool sends the query and its strongest matches back as pixels. The model reads the result and submits its answer.',
+      title:'Put the best matches in the next prompt.', text:'The model sees the query next to the retrieved regions and can check the match before submitting a door and side.',
       next:'Open development episodes', caseStep:5},
     {id:'development', name:'Development episodes', color:orange, parts:['development'],
-      title:'Look back at the missed painting.', text:'In a development episode, the program with basic image tools answered “not seen” for every painting. The recorded frames let the model revisit the doorway and the later question.',
+      title:'Trace a wrong answer back to the walk.', text:'On a development walk, the starting program called every painting unseen. The record includes each frame, tool result and memory snapshot, so the model can find where it lost the painting’s location.',
       next:'Read enhanced feedback', caseStep:1},
     {id:'feedback', name:'Enhanced feedback', color:orange, parts:['development','feedback'],
-      title:'Compare a prediction with the replay.', text:'Before trying whole-doorway storage, the model predicted how much it would help. The next report compares that forecast with measurements from the two development episodes.',
+      title:'Did the edit work for the reason predicted?', text:'Before a replay the model predicts changes in score and tool use. The measured changes on two development episodes guide its next diagnosis.',
       next:'Inspect revision experience', caseStep:1},
     {id:'experience', name:'Revision experience', color:plum, parts:['revision','experience'],
-      title:'A failed experiment guides the next edit.', text:'In DMV-Hard, Claude Haiku 5.5 recorded two unsuccessful matcher edits in its playbook. A later revision showed the query and candidate patches side by side at the same scale.',
+      title:'Keep a failed experiment in the playbook.', text:'The model rewrites its playbook, notes and analysis scripts for later revisions. In DMV-Hard, two failed matcher edits led it to inspect the shortlist and align patches for comparison.',
       next:'Follow the revision', caseStep:4},
     {id:'revision', name:'Revision', color:orange, parts:['evolution','revision','development','feedback','experience'], pose:'detective',
-      title:'Find what the notes left out.', text:'Back in MC Gallery, the model traced a wrong answer to its notebook. It had described the wall but never linked the painting to its door and side.',
+      title:'Find the missing link in the notes.', text:'In MC Gallery the model could see the painting in a recorded frame, but its notebook described only a green wall. It needed a lookup from painting to door and side.',
       next:'Inspect the candidate', caseStep:2},
     {id:'candidate', name:'Candidate program', color:green, parts:['candidate'], pose:'mechanic',
-      title:'Give each saved crop an address.', text:'The revised program adds a tool to save painting regions under a door and side, so a later visual match can return a location.',
+      title:'Change what the program records.', text:'The candidate saves a crop with its door and side. A new prompt asks the model to use a visual match when it answers.',
       next:'Run code checks', caseStep:2},
     {id:'checks', name:'Code checks', color:orange, parts:['checks','candidate','memory'],
-      title:'Try the revised code on a replay.', text:'Offline checks exercised the crop tools and verified that saved state could be restored. The candidate then ran on the same two development episodes as its parent.',
+      title:'Check the tools before scoring the edit.', text:'A stub model calls every registered tool on a recorded episode and checks that memory can be restored. A passing candidate runs on the same two development seeds as its parent.',
       next:'Apply the gate', caseStep:2},
     {id:'gate', name:'Gate', color:orange, parts:['gate','lineage'],
-      title:'Which edit goes forward?', text:'The gate compares development scores, then efficiency if scores tie. Inspect two decisions from this gallery lineage.',
+      title:'Which program becomes the next parent?', text:'A higher mean score wins. On a tie the candidate must succeed on both seeds and reduce steps or tokens without increasing the other.',
       next:'Follow the program lineage', caseStep:4},
     {id:'lineage', name:'Program lineage', color:orange, parts:['lineage','revision','experience'],
-      title:'A wider view finds the missing door.', text:'The crop program still missed some paintings. Its successor kept whole doorway views and searched for the painting inside them.',
+      title:'The next edit saves the entire doorway.', text:'The crop tool sometimes missed a painting on the walk. Saving whole views let the program search for any painting after the question arrived.',
       next:'Evaluate on new episodes', caseStep:3},
     {id:'heldout', name:'Held-out evaluation', color:blue, pose:'presenter',
-      title:'Take the tool into ten new galleries.', text:'Claude Haiku 5.5 used the selected MC Gallery program on ten held-out episodes. Each started with empty memory and ended with eight questions.',
+      title:'Run the selected program on new episodes.', text:'The program and model weights stay fixed. Each of the ten held-out walks starts with empty memory.',
       next:'Back to the overview', caseStep:5}
   ];
   const indexOf = id => story.findIndex(step => step.id === id);
@@ -57,8 +57,8 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const originalFigure = document.getElementById('framework-open');
 
-  root.innerHTML = '<div class="fw-toolbar"><label class="fw-picker"><span>Explore the framework</span><select aria-label="Choose a framework component"></select></label>' +
-    '<div class="fw-nav"><button type="button" class="fw-back" aria-label="Previous step">Back</button><button type="button" class="fw-auto" aria-pressed="false"><span aria-hidden="true">▷</span><span class="fw-auto-label">Auto-play</span></button><button type="button" class="fw-next"></button></div></div>' +
+  root.innerHTML = '<div class="fw-toolbar"><label class="fw-picker"><span>Step</span><select aria-label="Choose a framework component"></select></label>' +
+    '<div class="fw-nav"><button type="button" class="fw-back" aria-label="Previous step">Back</button><button type="button" class="fw-auto" aria-pressed="false"><span aria-hidden="true">▷</span><span class="fw-auto-label">Auto-play</span></button><button type="button" class="fw-next" aria-controls="fw-title"></button></div></div>' +
     '<div class="fw-spread"><div class="fw-map"></div><section class="fw-inspect" aria-labelledby="fw-title">' +
     '<div class="fw-heading"><h3 id="fw-title"></h3><picture class="fw-guide" hidden><source><img alt="" width="70" height="72"></picture></div><p class="fw-explain"></p>' +
     '<div class="fw-verdicts" role="group" aria-label="Gallery gate decisions" hidden><button type="button" data-verdict="accept">Accepted edit</button><button type="button" data-verdict="reject">Rejected edit</button></div>' +
@@ -175,7 +175,7 @@
   function followFigureLink() {
     const hotspot = document.getElementById(location.hash.slice(1));
     if (!hotspot?.matches('.fm-spot[data-stage]')) return;
-    jump(hotspot.dataset.stage);
+    hotspot.click();
     root.scrollIntoView({block:'start', behavior:'instant'});
   }
   window.addEventListener('hashchange',followFigureLink);

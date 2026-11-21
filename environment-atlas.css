@@ -35,9 +35,9 @@
 .lineage-intro p { max-width: 43ch; color: var(--body); font: 400 clamp(14px,1.1vw,17px)/1.5 var(--sans); }
 main :is(#gallery-lineage,#framework-loops,#evolved-tools,#evolution-story) { scroll-margin-top: calc(var(--nav-height,68px) + 14px); }
 .section-id { color: var(--teal); }
-.atlas-showcase { display:grid; grid-template-columns:minmax(0,1.08fr) minmax(0,1fr); align-items:center; gap:clamp(22px,3.4vw,52px); }
-#environment-reel { display:block; width:100%; height:auto; aspect-ratio:4/3; border-radius:4px; background:#f5f5ef; }
-.atlas-groups { display:grid; gap:clamp(18px,2vw,30px); }
+.atlas-groups { display:grid; gap:clamp(22px,3vw,40px); }
+.atlas-group-heading { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+.atlas-preview-toggle { color:var(--deep); padding:5px 0; font:550 14px/1.4 var(--sans); text-decoration:underline; text-underline-offset:3px; }
 .atlas-group { --group-ink: var(--clay); border-top: 2px solid var(--group-ink); padding-top: 12px; }
 .atlas-group.known { --group-ink: var(--teal); }
 .atlas-group h3 { margin:0 0 14px; font-size:clamp(22px,2.2vw,32px); line-height:1.13; letter-spacing:-.035em; }
@@ -47,16 +47,13 @@ main :is(#gallery-lineage,#framework-loops,#evolved-tools,#evolution-story) { sc
   position:relative; display:block; overflow:hidden; aspect-ratio: 1.48;
   background:#e7e9e4;
 }
-.atlas-image img { width:100%; height:100%; object-fit:cover; transition:transform .45s cubic-bezier(.2,.72,.2,1); }
-[data-env="dmv-hard"] img { object-position:50% 54%; }
-[data-env="card-matching"] img { object-position: 76% 4%; }
-.atlas-play { position:absolute; inset:auto 5px 5px auto; display:grid; place-items:center; width:24px; height:24px; border:1px solid #ffffffbd; border-radius:50%; color:#fff; background:#192a32b8; font:normal 9px/1 var(--sans); }
+.atlas-preview { display:block; width:100%; height:100%; object-fit:cover; pointer-events:none; transition:transform .45s cubic-bezier(.2,.72,.2,1); }
+
+.atlas-play { position:absolute; inset:auto 5px 5px auto; display:grid; place-items:center; width:24px; height:24px; border:1px solid #ffffffbd; border-radius:50%; color:#fff; background:#192a32b8; font:normal 15px/1 var(--sans); }
 .atlas-item strong { display:block; margin-top:10px; font:630 clamp(13px,1.08vw,17px)/1.22 var(--sans); }
 .atlas-task { display:block; margin-top:4px; max-width:22ch; color:var(--soft); font-size:14px; line-height:1.38; }
-.atlas-item[data-playing] .atlas-image { outline:2px solid var(--group-ink); outline-offset:-2px; }
-.atlas-item[data-playing] strong { color:var(--group-ink); }
 .atlas-item:is(:hover,:focus-visible) strong { text-decoration:underline; text-underline-offset:4px; color:var(--group-ink); }
-.atlas-item:is(:hover,:focus-visible) img { transform:scale(1.055); }
+.atlas-item:is(:hover,:focus-visible) .atlas-preview { transform:scale(1.055); }
 .secondary-evidence { margin-top:clamp(22px,2.3vw,32px); border-block:1px solid var(--line); }
 .secondary-evidence > summary { width:fit-content; padding:14px 0; color:var(--deep); font:600 14px/1.5 var(--sans); cursor:pointer; }
 .secondary-evidence #cases { border:0; }
@@ -82,11 +79,6 @@ main :is(#gallery-lineage,#framework-loops,#evolved-tools,#evolution-story) { sc
 #environment-dialog #gallery-memory { margin-top:12px; padding:0; color:var(--ink); border-color:var(--line); }
 #environment-dialog #gallery-memory :is(summary,figcaption,figcaption strong) { color:var(--deep); }
 #environment-dialog #gallery-memory summary:focus-visible { outline-color:var(--deep); }
-@media (max-width:880px) {
-  .atlas-showcase { grid-template-columns:1fr; }
-  #environment-reel { width:min(100%,620px); justify-self:center; }
-  .atlas-groups { grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
-}
 @media (max-width:720px) {
   .lineage-intro { grid-template-columns: 1fr; gap: 10px; }
   .chapter-intro { grid-template-columns:1fr; gap:10px; margin-bottom:20px; }

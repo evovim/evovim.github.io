@@ -1,59 +1,105 @@
 (() => {
-  const figure = document.getElementById('framework-loops');
-  if (!figure) return;
-  const select = figure.querySelector('#framework-detail');
-  const region = figure.querySelector('.paper-figure-region');
-  const svg = region.querySelector('svg');
-  const marker = figure.querySelector('.paper-figure-marker');
-  const title = svg.querySelector('title');
+  'use strict';
+  // Hotspots follow the labelled boxes in the original 495 × 259 paper artwork.
+  const width = 495, height = 259;
+  const regions = [
+    ['Memory evolution', 'revision', 16, 12, 63, 12],
+    ['Task execution', 'execution', 121, 16, 46, 12],
+    ['Environment', 'execution', 122, 108, 41, 32],
+    ['Record', 'record', 168, 24, 25, 12],
+    ['Memory program', 'record', 198, 39, 158, 12],
+    ['Frame memory', 'record', 200, 100, 155, 37],
+    ['Pixel computation', 'pixels', 200, 51, 155, 47],
+    ['Visual recall', 'recall', 200, 140, 155, 37],
+    ['Prompt at question steps', 'recall', 200, 179, 155, 28],
+    ['Act', 'recall', 168, 213, 25, 12],
+    ['Development episodes', 'development', 40, 143, 79, 29],
+    ['Enhanced feedback', 'feedback', 40, 84, 79, 46],
+    ['Revision experience', 'experience', 40, 42, 79, 30],
+    ['Revision', 'revision', 4, 94, 32, 75],
+    ['Candidate program', 'candidate', 377, 89, 115, 94],
+    ['Code checks', 'checks', 415, 22, 40, 11],
+    ['Gate', 'gate', 422, 229, 27, 12],
+    ['Program lineage', 'lineage', 272, 228, 122, 15]
+  ];
+  // For a region with more than one button, start on the part that explains the example.
+  const primary = {execution:'Environment', record:'Frame memory', recall:'Visual recall', revision:'Revision'};
 
-  // Coordinates in the original publication's 495 × 259 artboard.
-  const crops = new Map([
-    ['execution', ['Task execution', 120, 16, 76, 209]],
-    ['memory', ['Memory program', 196, 36, 163, 176]],
-    ['revision', ['Memory evolution', 2, 9, 119, 211]],
-    ['experience', ['Revision experience', 39, 39, 83, 36]],
-    ['feedback', ['Enhanced feedback', 39, 82, 83, 51]],
-    ['candidate', ['Candidate program', 376, 86, 117, 100]],
-    ['gate', ['Gate and program lineage', 271, 201, 188, 56]]
-  ]);
+  function mount(container, onSelect) {
+    container.innerHTML = '<div class="paper-map"><div class="paper-window"><div class="paper-canvas">' +
+      '<img width="990" height="518" src="media/method/framework-paper.svg" alt="EvoViM framework, from recording an observation to revising and selecting a memory program.">' +
+      '<div class="paper-hotspots" role="group" aria-label="Framework components"></div></div></div>' +
+      '<div class="paper-map-actions"><span>Select a part of the figure to see it in use.</span>' +
+      '<button type="button" class="paper-focus" hidden></button></div></div>';
+    const map = container.firstElementChild;
+    const canvas = map.querySelector('.paper-canvas');
+    const spots = map.querySelector('.paper-hotspots');
+    const focusButton = map.querySelector('.paper-focus');
+    const narrow = matchMedia('(max-width: 700px)');
+    const buttons = [];
+    let current = null, zoomed = false, selectedStage = '';
+    let clickedRegion = null;
 
-  for (const [id, [name]] of crops) select.add(new Option(name, id));
-  function show(id) {
-    const crop = crops.get(id);
-    figure.dataset.detail = String(Boolean(crop));
-    region.hidden = marker.hidden = !crop;
-    if (!crop) return;
-    const [name, x, y, width, height] = crop;
-    title.textContent = name;
-    svg.setAttribute('viewBox', [x, y, width, height].join(' '));
-    // Match the native artwork's aspect ratio and cap the reading size.
-    svg.style.aspectRatio = width + '/' + height;
-    svg.style.width = Math.min(width * 3.6, 630) + 'px';
-    Object.assign(marker.style, {
-      left: x / 495 * 100 + '%', top: y / 259 * 100 + '%',
-      width: width / 495 * 100 + '%', height: height / 259 * 100 + '%'
-    });
+    for (const region of regions) {
+      const [name, stage, x, y, w, h] = region;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'fm-spot';
+      button.id = 'method-' + name.toLowerCase().replaceAll(' ', '-');
+      button.setAttribute('aria-label', name);
+      button.setAttribute('aria-controls', 'fw-title');
+      button.title = name;
+      button.dataset.stage = stage;
+      Object.assign(button.style, {
+        left: (x / width * 100) + '%', top: (y / height * 100) + '%',
+        width: (w / width * 100) + '%', height: (h / height * 100) + '%'
+      });
+      button.addEventListener('click', () => {
+        clickedRegion = region;
+        onSelect(stage);
+        // Some paper components correspond to different parts of the same worked step.
+        if (clickedRegion) { current = clickedRegion; clickedRegion = null; draw(); }
+      });
+      buttons.push(button);
+      spots.append(button);
+    }
+
+    function draw() {
+      let scale = 1, dx = 0, dy = 0;
+      if (zoomed && current) {
+        const [, , x, y, w, h] = current;
+        scale = Math.min(4, width / (w + 28), height / (h + 22));
+        dx = Math.max(1 - scale, Math.min(0, .5 - scale * (x + w / 2) / width));
+        dy = Math.max(1 - scale, Math.min(0, .5 - scale * (y + h / 2) / height));
+      }
+      map.style.setProperty('--paper-outline', (2 / scale) + 'px');
+      map.querySelector('.paper-map-actions span').hidden = !!current;
+      canvas.style.transform = 'translate(' + (dx * 100) + '%,' + (dy * 100) + '%) scale(' + scale + ')';
+      focusButton.hidden = !current;
+      focusButton.textContent = zoomed ? 'Show whole figure' : 'Enlarge this part';
+      focusButton.setAttribute('aria-pressed', String(zoomed));
+      for (const [index, button] of buttons.entries()) {
+        const region = regions[index];
+        const centerX = dx + (region[2] + region[4] / 2) / width * scale;
+        const centerY = dy + (region[3] + region[5] / 2) / height * scale;
+        button.tabIndex = centerX >= 0 && centerX <= 1 && centerY >= 0 && centerY <= 1 ? 0 : -1;
+        button.setAttribute('aria-pressed', String(current === region));
+      }
+    }
+    focusButton.addEventListener('click', () => { zoomed = !zoomed; draw(); });
+    narrow.addEventListener('change', () => { zoomed = narrow.matches && !!current; draw(); });
+
+    return {update(step) {
+      const stageChanged = step.id !== selectedStage;
+      if (stageChanged) {
+        selectedStage = step.id;
+        current = clickedRegion || regions.find(([name]) => name === primary[step.id])
+          || regions.find(([, stage]) => stage === step.id) || null;
+        zoomed = !!current && narrow.matches;
+      }
+      clickedRegion = null;
+      draw();
+    }};
   }
-  select.addEventListener('change', () => show(select.value));
-  select.closest('label').hidden = false;
-  show(select.value);
-
-  // Bookmarks from the earlier walkthrough land on the same part of the paper figure.
-  const bookmarkedViews = {
-    'task-execution': 'execution', environment: 'execution', record: 'execution', act: 'execution',
-    'memory-program': 'memory', 'frame-memory': 'memory', 'pixel-computation': 'memory',
-    'visual-recall': 'memory', 'prompt-at-question-steps': 'memory',
-    'memory-evolution': 'revision', revision: 'revision', 'development-episodes': 'revision',
-    'enhanced-feedback': 'feedback', 'revision-experience': 'experience',
-    'candidate-program': 'candidate', 'code-checks': 'overview', gate: 'gate', 'program-lineage': 'gate'
-  };
-  function followBookmark() {
-    if (!location.hash.startsWith('#method-')) return;
-    select.value = bookmarkedViews[location.hash.slice(8)] || 'overview';
-    show(select.value);
-    figure.scrollIntoView({block: 'start'});
-  }
-  window.addEventListener('hashchange', followBookmark);
-  followBookmark();
+  window.EvoViMFrameworkMap = {mount};
 })();

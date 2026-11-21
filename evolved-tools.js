@@ -29,11 +29,11 @@
       title: 'Which product carried this pattern?', action: 'Search saved pages', finish: 'Identify the product',
       stages: [
         step('A corner patch', plate(tile(img('dmv-query', 'Queried teal product swatch with colored dots'), 'Question image') + tile(img('dmv-catalog', 'Twenty saved grayscale product thumbnails'), '20 saved pages'), 'et-query-catalog'),
-          'One grayscale thumbnail per page'),
+          'The catalog keeps a grayscale thumbnail and product ID for every page.'),
         step('Match the patch', plate(tile(img('dmv-win18', 'Runner-up patch on page 18'), 'Page 18 · 0.402') + tile(img('dmv-win1', 'Best matching patch on page 1'), 'Page 1 · 0.955', true), 'et-pair'),
-          'ALIGN_PAGES shows patches ranked by normalized cross-correlation.'),
+          'The matcher slides the query across each thumbnail. A higher correlation means a closer match.'),
         step('Return the product ID', withScore(img('dmv-p1', 'Original page for the winning product'), '9cbae018', 'Page 1 · session 1'),
-          'The matching thumbnail carries the product ID.')
+          '')
       ]
     },
     {
@@ -41,7 +41,7 @@
       title: 'Which side of which door?', action: 'Search doorway views', finish: 'Read the door and side',
       stages: [
         step('A painting returns', plate(tile(img('gallery-question', 'The transformed painting in the held-out gallery question'), 'Question image'), 'et-single'),
-          'Same painting, new viewpoint'),
+          'The query shows the painting from a different angle.'),
         step('Search 14 saved views', plate(img('gallery-peak', 'Recomputed similarity across view 0011 with a red peak left of the doorway') + '<span class="et-image-note">Peak similarity 0.791</span>', 'et-landscape'),
           'The heatmap was recomputed with the evolved matcher across rotations and scales.'),
         step('Door 7, left', plate('<div class="et-shot"><img src="media/gallery-memory/view_0011.webp" alt="Saved view of doorway 7, with the matching painting marked on its left"><i class="et-box et-door-box" aria-hidden="true"></i></div>', 'et-landscape'),
@@ -65,7 +65,7 @@
       title: 'Where should the T land?', action: 'Project the landings', finish: 'Play the drop',
       stages: [
         step('Read the live well', withScore(img('tetris-well', 'Actual Tetris well with the T piece at step 30'), '298', 'Score before the move'),
-          'Occupied cells and falling piece, read from pixels'),
+          'The program reads the occupied cells and the falling piece from the screenshot.'),
         step('Simulate each slide', withScore('<div class="et-drop-simulation">' + img('tetris-plan', 'Board reconstructed by the parser with the planned T landing outlined') + '<i class="et-tetromino" aria-hidden="true"></i></div>', '13 rows', 'Projected drop'),
           'Two cells left or four right give the same drop.'),
         step('Left, left, hard drop', withScore(img('tetris-drop', 'Actual board after the two left moves and the hard drop'), '320', 'Score after the drop'),
@@ -120,7 +120,7 @@
     trace.innerHTML = '<div class="et-trace-heading"><h3>' + active.name + '</h3><p>' + active.title + '</p></div>' +
       '<div class="et-stages">' + active.stages.map((s, i) =>
         '<section class="et-stage"><button type="button" class="et-stage-button" data-step="' + i + '" aria-pressed="false"><i>' + ['Input','Computation','Outcome'][i] + '</i><b>' + s.label + '</b></button>' + 
-        '<div class="et-stage-body"><h4>' + s.label + '</h4>' + s.picture + '<p>' + s.caption + '</p></div></section>'
+        '<div class="et-stage-body"><h4>' + s.label + '</h4>' + s.picture + (s.caption ? '<p>' + s.caption + '</p>' : '') + '</div></section>'
       ).join('') + '</div><div class="et-controls"><a class="et-code-link" href="' + media + 'source/' + active.id + '.txt" target="_blank" rel="noopener">View tool code</a><button class="et-next" type="button"></button></div><span class="et-sr-update" aria-live="polite"></span>';
     showStep(0, true);
   }

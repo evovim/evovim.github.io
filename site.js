@@ -10,9 +10,9 @@ const inlinePlayers = new IntersectionObserver(entries => {
 });
 document.addEventListener("play", event => {
   const active = event.target;
-  if (!(active instanceof HTMLVideoElement) || active.id === "environment-reel") return;
+  if (!(active instanceof HTMLVideoElement) || active.matches(".atlas-preview")) return;
   if (active.id !== "environment-film") inlinePlayers.observe(active);
-  document.querySelectorAll("video").forEach(video => {
+  document.querySelectorAll("video:not(.atlas-preview)").forEach(video => {
     if (video !== active && !video.paused) video.pause();
   });
 }, true);
