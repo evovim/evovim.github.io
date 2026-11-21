@@ -208,9 +208,20 @@
       return;
     }
     switch (button.dataset.action) {
-      case 'question': page = 1; break;
-      case 'check': if (choice === null) return; page = 2; break;
-      case 'evidence': choice = null; page = 2; break;
+      case 'question':
+        window.EvoViMMetrics?.demo(cases[current].id, 'start');
+        page = 1;
+        break;
+      case 'check':
+        if (choice === null) return;
+        window.EvoViMMetrics?.demo(cases[current].id, 'complete');
+        page = 2;
+        break;
+      case 'evidence':
+        window.EvoViMMetrics?.demo(cases[current].id, 'reveal');
+        choice = null;
+        page = 2;
+        break;
       case 'observe': choice = null; page = 0; break;
       case 'next': current = (current + 1) % cases.length; choice = null; page = 0; break;
       default: return;

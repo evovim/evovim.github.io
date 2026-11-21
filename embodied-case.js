@@ -35,6 +35,7 @@
   const status = figure.querySelector('.kitchen-status');
   const back = host.querySelector('.kitchen-back');
   const questions = [...host.querySelectorAll('details')];
+  const openedQuestions = new Set();
   let returnFocus = host.querySelector('.kitchen-play');
 
   function syncBack() {
@@ -43,7 +44,12 @@
 
   for (const question of questions) {
     question.addEventListener('toggle', () => {
-      if (question.open && figure.hidden) returnFocus = question.querySelector('summary');
+      if (question.open) {
+        if (figure.hidden) returnFocus = question.querySelector('summary');
+        window.EvoViMMetrics?.demo('kitchen', 'start');
+        openedQuestions.add(question);
+        if (openedQuestions.size === questions.length) window.EvoViMMetrics?.demo('kitchen', 'complete');
+      }
       syncBack();
     });
   }
@@ -64,6 +70,7 @@
   for (const button of host.querySelectorAll('[data-time]')) {
     button.addEventListener('click', () => {
       const time = Number(button.dataset.time);
+      window.EvoViMMetrics?.demo('kitchen', 'start');
       returnFocus = button.closest('details')?.querySelector('summary') || button;
       figure.hidden = false;
       syncBack();

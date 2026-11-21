@@ -238,11 +238,13 @@
     if (stage === 'browse') stage = 'choose';
     else if (stage === 'choose') {
       stage = 'answer';
+      window.EvoViMMetrics?.demo(collection, 'reveal');
       status.textContent = 'Source record ' + records[collection][sample].id + '.';
     } else {
       sample = (sample + 1) % records[collection].length;
       stage = 'choose';
     }
+    if (stage === 'choose') window.EvoViMMetrics?.demo(collection, 'start');
     drawStage();
     get('.archive-instruction').focus({preventScroll: true});
   });
@@ -259,6 +261,7 @@
       return;
     }
     stage = 'answer';
+    window.EvoViMMetrics?.demo(collection, 'complete');
     status.textContent = 'You found it. Source record ' + records[collection][sample].id + '.';
     drawStage();
     get('.archive-instruction').focus({preventScroll: true});

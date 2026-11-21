@@ -13,10 +13,12 @@
 <link rel="stylesheet" href="challenge-pilot.css?v=0cea514e"><link rel="stylesheet" href="evolution-story.css?v=96342654"><link rel="stylesheet" href="findings.css?v=8a33351e">
 <link rel="stylesheet" href="framework-loops.css?v=7745e5c3"><link rel="stylesheet" href="framework-map.css?v=6ea17b4a"><link rel="stylesheet" href="framework-evidence.css?v=73866688"><link rel="stylesheet" href="evolved-tools.css?v=ca642fd9">
 <link rel="stylesheet" href="reading-nav.css?v=c7ea47ce">
-<script defer src="results-data.js"></script><script defer src="site.js?v=1223652e"></script><script defer src="cases.js?v=ea271bae"></script>
-<script defer src="gallery-memory.js?v=36816cbc"></script><script defer src="applications.js?v=6c12bbb0"></script>
+<link rel="stylesheet" href="analytics.css">
+<script defer src="analytics.js" data-measurement-id="G-NFL9PGZGV3"></script>
+<script defer src="results-data.js"></script><script defer src="site.js?v=1223652e"></script><script defer src="cases.js?v=68737b19"></script>
+<script defer src="gallery-memory.js?v=36816cbc"></script><script defer src="applications.js?v=348222e5"></script>
 <script defer src="ambient.js?v=c14b31fe"></script><script defer src="overview-film.js"></script><script defer src="environment-atlas.js?v=3538c9f3"></script>
-<script defer src="embodied-case.js?v=3218387e"></script><script defer src="mascot-scenes.js?v=f07bb2d9"></script><script defer src="challenge-pilot.js?v=461d18e7"></script>
+<script defer src="embodied-case.js?v=06f88d1a"></script><script defer src="mascot-scenes.js?v=f07bb2d9"></script><script defer src="challenge-pilot.js?v=461d18e7"></script>
 <script defer src="framework-map.js?v=f614137e"></script><script defer src="framework-evidence.js?v=a8458531"></script><script defer src="framework-loops.js?v=3543f562"></script><script defer src="evolution-story.js?v=64f3fe7f"></script><script defer src="evolved-tools.js?v=002e30fa"></script>
 <script defer src="findings.js?v=d77ba3e4"></script><script defer src="scroll-story.js?v=b6c09ed0"></script>
 </head>
@@ -167,8 +169,8 @@
 <section id="install" class="install"><div class="wrap install-inner"><div><h2>Try <em>EvoViM.</em></h2><p>Watch the Card Matching program recall a card it flipped earlier. The demo runs offline with Python 3.10+ on macOS or Linux.</p>
 <div class="install-links">
   <a class="btn light" href="https://github.com/Lewis-Xinyu/EvoViM">Code on GitHub</a>
-  <a href="downloads/evovim-0.3.0-py3-none-any.whl" download>Download wheel ↓</a>
-  <a href="downloads/evovim-0.3.0.tar.gz" download>Source package ↓</a>
+  <a href="https://github.com/Lewis-Xinyu/EvoViM/releases/download/v0.3.0/evovim-0.3.0-py3-none-any.whl">Download wheel ↓</a>
+  <a href="https://github.com/Lewis-Xinyu/EvoViM/releases/download/v0.3.0/evovim-0.3.0.tar.gz">Source package ↓</a>
 </div></div>
 <div class="terminal"><div class="terminal-head"><span>Terminal</span><button id="copy-install" type="button">Copy commands</button></div><pre><code id="install-code">git clone https://github.com/Lewis-Xinyu/EvoViM.git
 cd EvoViM
@@ -177,7 +179,11 @@ python3 -m venv .venv
 python -m pip install .
 evovim demo --cards</code></pre></div></div></section>
 </main>
-<footer class="wrap footer"><a class="brand" href="#top" aria-label="EvoViM home"><span class="wordmark" aria-hidden="true"><i>E</i><i>v</i><i>o</i><i>V</i><i>i</i><i>M</i></span></a><div class="footer-links"><a href="#top">Back to top ↑</a></div></footer>
+<footer class="wrap footer"><a class="brand" href="#top" aria-label="EvoViM home"><span class="wordmark" aria-hidden="true"><i>E</i><i>v</i><i>o</i><i>V</i><i>i</i><i>M</i></span></a><div class="footer-links"><button type="button" id="analytics-settings" aria-controls="analytics-notice" hidden>Analytics settings</button><a href="#top">Back to top ↑</a></div></footer>
+<aside class="analytics-notice" id="analytics-notice" aria-label="Analytics preferences" hidden>
+  <p>Allow Google Analytics to measure visits, film viewing and demo use with session cookies?</p>
+  <button type="button" data-consent="allow">Allow</button><button type="button" data-consent="decline">Decline</button>
+</aside>
 <dialog id="environment-dialog" aria-labelledby="environment-name">
   <div class="env-modal-head"><h2 id="environment-name"></h2><button class="env-close" aria-label="Close environment" type="button">Close <span aria-hidden="true">×</span></button></div>
   <p id="environment-task"></p>
