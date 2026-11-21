@@ -62,17 +62,17 @@
     if (!loaded) {
       loaded = true;
       window.dataLayer = window.dataLayer || [];
-      tag('consent', 'default', denied);
+      tag('consent', 'default', {...denied, analytics_storage: 'granted'});
       // All events share the canonical page. The referrer category is sent separately.
       tag('set', {
         page_location: 'https://evovim.github.io/', page_referrer: '',
-        allow_ad_personalization_signals: false, allow_google_signals: false
+        allow_ad_personalization_signals: false, allow_google_signals: false,
+        send_page_view: false, cookie_expires: 86400, cookie_update: false,
+        cookie_flags: 'SameSite=Lax;Secure;Max-Age=86400'
       });
-      tag('consent', 'update', {...denied, analytics_storage: 'granted'});
       tag('js', new Date());
       const config = {
-        send_page_view: false, cookie_domain: 'evovim.github.io',
-        cookie_expires: 0, cookie_update: false
+        send_page_view: false, cookie_domain: 'evovim.github.io'
       };
       if (new URLSearchParams(location.search).get('analytics_debug') === '1') {
         config.debug_mode = true;
@@ -128,15 +128,19 @@
 
   // An exercise or milestone counts at most once during this page visit.
   const recorded = new Set();
+  function send(name) {
+    if (choice === 'allow' && loaded) tag('event', name);
+  }
   function record(name) {
     if (choice !== 'allow' || !loaded || recorded.has(name)) return;
     recorded.add(name);
-    tag('event', name);
+    send(name);
   }
 
   const demos = new Set(['apollo', 'monet', 'kitchen', 'dmv-hard', 'poster-maze', 'card-matching', 'tetris']);
   const actions = new Set(['start', 'complete', 'reveal']);
   window.EvoViMMetrics = {
+    copiedInstall() { send('install_command_copy'); },
     demo(id, action) {
       if (!demos.has(id) || !actions.has(action)) return;
       const prefix = 'demo_' + id.replaceAll('-', '_') + '_';
@@ -144,6 +148,13 @@
       record(prefix + action);
     }
   };
+
+  for (const link of document.querySelectorAll('a[data-site-action]')) {
+    const name = link.dataset.siteAction;
+    if (!['github_hero_click', 'github_install_click', 'download_wheel_click', 'download_sdist_click'].includes(name)) continue;
+    link.addEventListener('click', () => send(name));
+    link.addEventListener('auxclick', event => { if (event.button === 1) send(name); });
+  }
 
   if (choice === 'allow') start();
   const film = document.getElementById('environment-film');

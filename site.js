@@ -40,6 +40,7 @@ copyButton.addEventListener("click", async () => {
   try {
     if (!navigator.clipboard) throw new Error("clipboard unavailable");
     await navigator.clipboard.writeText(installCode.textContent);
+    window.EvoViMMetrics?.copiedInstall();
     copyButton.textContent = "Copied ✓";
   } catch {
     const range = document.createRange(); range.selectNodeContents(installCode);
