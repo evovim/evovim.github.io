@@ -12,6 +12,8 @@
 /* A chapter keeps its colour in the rail, the menu and its collapsed label. */
 .reading-links a[href="#top"],
 .reading-nav:has(a[href="#top"][aria-current="location"]) { --chapter-ink: #ad3759; }
+.reading-links a[href="#research-question"],
+.reading-nav:has(a[href="#research-question"][aria-current="location"]) { --chapter-ink: #a34237; }
 .reading-links a[href="#environments"],
 .reading-nav:has(a[href="#environments"][aria-current="location"]) { --chapter-ink: #a14b20; }
 .reading-links a[href="#pilots"],
@@ -19,9 +21,9 @@
 .reading-links a[href="#method"],
 .reading-nav:has(a[href="#method"][aria-current="location"]) { --chapter-ink: #3e743f; }
 .reading-links a[href="#tools"],
-.reading-nav:has(a[href="#tools"][aria-current="location"]) { --chapter-ink: #08706b; }
+.reading-nav:has(a[href="#tools"][aria-current="location"]) { --chapter-ink: #216396; }
 .reading-links a[href="#results"],
-.reading-nav:has(a[href="#results"][aria-current="location"]) { --chapter-ink: #216396; }
+.reading-nav:has(a[href="#results"][aria-current="location"]) { --chapter-ink: #08706b; }
 .reading-links a[href="#applications"],
 .reading-nav:has(a[href="#applications"][aria-current="location"]) { --chapter-ink: #554d9b; }
 .reading-links a[href="#install"],

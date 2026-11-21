@@ -78,7 +78,7 @@
     + '</div><article id="ev-panel"><div class="ev-figure"></div><div class="ev-caption" aria-live="polite" aria-atomic="true">'
     + '<h3></h3></div><div class="ev-guide"><picture><source><img alt="" width="124" height="120" decoding="async"></picture>'
     + '<p class="ev-quote"></p></div></article><div class="ev-controls"><button class="ev-back" type="button">Back</button>'
-    + '<a href="#tools" class="ev-tools-link" hidden>Explore the six evolved tools</a><button class="ev-next" type="button"></button></div>';
+    + '<a href="#results" class="ev-results-link" hidden>See results across all six tasks</a><button class="ev-next" type="button"></button></div>';
 
   const rail = root.querySelector('.ev-rail');
   const stageButtons = [...rail.querySelectorAll('button')];
@@ -90,7 +90,7 @@
   const quote = root.querySelector('.ev-quote');
   const previous = root.querySelector('.ev-back');
   const next = root.querySelector('.ev-next');
-  const toolsLink = root.querySelector('.ev-tools-link');
+  const resultsLink = root.querySelector('.ev-results-link');
   const motion = matchMedia('(prefers-reduced-motion: no-preference)');
   let current = 0;
   let inView = false;
@@ -112,7 +112,7 @@
     updatePose();
     previous.disabled = index === 0;
     next.textContent = step.next;
-    toolsLink.hidden = index !== steps.length - 1;
+    resultsLink.hidden = index !== steps.length - 1;
     stageButtons.forEach((button, i) => {
       button.setAttribute('aria-pressed', String(index === i));
       button.classList.toggle('ev-past', i < index);

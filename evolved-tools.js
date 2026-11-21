@@ -12,6 +12,27 @@
   const step = (label, picture, caption) => ({label, picture, caption});
   const families = ['Visual matching', 'Spatial recall', 'Sequential decision-making'];
 
+  // The paper's mechanisms figure counts additions relative to the starting
+  // programs. Its supplementary functions table counts programs, out of 18.
+  const mechanismGroups = [
+    { name: 'Image memory', count: 39, functions: [
+      ['Pixel matching', 14, 'Compare a query with stored pixels or features.'],
+      ['Visual store', 12, 'Save frames, crops or features under an ID or location.'],
+      ['Visual recall', 11, 'Show a saved frame or crop to the model.']
+    ] },
+    { name: 'Frame parsing', count: 42, functions: [
+      ['Frame parsing', 13, 'Read an observation into card cells, posters or board state.'],
+      ['Spatial index', 8, 'Track locations and how they connect.'],
+      ['Decision support', 12, 'Use the evidence to rank a move or propose an answer.']
+    ] },
+    { name: 'Text notes', count: 6, functions: [
+      ['Text ledger', 6, 'Keep, revise or pin records written by the model.']
+    ] },
+    { name: 'Workflow', count: 19, functions: [
+      ['Workflow control', 16, 'Manage request budgets, add reminders or change when the model is called.']
+    ] }
+  ];
+
   const tools = [
     {
       id: 'card', name: 'Card memory + pixel matcher', task: 'Card Matching', family: 0,
@@ -90,7 +111,27 @@
     '<button type="button" class="et-picker" data-tool="' + t.id + '" aria-pressed="false"><span>' + t.task + '</span></button>'
   ).join('') + '</div></div>').join('');
 
-  mount.innerHTML = '<div class="et-menu">' + familyNav + '</div><div class="et-trace"></div>';
+  const mechanismBars = mechanismGroups.map((group, index) =>
+    '<button type="button" class="et-mechanism" data-group="' + index + '" aria-controls="et-function-panel" aria-pressed="' + (index === 0) + '">' +
+      '<span>' + group.name + '</span><i aria-hidden="true"><i style="width:' + (group.count / 50 * 100) + '%"></i></i>' +
+      '<strong>' + group.count + '</strong></button>'
+  ).join('');
+  mount.innerHTML = '<figure class="et-taxonomy" aria-labelledby="et-taxonomy-title">' +
+    '<figcaption><h3 id="et-taxonomy-title">Mechanisms added during evolution</h3>' +
+    '<p>Across six tasks and three models, the 18 selected programs added 106 mechanisms. A program can add several mechanisms in the same group.</p></figcaption>' +
+    '<div class="et-taxonomy-grid"><div class="et-group-picker" role="group" aria-labelledby="et-group-label"><h4 id="et-group-label">Choose a mechanism group</h4>' +
+    mechanismBars + '</div><div class="et-function-panel" id="et-function-panel" aria-live="polite"></div></div></figure>' +
+    '<h3 class="et-examples-title">A tool from each task</h3><div class="et-menu">' + familyNav + '</div><div class="et-trace"></div>';
+
+  function selectGroup(index) {
+    const group = mechanismGroups[index];
+    mount.querySelectorAll('.et-mechanism').forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
+    const rows = group.functions.map(([name, count, description]) =>
+      '<div><dt>' + name + '</dt><dd><span>' + description + '</span><strong>' + count + '<span> / 18</span></strong></dd></div>'
+    ).join('');
+    mount.querySelector('.et-function-panel').innerHTML = '<h4>' + group.name + '</h4><p>Selected programs with each function</p><dl>' + rows + '</dl>';
+  }
+  selectGroup(0);
   const trace = mount.querySelector('.et-trace');
   const buttons = [...mount.querySelectorAll('.et-picker')];
   let active;
@@ -128,7 +169,8 @@
   mount.addEventListener('click', event => {
     const button = event.target.closest('button');
     if (!button || !mount.contains(button)) return;
-    if (button.dataset.tool) selectTool(button.dataset.tool);
+    if (button.dataset.group !== undefined) selectGroup(Number(button.dataset.group));
+    else if (button.dataset.tool) selectTool(button.dataset.tool);
     else if (button.dataset.step !== undefined) showStep(Number(button.dataset.step), true);
     else if (button.classList.contains('et-next')) showStep((stageIndex + 1) % 3, true);
   });

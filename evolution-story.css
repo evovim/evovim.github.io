@@ -114,13 +114,13 @@
 .ev-legend b { color: #90482e; margin-left: 4px; }
 .ev-controls { display: flex; align-items: center; gap: 17px; flex-wrap: wrap; }
 .ev-controls { border-top: 1px solid var(--ev-hairline); padding-top: 14px; }
-.ev-next, .ev-back, .ev-tools-link { font: 600 14px/1.35 var(--sans); min-height: 44px; }
+.ev-next, .ev-back, .ev-results-link { font: 600 14px/1.35 var(--sans); min-height: 44px; }
 .ev-next { background: var(--ev-green); color: #fff; border-radius: 4px; padding: 8px 19px; margin-left: auto; }
 .ev-next:hover { background: #104f47; }
 .ev-back { color: var(--ev-ink); }
 .ev-back:disabled { opacity: .45; cursor: default; }
-.ev-tools-link { display: inline-flex; align-items: center; color: var(--ev-green); }
-.ev-tools-link[hidden] { display: none; }
+.ev-results-link { display: inline-flex; align-items: center; color: var(--ev-green); }
+.ev-results-link[hidden] { display: none; }
 @media (prefers-reduced-motion: no-preference) {
   .ev-in-view .ev-door, .ev-in-view .ev-paper, .ev-in-view .ev-located { animation: ev-uncover .65s cubic-bezier(.2,.8,.2,1) backwards; }
   .ev-in-view .ev-print { animation: ev-show-query .78s .12s cubic-bezier(.2,.8,.2,1) backwards; }
@@ -158,6 +158,6 @@
   .ev-walks > div > span { gap: 2px; }
 }
 @media (max-width: 360px) {
-  .ev-controls .ev-tools-link { order: 3; min-height: 28px; width: 100%; }
+  .ev-controls .ev-results-link { order: 3; min-height: 28px; width: 100%; }
   .ev-hit { gap: 4px 6px; }
 }
