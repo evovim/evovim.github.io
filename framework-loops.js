@@ -83,6 +83,10 @@
     '<div class="fw-footer"><a class="fw-case" href="#gallery-lineage" data-gallery-step="0">Follow the gallery revision history</a></div><span class="fw-sr" role="status"></span>';
 
   const find = selector => root.querySelector(selector);
+  const head = document.createElement('div');
+  head.className = 'method-head';
+  head.append(document.querySelector('#method > .chapter-intro'), find('.fw-toolbar'));
+  root.prepend(head);
   find('.fw-footer').prepend(originalFigure);
   const picker = find('.fw-picker select');
   picker.add(new Option('Framework overview','intro'));

@@ -14,30 +14,21 @@
 @media screen and (prefers-reduced-motion: no-preference) {
   [data-scroll-scene] {
     --remaining: calc(1 - var(--arrival, 1));
-    --rise: 24px;
+    --rise: 10px;
   }
 
-  [data-scroll-scene="heading"] :is(h2, h3, p) {
-    transform: translateY(calc(var(--remaining) * var(--rise)));
-  }
-  [data-scroll-scene="heading"] :is(h2, h3) em {
-    background: linear-gradient(currentColor, currentColor) left bottom / calc(var(--arrival) * 100%) 2px no-repeat;
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-    text-decoration: none;
-  }
   [data-scroll-scene="environments"] .atlas-item {
-    transform: translateY(calc(var(--remaining) * var(--distance, 16px)));
+    transform: translateY(calc(var(--remaining) * var(--distance, 6px)));
   }
-  [data-scroll-scene="environments"] .atlas-item:nth-child(2) { --distance: 30px; }
-  [data-scroll-scene="environments"] .atlas-item:nth-child(3) { --distance: 44px; }
+  [data-scroll-scene="environments"] .atlas-item:nth-child(2) { --distance: 10px; }
+  [data-scroll-scene="environments"] .atlas-item:nth-child(3) { --distance: 14px; }
   [data-scroll-scene="evidence"] :is(.ep-picture, .ev-figure) {
     translate: 0 calc(var(--remaining) * var(--rise));
     scale: calc(1 - var(--remaining) * .024);
     transform-origin: center top;
   }
   [data-scroll-scene="evidence"] :is(.ep-narration, .ev-caption) {
-    translate: 0 calc(var(--remaining) * var(--rise) * 1.8);
+    translate: 0 calc(var(--remaining) * var(--rise));
   }
   [data-scroll-scene="install"] .terminal::after {
     content: "";
@@ -51,24 +42,21 @@
 }
 
 @media screen and (min-width: 800px) and (prefers-reduced-motion: no-preference) {
-  [data-scroll-scene] { --rise: 41px; }
+  [data-scroll-scene] { --rise: 14px; }
   [data-scroll-scene="opening"] .paper-heading h1 {
     transform: translateY(calc(var(--arrival) * -24px)) scale(calc(1 - var(--arrival) * .028));
     transform-origin: left bottom;
   }
-  [data-scroll-scene="heading"] :is(h2, h3) em {
-    background-image: linear-gradient(color-mix(in srgb, currentColor 38%, transparent), color-mix(in srgb, currentColor 38%, transparent));
-  }
-  [data-scroll-scene="environments"] .atlas-item { --distance: 36px; }
-  [data-scroll-scene="environments"] .atlas-item:nth-child(2) { --distance: 64px; }
-  [data-scroll-scene="environments"] .atlas-item:nth-child(3) { --distance: 92px; }
+  [data-scroll-scene="environments"] .atlas-item { --distance: 8px; }
+  [data-scroll-scene="environments"] .atlas-item:nth-child(2) { --distance: 12px; }
+  [data-scroll-scene="environments"] .atlas-item:nth-child(3) { --distance: 16px; }
   [data-scroll-scene="decision"] .cs-visual {
     clip-path: inset(0 calc(var(--remaining) * 7%) calc(var(--remaining) * 6%) 0);
-    transform: translateY(calc(var(--remaining) * 26px)) scale(calc(1 - var(--remaining) * .04));
+    transform: translateY(calc(var(--remaining) * 10px)) scale(calc(1 - var(--remaining) * .04));
     transform-origin: left top;
   }
   [data-scroll-scene="decision"] .cs-copy h3 {
-    transform: translateX(calc(var(--remaining) * 20px));
+    transform: translateX(calc(var(--remaining) * 8px));
   }
 
   /* Three archive prints open from a fan into their original order. */

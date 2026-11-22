@@ -4,7 +4,6 @@
   const header = document.querySelector('.top');
   const chapters = [
     ['.hero', 'opening'],
-    ['.chapter-intro, .lineage-intro, .question-copy', 'heading'],
     ['#environments .atlas-groups', 'environments'],
     ['#cases .cs-stage', 'decision'],
     ['#pilot-story .ep-stage, #ev-panel', 'evidence'],

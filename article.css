@@ -1,0 +1,270 @@
+/* Keep the cover on its original background. The chapters share one reading column. */
+@font-face {
+  font-family: "STIX Two Text Web";
+  src: url("media/fonts/stix-two-text-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+2000-206F, U+2190-2199;
+}
+.article-body {
+  --paper: #fdfcf9;
+  --ink: #202923;
+  --body: #434b46;
+  --line: #d8dcd6;
+  --serif: "STIX Two Text", "STIX Two Text Web", Georgia, serif;
+  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --chapter-space: clamp(26px, 2.9vw, 46px);
+  color: var(--ink);
+  font-family: var(--sans);
+}
+.article-body, .footer { position: relative; isolation: isolate; }
+.article-body::before, .footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #fdfcf9;
+  box-shadow: 0 0 0 100vmax #fdfcf9;
+  clip-path: inset(0 -100vmax);
+  pointer-events: none;
+}
+main .article-body .wrap { max-width: 1120px; }
+.article-body > section[id] { scroll-margin-top: calc(var(--nav-height, 0px) + 12px); }
+.article-body .story-chapter,
+#applications .app-wrap, #install .install-inner { padding-block: var(--chapter-space); }
+.article-body .chapter-intro { margin-bottom: 16px; }
+.article-body :is(.chapter-intro h2, #question-title, #applications-title, .install h2) {
+  max-width: none;
+  color: var(--ink);
+  font: 500 clamp(30px, 3.1vw, 46px)/1.1 var(--serif);
+  letter-spacing: -.034em;
+  text-wrap: pretty;
+}
+#main .article-body :is(h2, #gallery-lineage-title) em {
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  background: none;
+}
+.article-body :is(.chapter-intro, .lineage-intro, .rq-heading) p {
+  margin-top: 8px;
+  max-width: 78ch;
+  color: var(--body);
+  font: 400 16px/1.52 var(--sans);
+}
+.article-body :is(#gallery-lineage-title, #fw-title, .ev-caption h3,
+    #generation-heading, #revision-support-heading, #et-taxonomy-title,
+    #et-functions-title, .et-examples-title, .et-trace-heading h3,
+    .archive-title, .kitchen-intro h3) {
+  max-width: none;
+  color: var(--ink);
+  font: 500 clamp(23px, 2.1vw, 31px)/1.16 var(--serif);
+  letter-spacing: -.024em;
+}
+@media (max-width: 650px) {
+  .article-body :is(.chapter-intro, .lineage-intro, .rq-heading) p { font-size: 15px; }
+}
+
+/* Question, environments and pilot evidence */
+#research-question .rq-heading {
+  margin-bottom: 20px;
+}
+#research-question .rq-heading em {
+  display: inline;
+}
+#research-question .rq-heading p {
+  max-width: 78ch;
+  margin-top: 8px;
+  color: var(--body);
+  font: 400 16px/1.52 var(--sans);
+}
+.rq-example h3, .atlas-group h3 {
+  margin-bottom: 10px;
+  color: var(--ink);
+  font: 500 clamp(21px, 1.8vw, 27px)/1.18 var(--serif);
+  letter-spacing: -.024em;
+}
+.rq-example {
+  column-gap: clamp(16px, 2.4vw, 30px);
+}
+.rq-question {
+  padding: clamp(12px, 1.2vw, 18px);
+  background: #fff;
+  border-color: var(--line);
+}
+.rq-response p {
+  font-size: clamp(18px, 1.5vw, 22px);
+}
+.rq-lure {
+  font-size: 15px;
+}
+
+.atlas-groups {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 28rem), 1fr));
+  gap: 22px;
+}
+.atlas-group {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+.atlas-row { column-gap: clamp(8px, .85vw, 12px); }
+.atlas-item strong { margin-top: 7px; }
+.atlas-task { margin-top: 3px; }
+.secondary-evidence {
+  margin-top: 18px;
+  border-bottom: 0;
+}
+#case-exercises #cases .cs-stage {
+  column-gap: clamp(18px, 2.8vw, 34px);
+}
+#case-exercises #cases .cs-copy h3 {
+  font-size: clamp(22px, 1.9vw, 29px);
+  line-height: 1.17;
+}
+
+.ep-comparison caption {
+  margin-bottom: 8px;
+  font-size: clamp(16px, 1.28vw, 19px);
+}
+.ep-narration h3 {
+  margin-bottom: 6px;
+  color: var(--ink);
+  font: 500 clamp(22px, 1.9vw, 29px)/1.17 var(--serif);
+  letter-spacing: -.025em;
+}
+.ep-narration section > p {
+  max-width: 60ch;
+  color: var(--body);
+  font: 400 16px/1.5 var(--sans);
+  letter-spacing: normal;
+}
+#pilot-story .ep-stage {
+  column-gap: clamp(18px, 2.8vw, 34px);
+  padding-block: clamp(16px, 1.8vw, 24px);
+}
+.ep-counts {
+  column-gap: 16px;
+  margin-top: 14px;
+}
+.ep-counts strong { font-size: clamp(30px, 2.5vw, 38px); }
+.ep-counts span { font-size: 15px; }
+.ep-playbar { padding-block: 5px; }
+
+@media (max-width: 600px) {
+  #research-question .rq-heading p, .ep-narration section > p { font-size: 15px; }
+  .rq-example { row-gap: 14px; }
+  .atlas-groups { gap: 16px; }
+  .ep-counts span { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .atlas-item:is(:hover,:focus-visible) .atlas-preview {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* The opening controls and figure form a single group. During playback the toolbar stays sticky. */
+.method-head { display: contents; }
+#framework-loops[data-stage="intro"] .method-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px 24px;
+  margin-bottom: 14px;
+}
+#framework-loops[data-stage="intro"] .chapter-intro { flex: 1 1 540px; margin: 0; }
+#framework-loops[data-stage="intro"] .fw-toolbar { padding: 0; border: 0; }
+#framework-loops[data-stage="intro"] .fw-nav { gap: 8px; }
+#framework-loops[data-stage="intro"] .fw-nav button {
+  min-height: 40px;
+  padding: 9px 13px;
+  border: 1px solid #c4c9c2;
+  border-radius: 5px;
+  color: var(--ink);
+  font: 550 14px/1.3 var(--sans);
+}
+#framework-loops[data-stage="intro"] .fw-nav .fw-next {
+  color: white;
+  background: #22382f;
+  border-color: #22382f;
+}
+#framework-loops[data-stage="intro"] .fw-spread { max-width: none; padding: 0 0 9px; }
+#method .paper-window { border-color: var(--line); border-radius: 3px; }
+#method .fw-footer { border: 0; padding-top: 0; }
+#method .fw-footer a { font: 500 14px/1.45 var(--sans); }
+#method #gallery-lineage {
+  margin-top: clamp(28px, 4vw, 54px);
+  padding-top: clamp(20px, 2.6vw, 36px);
+}
+#method .lineage-intro { margin-bottom: 15px; }
+@media (max-width: 650px) {
+  #framework-loops[data-stage="intro"] .fw-nav button { min-height: 44px; }
+}
+
+/* Keep findings, controls, and their figure together on the reading column. */
+#results .chapter-intro { margin-bottom: 8px; }
+#results .fd-lead { max-width: 76ch; font: 400 16px/1.52 var(--sans); }
+#results #score-explorer { margin-top: 16px; }
+#results .fd-controls { padding-block: 6px; gap: 6px 22px; }
+#results .fd-main-chart { margin-top: 12px; }
+#results .fd-score-data { margin-top: 14px; }
+#results :is(#generation-results, .fd-revision) { margin-top: clamp(28px, 3vw, 44px); }
+#results .gen-intro { gap: 6px; }
+#results :is(.gen-intro p, .fd-revision p) {
+  max-width: 76ch;
+  font: 400 16px/1.52 var(--sans);
+}
+#results .gen-controls { margin-top: 12px; padding-block: 4px; }
+#results .gen-caption { margin-block: 12px; }
+#results .fd-revision-head { align-items: center; flex-wrap: wrap; gap: 3px 16px; }
+#results .fd-revision-head h3 { margin: 0; }
+#results .fd-revision p { margin-top: 6px; }
+#results .fd-ablation-grid { margin-top: 16px; column-gap: clamp(16px, 2.4vw, 34px); }
+
+/* Both tool plots start with a caption directly above the evidence. */
+#tools #evolved-tools { margin-top: 0; }
+#tools .et-taxonomy { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+#tools .et-taxonomy figcaption p, #tools .et-functions figcaption p {
+  margin: 6px 0 0;
+  max-width: 76ch;
+  font: 400 16px/1.52 var(--sans);
+}
+#tools .et-mechanism-chart { width: 100%; max-width: none; }
+#tools .et-chart-tools { margin-bottom: 4px; }
+#tools .et-mechanism-row { min-height: 46px; }
+#tools .et-functions { margin-block: clamp(26px, 2.8vw, 40px); }
+#tools .et-function-heading { align-items: center; flex-wrap: wrap; gap: 3px 16px; }
+#tools .et-function-groups { margin-top: 14px; }
+#tools .et-examples-title { margin-bottom: 10px; }
+#tools .et-trace { margin-top: 16px; }
+#tools .et-trace-heading { padding-bottom: 12px; }
+#tools .et-trace-heading h3 { margin: 0; }
+#tools .et-trace-heading > p { margin-top: 4px; }
+
+#applications-title { margin-bottom: 10px; }
+#applications :is(.archive, .kitchen-case) { padding-top: 18px; }
+#applications .archive-title { margin-bottom: 12px; }
+#applications .archive-interaction { padding-block: 14px; gap: clamp(12px, 1.8vw, 24px); }
+#applications .archive-instruction { font: 600 17px/1.35 var(--sans); letter-spacing: -.01em; }
+#applications .archive-record-label { padding-top: 6px; }
+#applications .archive-foot { padding-top: 9px; }
+#applications .kitchen-intro h3 { margin-bottom: 8px; }
+#applications .kitchen-intro .kitchen-play {
+  margin-top: 10px;
+  border-radius: 5px;
+  border-color: var(--line);
+  color: var(--ink);
+  font-size: 14px;
+}
+#install .install-inner { align-items: start; gap: clamp(20px, 3vw, 44px); }
+#install h2 { margin: 0 0 8px; }
+#install .install-links { margin-top: 14px; }
+#install .terminal pre { margin-block: 12px 15px; }
+
+@media (max-width: 650px) {
+  #results .fd-controls label { min-width: 0; }
+  #results :is(.fd-controls select, .gen-controls select) { min-height: 44px; }
+  #tools .et-function-heading { align-items: baseline; }
+  #applications .app-switch { gap: 8px; }
+}
