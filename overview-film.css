@@ -57,6 +57,21 @@
 .sjtu-logo { width:155px; height:48px; margin-left:-3%; }
 .school-short { display:none; }
 .paper-heading .actions { margin-top:clamp(19px,4.9cqi,30px); }
+.hero .resource-pill {
+  min-height: 44px;
+  padding: 9px 18px 9px 15px;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font: 600 15px/1.2 var(--sans);
+  white-space: nowrap;
+}
+.resource-pill img { display: block; flex: none; }
+.resource-pill .github-mark { filter: brightness(0) invert(1); }
+.hero .resource-pill:is(:hover, :focus-visible) { background: var(--deep); }
+.hero .resource-pill:active { transform: none; box-shadow: none; }
 .overview-film { grid-area: film; min-width: 0; scroll-margin-top: calc(var(--nav-height, 68px) + 16px); }
 .film-projection { position: relative; overflow: hidden; border-radius: 3px; }
 .overview-film video {
