@@ -221,6 +221,15 @@ main .article-body .wrap { max-width: 1120px; }
 #results .fd-revision-head h3 { margin: 0; }
 #results .fd-revision p { margin-top: 6px; }
 #results .fd-ablation-grid { margin-top: 16px; column-gap: clamp(16px, 2.4vw, 34px); }
+.dataset-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 20px;
+  margin-top: 24px;
+  font: 400 15px/1.5 var(--sans);
+}
+.dataset-links a { color: var(--deep); text-decoration: underline; text-underline-offset: 3px; }
 
 /* Both tool plots start with a caption directly above the evidence. */
 #tools #evolved-tools { margin-top: 0; }

@@ -148,9 +148,13 @@
     }
   };
 
+  const linkActions = new Set([
+    'github_hero_click', 'github_install_click', 'download_wheel_click', 'download_sdist_click',
+    'hf_datasets_click', 'hf_research_data_click', 'hf_visual_trajectories_click', 'hf_memory_traces_click'
+  ]);
   for (const link of document.querySelectorAll('a[data-site-action]')) {
     const name = link.dataset.siteAction;
-    if (!['github_hero_click', 'github_install_click', 'download_wheel_click', 'download_sdist_click'].includes(name)) continue;
+    if (!linkActions.has(name)) continue;
     link.addEventListener('click', () => send(name));
     link.addEventListener('auxclick', event => { if (event.button === 1) send(name); });
   }
