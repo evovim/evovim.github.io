@@ -47,6 +47,13 @@
 }
 .resource-pill img { display: block; flex: none; }
 .resource-pill .github-mark { filter: brightness(0) invert(1); }
+.resource-pill .arxiv-mark {
+  padding: 3px 5px;
+  border-radius: 4px;
+  background: #a82335;
+  color: #fff;
+  font: 700 11px/1 var(--sans);
+}
 .hero .resource-pill:is(:hover, :focus-visible) { background: var(--deep); }
 .hero .resource-pill:active { transform: none; box-shadow: none; }
 .overview-film { grid-area: film; min-width: 0; scroll-margin-top: calc(var(--nav-height, 68px) + 16px); }
